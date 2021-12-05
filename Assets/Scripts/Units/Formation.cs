@@ -17,10 +17,18 @@ public class Formation
     private Order currOrder;
     private bool executingOrder = false;
 
-    public Formation(List<Unit> _units, FormationType _type)
+    public Formation(List<Unit> _units, FormationType _type, bool _temp)
     {
         units = _units;
         type = _type;
+        if (_temp)
+        {
+            UnitManager.instance.tempFormations.Add(this);
+        }
+        else
+        {
+            UnitManager.instance.fleets.Add(this);
+        }
     }
 
     public void Update()
@@ -47,6 +55,9 @@ public class Formation
                 {
                     if (type == FormationType.SQUARE)
                     {
+                        int rows;
+                        int cols;
+
                         Vector3 calculatedPos = Vector3.zero;
                         units[i].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos });
                     }

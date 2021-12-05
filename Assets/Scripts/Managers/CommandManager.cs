@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public enum OrderType
@@ -36,6 +37,7 @@ public class CommandManager : MonoBehaviour
         if (instance == null)
         {
             mainCamera = Camera.main;
+            Debug.Log("This actually happend");
             instance = this;
         }
         else
@@ -52,9 +54,6 @@ public class CommandManager : MonoBehaviour
     public void GiveOrders(object orderData)
     {
         givingOrders = false;
-        Debug.Log(SelectionManager.instance.selected.TrueForAll(
-            (ISelectable selected) => { return selected.GetType().IsSubclassOf(typeof(Unit)); }
-        ));
         //Handle orders for units
         if (SelectionManager.instance.selected.TrueForAll(
             (ISelectable selected) => { return selected.GetType().IsSubclassOf(typeof(Unit)); }
@@ -62,11 +61,16 @@ public class CommandManager : MonoBehaviour
         {
             if (moveOrder)
             {
-                SelectionManager.instance.selected.ForEach((ISelectable unit) =>
+                if (SelectionManager.instance.selected.Count > 1)
                 {
-                    ((Unit)unit).RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
-                });
-                moveOrder = false;
+                    Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
+                    tempFormation.RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
+                }
+                else
+                {
+                    ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
+                    moveOrder = false;
+                }
             }
             else if (patrolOrder)
             {
@@ -125,7 +129,7 @@ public class CommandManager : MonoBehaviour
 
     public void HandleKeyInput(KeyCode e)
     {
-        if (e == KeyCode.None)
+        if (e == KeyCode.None || SelectionManager.instance.selected.Count <= 0)
         {
             return;
         }

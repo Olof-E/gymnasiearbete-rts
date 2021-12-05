@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.035066225, g: 0.06172339, b: 0.072073124, a: 1}
+  m_IndirectSpecularColor: {r: 0.035049867, g: 0.06164164, b: 0.07197396, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1023,7 +1023,7 @@ RectTransform:
   - {fileID: 1933693279}
   - {fileID: 458384529}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2418,7 +2418,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &981776145
 GameObject:
@@ -3148,6 +3148,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 383139792, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
+    - target: {fileID: 4476911175386191683, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
     - target: {fileID: 4476911176958901980, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
       propertyPath: m_Name
       value: Escort
@@ -3205,6 +3213,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 383139792, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
+    - target: {fileID: 4476911175386191683, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
     - target: {fileID: 4476911176958901980, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
       propertyPath: m_Name
       value: Escort (1)
@@ -4599,6 +4615,7 @@ GameObject:
   - component: {fileID: 1792224773}
   - component: {fileID: 1792224772}
   - component: {fileID: 1792224771}
+  - component: {fileID: 1792224774}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4645,8 +4662,27 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1792224774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792224770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31c6b3d012d5ae3408d3d152b4702602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveOrder: 0
+  patrolOrder: 0
+  regroupOrder: 0
+  assignOrder: 0
+  stopOrder: 0
+  attackOrder: 0
+  givingOrders: 0
 --- !u!1 &1804873888
 GameObject:
   m_ObjectHideFlags: 0
@@ -4657,7 +4693,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1804873891}
   - component: {fileID: 1804873889}
-  - component: {fileID: 1804873890}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4687,25 +4722,6 @@ MonoBehaviour:
   usedPower: 0
   totalRareMetals: 0
   totalGas: 0
---- !u!114 &1804873890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804873888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31c6b3d012d5ae3408d3d152b4702602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveOrder: 0
-  patrolOrder: 0
-  regroupOrder: 0
-  assignOrder: 0
-  stopOrder: 0
-  attackOrder: 0
-  givingOrders: 0
 --- !u!4 &1804873891
 Transform:
   m_ObjectHideFlags: 0
@@ -4718,7 +4734,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886440453
 GameObject:

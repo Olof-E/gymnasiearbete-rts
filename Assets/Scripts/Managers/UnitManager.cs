@@ -42,7 +42,7 @@ public class UnitManager : MonoBehaviour
     public void CreateFleet()
     {
         List<Unit> fleetUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
-        fleets.Add(new Formation(fleetUnits, FormationType.SQUARE));
+        new Formation(fleetUnits, FormationType.SQUARE, false);
     }
 
     public void AssignFleet(Unit assignedUnit, int fleetId)
