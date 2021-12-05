@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+/*
+Planetary structures:
+- Fusion reactor
+- Tritanium extractors
+- Crystal synthesizers
+- rare metals extractors
+- Carbon extractors
+- Research facility
+- Agricultural hub
+
+Space structures:
+- Large shipyard
+- Small Shipyard
+- Spaceport
+- Railgun cannon
+- Torpedo/Missile laucnher
+- Phased energy beam
+- Deep space antenna array 
+- 
+
+*/
+
+public class SpaceStructure : Targetable, ISelectable
+{
+    public int playerId { get; set; }
+    public int level { get; set; } = 0;
+    public int maxLevel { get; set; } = 1;
+    public Planet parentBody { get; set; }
+    public ResourceConsumtion constructionCost { get; set; }
+    public bool selected { get; set; }
+    public BoxCollider selectionCollider { get; set; }
+    public SpriteRenderer selectedSprite { get; set; }
+    public Queue<Order> orderQueue { get; set; }
+    private Order currOrder { get; set; }
+    private bool executingOrder { get; set; }
+    public virtual void LevelUp()
+    {
+        if (level < maxLevel)
+        {
+            level++;
+        }
+    }
+    public void RecieveOrder(Order recievedOrder)
+    {
+        orderQueue.Enqueue(recievedOrder);
+    }
+    public virtual void ExecuteOrder()
+    {
+        if (orderQueue.Count > 0)
+        {
+            if (!executingOrder)
+            {
+                executingOrder = true;
+                currOrder = orderQueue.Dequeue();
+            }
+        }
+        if (currOrder != null)
+        {
+            Debug.Log(currOrder);
+            if (currOrder.orderType == OrderType.ATTACK_ORDER)
+            {
+
+            }
+        }
+    }
+}
