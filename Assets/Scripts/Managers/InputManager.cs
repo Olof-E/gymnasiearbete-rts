@@ -35,7 +35,7 @@ public class InputManager : MonoBehaviour
             MouseEventOccured += SelectionManager.instance.HandleMouseInput;
             MouseEventOccured += BuildingManager.instance.HandleMouseInput;
             MouseEventOccured += CommandManager.instance.HandleMouseInput;
-            MouseEventOccured += PrintMouseInput;
+            //MouseEventOccured += PrintMouseInput;
             keyEventOccured += CommandManager.instance.HandleKeyInput;
             instance = this;
         }

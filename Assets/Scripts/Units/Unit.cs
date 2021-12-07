@@ -34,18 +34,18 @@ public class Unit : Targetable, ISelectable
                     maneuverability * Time.fixedDeltaTime
                     );
 
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    Quaternion.Euler(
-                        transform.rotation.eulerAngles.x,
-                        transform.rotation.eulerAngles.y,
-                        maneuverability * 4f * -Quaternion.Angle(
-                            Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
-                            Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
-                            ) / 180f
-                    ),
-                    maneuverability * 4f * Time.fixedDeltaTime
-                    );
+                // transform.rotation = Quaternion.RotateTowards(
+                //     transform.rotation,
+                //     Quaternion.Euler(
+                //         transform.rotation.eulerAngles.x,
+                //         transform.rotation.eulerAngles.y,
+                //         maneuverability * 4f * -Quaternion.Angle(
+                //             Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
+                //             Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
+                //             ) / 180f
+                //     ),
+                //     maneuverability * 4f * Time.fixedDeltaTime
+                //     );
 
                 if (
                     Quaternion.Angle(

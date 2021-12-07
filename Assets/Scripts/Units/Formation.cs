@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class Formation
     {
         units = _units;
         type = _type;
+        orderQueue = new Queue<Order>();
         if (_temp)
         {
             UnitManager.instance.tempFormations.Add(this);
@@ -49,17 +51,28 @@ public class Formation
         }
         if (currOrder != null)
         {
+            Debug.Log("Executing order");
             if (currOrder.orderType == OrderType.MOVE_ORDER)
             {
-                for (int i = 0; i < units.Count; i++)
+                if (type == FormationType.SQUARE)
                 {
-                    if (type == FormationType.SQUARE)
-                    {
-                        int rows;
-                        int cols;
 
-                        Vector3 calculatedPos = Vector3.zero;
-                        units[i].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos });
+                    int rows = 4;
+                    int cols = (int)Math.Ceiling((float)units.Count / (float)rows / 2f);
+                    int index = 0;
+                    for (int i = -rows / 2; i < rows / 2; i++)
+                    {
+                        for (int j = -cols; j < cols; j++)
+                        {
+                            if (index >= units.Count)
+                            {
+                                continue;
+                            }
+                            Vector3 calculatedPos = currOrder.movePos + new Vector3(j * 1.5f, 0f, i * 1.5f);
+                            //Debug.Log("we get here");
+                            units[index++].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos });
+                        }
+
                     }
                 }
                 executingOrder = false;

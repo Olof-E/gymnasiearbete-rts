@@ -12,6 +12,8 @@ public class UnitManager : MonoBehaviour
     {
         if (instance == null)
         {
+            fleets = new List<Formation>();
+            tempFormations = new List<Formation>();
             instance = this;
         }
         else
@@ -19,12 +21,6 @@ public class UnitManager : MonoBehaviour
             Debug.Log("Unit manager instance already exists...");
             Destroy(this);
         }
-    }
-
-    private void Start()
-    {
-        fleets = new List<Formation>();
-        tempFormations = new List<Formation>();
     }
 
     private void Update()

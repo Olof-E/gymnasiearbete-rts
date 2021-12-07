@@ -65,6 +65,7 @@ public class CommandManager : MonoBehaviour
                 {
                     Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
                     tempFormation.RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
+                    moveOrder = false;
                 }
                 else
                 {
