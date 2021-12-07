@@ -134,28 +134,28 @@ public class CommandManager : MonoBehaviour
         {
             return;
         }
+
         attackOrder = false;
         moveOrder = false;
         stopOrder = false;
-        Debug.Log(e);
+
         if (e == KeyCode.A)
         {
             attackOrder = true;
+            givingOrders = true;
         }
         else if (e == KeyCode.Q)
         {
             moveOrder = true;
+            givingOrders = true;
         }
         else if (e == KeyCode.S)
         {
             stopOrder = true;
-        }
-
-        if (e != KeyCode.Escape)
-        {
             givingOrders = true;
         }
-        else
+
+        if (e == KeyCode.Escape)
         {
             givingOrders = false;
         }

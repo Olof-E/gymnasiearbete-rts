@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
     private static Plane XZPlane = new Plane(Vector3.up, Vector3.zero);
 
     //Create a singelton instance of the input manager
-    private void Awake()
+    private void Start()
     {
         if (instance == null)
         {
