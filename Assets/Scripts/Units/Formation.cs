@@ -51,7 +51,6 @@ public class Formation
         }
         if (currOrder != null)
         {
-            Debug.Log("Executing order");
             if (currOrder.orderType == OrderType.MOVE_ORDER)
             {
                 if (type == FormationType.SQUARE)
@@ -80,7 +79,12 @@ public class Formation
             }
             else if (currOrder.orderType == OrderType.ATTACK_ORDER)
             {
-
+                for (int i = 0; i < units.Count; i++)
+                {
+                    units[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = currOrder.target });
+                }
+                executingOrder = false;
+                currOrder = null;
             }
         }
     }

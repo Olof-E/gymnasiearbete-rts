@@ -9,7 +9,7 @@ public class PhasedEnergyBeamArray : Weapon
     private void Start()
     {
         beamGameObj = GetComponent<LineRenderer>();
-        targetingRadius = 20f;
+        targetingRadius = 2f;
         reloadTime = 5f;
     }
 
@@ -17,6 +17,7 @@ public class PhasedEnergyBeamArray : Weapon
     {
         if (target != null)
         {
+            Debug.Log("We have target " + target);
             if ((target.gameObj.transform.position - transform.position).magnitude > targetingRadius)
             {
                 target = null;
@@ -49,7 +50,7 @@ public class PhasedEnergyBeamArray : Weapon
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Handles.DrawWireDisc(transform.position, Vector3.up, targetingRadius);
     }

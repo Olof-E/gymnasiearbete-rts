@@ -95,10 +95,16 @@ public class CommandManager : MonoBehaviour
                 {
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
-                        SelectionManager.instance.selected.ForEach((ISelectable unit) =>
+                        Debug.Log("Target is " + target);
+                        if (SelectionManager.instance.selected.Count > 1)
                         {
-                            ((Unit)unit).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
-                        });
+                            Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
+                            tempFormation.RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                        }
+                        else
+                        {
+                            ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                        }
                     }
                 }
                 attackOrder = false;
@@ -111,11 +117,19 @@ public class CommandManager : MonoBehaviour
         {
             if (attackOrder)
             {
-                SelectionManager.instance.selected.ForEach((ISelectable structure) =>
+                Targetable target;
+                RaycastHit hitInfo;
+                if (Physics.Raycast(mainCamera.transform.position, ((Vector3)orderData) - mainCamera.transform.position, out hitInfo, 100f))
                 {
-                    ((SpaceStructure)structure).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER });
-                });
-                attackOrder = false;
+                    if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
+                    {
+                        SelectionManager.instance.selected.ForEach((ISelectable structure) =>
+                        {
+                            ((SpaceStructure)structure).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                        });
+                        attackOrder = false;
+                    }
+                }
             }
         }
     }

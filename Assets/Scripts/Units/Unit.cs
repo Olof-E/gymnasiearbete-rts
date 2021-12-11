@@ -10,6 +10,7 @@ public class Unit : Targetable, ISelectable
     public bool selected { get; set; }
     public BoxCollider selectionCollider { get; set; }
     public Queue<Order> orderQueue;
+    public List<Weapon> weapons;
     private Order currOrder;
     private bool executingOrder = false;
     public SpriteRenderer selectedSprite { get; set; }
@@ -63,8 +64,12 @@ public class Unit : Targetable, ISelectable
             }
             else if (currOrder.orderType == OrderType.ATTACK_ORDER)
             {
-
+                weapons.ForEach((Weapon weapon) =>
+                {
+                    weapon.target = target;
+                });
             }
+
             else if (currOrder.orderType == OrderType.ASSIGN_ORDER)
             {
                 UnitManager.instance.AssignFleet(this, currOrder.newFleetId);
