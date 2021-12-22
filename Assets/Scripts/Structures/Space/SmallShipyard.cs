@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SmallShipyard : SpaceStructure
 {
+    public GameObject[] shipPrefabs;
     private void Start()
     {
         gameObj = gameObject;
@@ -31,6 +32,11 @@ public class SmallShipyard : SpaceStructure
             UiManager.instance.ActivateActions(-1);
         }
         ExecuteOrder();
+    }
+
+    public void BuildShip(int shipIndex)
+    {
+        GameObject shipGo = GameObject.Instantiate(shipPrefabs[shipIndex], transform.position + Vector3.forward * 2f, Quaternion.identity);
     }
 
     public override void LevelUp()

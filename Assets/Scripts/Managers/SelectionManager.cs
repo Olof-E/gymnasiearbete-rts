@@ -41,7 +41,7 @@ public class SelectionManager : MonoBehaviour
             selected.Clear();
         }
         //Check for single left click
-        if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero)
+        if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)
         {
             RaycastHit hit;
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, 100f, selectionLayer))

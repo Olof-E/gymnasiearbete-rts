@@ -95,7 +95,6 @@ public class CommandManager : MonoBehaviour
                 {
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
-                        Debug.Log("Target is " + target);
                         if (SelectionManager.instance.selected.Count > 1)
                         {
                             Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);

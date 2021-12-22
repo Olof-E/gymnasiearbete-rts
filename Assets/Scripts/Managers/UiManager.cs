@@ -24,7 +24,6 @@ public class UiManager : MonoBehaviour
     public Button buildTritaniumExtractor;
     public Button buildNanoCarbonExtruder;
     public Button buildCrystalSynthesizer;
-    public Button buildAgriculutralHub;
     public Button buildResearchFacility;
     public Button buildGasSepartor;
     public Button buildSmallShipyard;
@@ -43,9 +42,8 @@ public class UiManager : MonoBehaviour
             buildTritaniumExtractor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(1); });
             buildNanoCarbonExtruder.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(2); });
             buildCrystalSynthesizer.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(3); });
-            buildAgriculutralHub.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(4); });
             buildResearchFacility.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(5); });
-            //buildGasSepartor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(6); });
+            buildGasSepartor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(6); });
             buildSmallShipyard.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(0); });
             buildEnergyBeam.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(2); });
             buildTorpedLauncher.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(3); });

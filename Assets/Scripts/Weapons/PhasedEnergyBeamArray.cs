@@ -9,7 +9,7 @@ public class PhasedEnergyBeamArray : Weapon
     private void Start()
     {
         beamGameObj = GetComponent<LineRenderer>();
-        targetingRadius = 2f;
+        targetingRadius = 200000000000000000000000f;
         reloadTime = 5f;
     }
 
@@ -18,13 +18,15 @@ public class PhasedEnergyBeamArray : Weapon
         if (target != null)
         {
             Debug.Log("We have target " + target);
+            Debug.Log(transform.parent.name);
             if ((target.gameObj.transform.position - transform.position).magnitude > targetingRadius)
             {
                 target = null;
             }
             else if (loaded)
             {
-                beamGameObj.SetPosition(1, target.gameObj.transform.position - transform.position);
+                beamGameObj.SetPosition(0, transform.position);
+                beamGameObj.SetPosition(1, target.gameObj.transform.position);
                 firing = true;
             }
             if (firing)
@@ -40,7 +42,8 @@ public class PhasedEnergyBeamArray : Weapon
             if (!loaded && !loading)
             {
                 StartCoroutine(Reload());
-                beamGameObj.SetPosition(1, Vector3.zero);
+                beamGameObj.SetPosition(0, transform.position);
+                beamGameObj.SetPosition(1, transform.position);
                 loading = true;
             }
         }
