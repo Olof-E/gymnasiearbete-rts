@@ -59,18 +59,24 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (MapManager.instance.mapState == MapState.PLANETARY_VIEW)
                 {
-                    if (hit.collider.gameObject.GetComponent<ISelectable>().GetType() == typeof(Planet))
+                    ISelectable currSelection;
+                    if (hit.collider.gameObject.TryGetComponent<ISelectable>(out currSelection))
                     {
-                        Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
-                        selectedPlanet.selected = true;
-                        selected.Add(selectedPlanet);
+                        currSelection.selected = true;
+                        selected.Add(currSelection);
                     }
-                    if (hit.collider.gameObject.GetComponent<ISelectable>().GetType().IsSubclassOf(typeof(Unit)))
-                    {
-                        Unit selectedUnit = hit.collider.gameObject.GetComponent<Unit>();
-                        selectedUnit.selected = true;
-                        selected.Add(selectedUnit);
-                    }
+                    // if (hit.collider.gameObject.GetComponent<ISelectable>().GetType() == typeof(Planet))
+                    // {
+                    //     Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
+                    //     selectedPlanet.selected = true;
+                    //     selected.Add(selectedPlanet);
+                    // }
+                    // else if (hit.collider.gameObject.GetComponent<ISelectable>().GetType().IsSubclassOf(typeof(Unit)))
+                    // {
+                    //     Unit selectedUnit = hit.collider.gameObject.GetComponent<Unit>();
+                    //     selectedUnit.selected = true;
+                    //     selected.Add(selectedUnit);
+                    // }
                 }
 
             }

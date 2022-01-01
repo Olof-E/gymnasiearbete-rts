@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class PhasedEnergyBeamStructure : SpaceStructure
     public PhasedEnergyBeamArray beamArrray;
     private void Start()
     {
+        orderQueue = new Queue<Order>();
+        selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         gameObj = gameObject;
         maxLevel = 8;
         armor = 1000;

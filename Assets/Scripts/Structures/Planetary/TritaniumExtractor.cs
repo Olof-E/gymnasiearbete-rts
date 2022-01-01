@@ -19,7 +19,6 @@ public class tritaniumExtractor : PlanetaryStructure
     }
     public override void Execute()
     {
-        Debug.Log("Updating tritanium");
         Player.instance.totalTritanium += 25f * Time.fixedDeltaTime * (1f + 1f / (level + 1f)) * parentBody.planetProperties.tritaniumMultiplier;
     }
 

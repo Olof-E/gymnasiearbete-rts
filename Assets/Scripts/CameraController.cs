@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
         mainCamera.transform.position = mainCamera.transform.position - mainCamera.transform.forward * offsetDist;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         moveDir = Vector3.zero;
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)

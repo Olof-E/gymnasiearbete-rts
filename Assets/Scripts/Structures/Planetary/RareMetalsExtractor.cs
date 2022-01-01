@@ -12,4 +12,23 @@ public class RareMetalsExtractor : PlanetaryStructure
     {
         Player.instance.totalRareMetals += 10f * Time.fixedDeltaTime * level * parentBody.planetProperties.rareMetalsMultiplier;
     }
+    public override void LevelUp()
+    {
+        if (level < maxLevel)
+        {
+            if (level > 0)
+            {
+                constructionCost = new ResourceConsumtion()
+                {
+                    usedTritanium = constructionCost.usedTritanium * 0.6f,
+                    usedRareMetals = constructionCost.usedRareMetals * 0.5f,
+                    usedNanoCarbon = constructionCost.usedNanoCarbon * 0.6f,
+                    usedCrystals = constructionCost.usedCrystals * 0.75f,
+                    usedPower = constructionCost.usedPower * 0.4f,
+                };
+            }
+            Player.instance.UseResources(constructionCost);
+            level++;
+        }
+    }
 }

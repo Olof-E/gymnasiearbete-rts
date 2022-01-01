@@ -47,7 +47,6 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         mapGraph = new Graph();
-        mapState = MapState.PLANETARY_VIEW;
         mapSeed = UnityEngine.Random.Range(-9999, 9999);
         mapGraph.Initialize(45, mapSeed);
 

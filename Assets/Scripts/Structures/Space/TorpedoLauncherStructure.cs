@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TorpedoLauncherStructure : SpaceStructure
@@ -6,6 +7,8 @@ public class TorpedoLauncherStructure : SpaceStructure
     public TorpedoLauncher torpedoLauncher;
     private void Start()
     {
+        orderQueue = new Queue<Order>();
+        selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         gameObj = gameObject;
         maxLevel = 8;
         armor = 1000;

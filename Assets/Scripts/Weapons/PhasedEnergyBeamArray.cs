@@ -9,7 +9,7 @@ public class PhasedEnergyBeamArray : Weapon
     private void Start()
     {
         beamGameObj = GetComponent<LineRenderer>();
-        targetingRadius = 200000000000000000000000f;
+        targetingRadius = 40f;
         reloadTime = 5f;
     }
 

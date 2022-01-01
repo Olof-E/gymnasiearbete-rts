@@ -20,16 +20,16 @@ public class UiManager : MonoBehaviour
     public TMP_Text gasText;
 
     public Button switchMapView;
-    public Button buildFusionReactor;
-    public Button buildTritaniumExtractor;
-    public Button buildNanoCarbonExtruder;
-    public Button buildCrystalSynthesizer;
-    public Button buildResearchFacility;
-    public Button buildGasSepartor;
-    public Button buildSmallShipyard;
-    public Button buildEnergyBeam;
-    public Button buildTorpedLauncher;
-    public Button buildRailgunCannon;
+    // public Button buildFusionReactor;
+    // public Button buildTritaniumExtractor;
+    // public Button buildNanoCarbonExtruder;
+    // public Button buildCrystalSynthesizer;
+    // public Button buildResearchFacility;
+    // public Button buildGasSepartor;
+    // public Button buildSmallShipyard;
+    // public Button buildEnergyBeam;
+    // public Button buildTorpedLauncher;
+    // public Button buildRailgunCannon;
 
     //Create singelton instance of ui manager
     private void Awake()
@@ -38,22 +38,43 @@ public class UiManager : MonoBehaviour
         {
             instance = this;
             switchMapView.onClick.AddListener(() => { MapManager.instance.SwitchMapView(); });
-            buildFusionReactor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(0); });
-            buildTritaniumExtractor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(1); });
-            buildNanoCarbonExtruder.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(2); });
-            buildCrystalSynthesizer.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(3); });
-            buildResearchFacility.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(5); });
-            buildGasSepartor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(6); });
-            buildSmallShipyard.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(0); });
-            buildEnergyBeam.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(2); });
-            buildTorpedLauncher.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(3); });
-            buildRailgunCannon.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(4); });
+            // buildFusionReactor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(0); });
+            // buildTritaniumExtractor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(1); });
+            // buildNanoCarbonExtruder.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(2); });
+            // buildCrystalSynthesizer.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(3); });
+            // buildResearchFacility.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(5); });
+            // buildGasSepartor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(6); });
+            // buildSmallShipyard.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(0); });
+            // buildEnergyBeam.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(2); });
+            // buildTorpedLauncher.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(3); });
+            // buildRailgunCannon.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(4); });
+            //() => { ((SmallShipyard)SelectionManager.instance.selected[0]).BuildShip(0); };
         }
         else
         {
             Debug.Log("Ui manager already exists...");
             Destroy(this);
         }
+    }
+
+    public void BuildPlanStrucClick(int index)
+    {
+        BuildingManager.instance.BuildPlanetaryStructure(index);
+    }
+
+    public void BuildSpaceStrucClick(int index)
+    {
+        BuildingManager.instance.BuildSpaceStructure(index);
+    }
+
+    public void BuildSmallShip(int index)
+    {
+        ((SmallShipyard)SelectionManager.instance.selected[0]).BuildShip(index);
+    }
+
+    public void BuildLargeShip(int index)
+    {
+        //((LargeShipyard)SelectionManager.instance.selected[0]).BuildShip(index);
     }
 
     private void Update()

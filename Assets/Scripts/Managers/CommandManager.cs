@@ -51,7 +51,7 @@ public class CommandManager : MonoBehaviour
     //Press order button
     //Depending on button (Pos, (Pos, Radius), None, fleetId, None, Target)
 
-    public void GiveOrders(object orderData)
+    public void GiveOrders(object orderData = null)
     {
         givingOrders = false;
         //Handle orders for units
@@ -108,6 +108,20 @@ public class CommandManager : MonoBehaviour
                 }
                 attackOrder = false;
             }
+            else if (stopOrder)
+            {
+                givingOrders = false;
+                if (SelectionManager.instance.selected.Count > 1)
+                {
+                    Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
+                    tempFormation.RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                }
+                else
+                {
+                    ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                }
+                stopOrder = false;
+            }
         }
         //Handle orders for structures
         else if (SelectionManager.instance.selected.TrueForAll(
@@ -135,9 +149,16 @@ public class CommandManager : MonoBehaviour
 
     public void HandleMouseInput(MouseEventArgs e)
     {
-        if (CommandManager.instance.moveOrder || CommandManager.instance.attackOrder)
+        if (moveOrder || attackOrder)
         {
-            CommandManager.instance.GiveOrders(e.startDrag);
+            GiveOrders(e.startDrag);
+        }
+        else if (givingOrders)
+        {
+            attackOrder = false;
+            moveOrder = false;
+            stopOrder = false;
+            givingOrders = false;
         }
     }
 
@@ -166,11 +187,7 @@ public class CommandManager : MonoBehaviour
         {
             stopOrder = true;
             givingOrders = true;
-        }
-
-        if (e == KeyCode.Escape)
-        {
-            givingOrders = false;
+            GiveOrders();
         }
     }
 }

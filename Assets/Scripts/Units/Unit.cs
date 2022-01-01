@@ -9,6 +9,7 @@ public class Unit : Targetable, ISelectable
     public float maneuverability { get; set; }
     public bool selected { get; set; }
     public BoxCollider selectionCollider { get; set; }
+    public Planet parentBody { get; set; }
     public Queue<Order> orderQueue;
     public List<Weapon> weapons;
     private Order currOrder;
@@ -64,6 +65,10 @@ public class Unit : Targetable, ISelectable
                         currOrder = null;
                     }
                 }
+                else if (MapManager.instance.mapState == MapState.SYSTEM_VIEW)
+                {
+
+                }
             }
             else if (currOrder.orderType == OrderType.ATTACK_ORDER)
             {
@@ -81,6 +86,11 @@ public class Unit : Targetable, ISelectable
             else if (currOrder.orderType == OrderType.ASSIGN_ORDER)
             {
                 UnitManager.instance.AssignFleet(this, currOrder.newFleetId);
+            }
+            else if (currOrder.orderType == OrderType.STOP_ORDER)
+            {
+                currOrder = null;
+                orderQueue.Clear();
             }
         }
     }
