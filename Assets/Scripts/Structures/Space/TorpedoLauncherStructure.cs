@@ -22,6 +22,7 @@ public class TorpedoLauncherStructure : SpaceStructure
             usedCrystals = 1500,
             usedPower = 50,
         };
+        selectionCollider = GetComponent<BoxCollider>();
         LevelUp();
     }
 

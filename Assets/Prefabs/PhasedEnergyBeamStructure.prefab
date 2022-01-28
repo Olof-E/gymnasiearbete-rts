@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1734279045935145401}
   - component: {fileID: 5797097396495037486}
   - component: {fileID: -1492040627930991855}
-  m_Layer: 0
+  - component: {fileID: 679192053636287811}
+  m_Layer: 6
   m_Name: PhasedEnergyBeamStructure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,6 +101,19 @@ MonoBehaviour:
   shields: 0
   gameObj: {fileID: 4126613452227475264}
   beamArrray: {fileID: 2222747450626846302}
+--- !u!65 &679192053636287811
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4126613452227475264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7356034484188496840
 GameObject:
   m_ObjectHideFlags: 0

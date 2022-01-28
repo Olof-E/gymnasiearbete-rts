@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class Order
 {
     public OrderType orderType { get; set; }
     public Vector3 movePos { get; set; }
+    public Planet targetBody { get; set; }
     public float patrolRadius { get; set; }
     public int newFleetId { get; set; }
     public Targetable target { get; set; }
@@ -59,32 +61,56 @@ public class CommandManager : MonoBehaviour
             (ISelectable selected) => { return selected.GetType().IsSubclassOf(typeof(Unit)); }
         ))
         {
+            List<Unit> selectedUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
             if (moveOrder)
             {
-                if (SelectionManager.instance.selected.Count > 1)
+                if (selectedUnits.Count > 1)
                 {
-                    Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
-                    tempFormation.RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
+                    List<Vector3> unitPos = Formation.CalculateFormationPos(FormationType.SQUARE, selectedUnits.Count, (Vector3)orderData);
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        selectedUnits[i].RecieveOrder(
+                            new Order()
+                            {
+                                orderType = OrderType.MOVE_ORDER,
+                                movePos = unitPos[i],
+                                targetBody = MapManager.instance.activePlanet
+                            });
+                    }
+                    // Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
+                    // tempFormation.RecieveOrder(
+                    //     new Order()
+                    //     {
+                    //         orderType = OrderType.MOVE_ORDER,
+                    //         movePos = (Vector3)orderData,
+                    //         targetBody = MapManager.instance.activePlanet
+                    //     });
                     moveOrder = false;
                 }
                 else
                 {
-                    ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = (Vector3)orderData });
+                    selectedUnits[0].RecieveOrder(
+                        new Order()
+                        {
+                            orderType = OrderType.MOVE_ORDER,
+                            movePos = (Vector3)orderData,
+                            targetBody = MapManager.instance.activePlanet
+                        });
                     moveOrder = false;
                 }
             }
             else if (patrolOrder)
             {
                 Vector3 patrolPos = new Vector3(((Vector4)orderData).x, ((Vector4)orderData).y, ((Vector4)orderData).z);
-                SelectionManager.instance.selected.ForEach((ISelectable unit) =>
+                for (int i = 0; i < selectedUnits.Count; i++)
                 {
-                    ((Unit)unit).RecieveOrder(new Order()
+                    selectedUnits[i].RecieveOrder(new Order()
                     {
                         orderType = OrderType.PATROL_ORDER,
                         movePos = patrolPos,
                         patrolRadius = ((Vector4)orderData).w
                     });
-                });
+                }
                 patrolOrder = false;
             }
             else if (attackOrder)
@@ -95,14 +121,16 @@ public class CommandManager : MonoBehaviour
                 {
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
-                        if (SelectionManager.instance.selected.Count > 1)
+                        if (selectedUnits.Count > 1)
                         {
-                            Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
-                            tempFormation.RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                            for (int i = 0; i < selectedUnits.Count; i++)
+                            {
+                                selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                            }
                         }
                         else
                         {
-                            ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                            selectedUnits[0].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
                         }
                     }
                 }
@@ -110,17 +138,33 @@ public class CommandManager : MonoBehaviour
             }
             else if (stopOrder)
             {
-                givingOrders = false;
                 if (SelectionManager.instance.selected.Count > 1)
                 {
-                    Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
-                    tempFormation.RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                    }
                 }
                 else
                 {
-                    ((Unit)SelectionManager.instance.selected[0]).RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                    selectedUnits[0].RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
                 }
                 stopOrder = false;
+            }
+            else if (assignOrder)
+            {
+                if (SelectionManager.instance.selected.Count > 1)
+                {
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ASSIGN_ORDER, newFleetId = (int)orderData });
+                    }
+                }
+                else
+                {
+                    selectedUnits[0].RecieveOrder(new Order() { orderType = OrderType.ASSIGN_ORDER, newFleetId = (int)orderData });
+                }
+                assignOrder = false;
             }
         }
         //Handle orders for structures
@@ -128,6 +172,7 @@ public class CommandManager : MonoBehaviour
             (ISelectable selected) => { return selected.GetType() == typeof(SpaceStructure); }
         ))
         {
+            List<SpaceStructure> selectedStrucs = SelectionManager.instance.selected.Cast<SpaceStructure>().ToList();
             if (attackOrder)
             {
                 Targetable target;
@@ -136,13 +181,21 @@ public class CommandManager : MonoBehaviour
                 {
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
-                        SelectionManager.instance.selected.ForEach((ISelectable structure) =>
+                        for (int i = 0; i < selectedStrucs.Count; i++)
                         {
-                            ((SpaceStructure)structure).RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
-                        });
+                            selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                        }
                         attackOrder = false;
                     }
                 }
+            }
+            else if (stopOrder)
+            {
+                for (int i = 0; i < selectedStrucs.Count; i++)
+                {
+                    selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.STOP_ORDER });
+                };
+                stopOrder = false;
             }
         }
     }
@@ -173,7 +226,7 @@ public class CommandManager : MonoBehaviour
         moveOrder = false;
         stopOrder = false;
 
-        if (e == KeyCode.A)
+        if (e == KeyCode.G)
         {
             attackOrder = true;
             givingOrders = true;
@@ -183,11 +236,16 @@ public class CommandManager : MonoBehaviour
             moveOrder = true;
             givingOrders = true;
         }
-        else if (e == KeyCode.S)
+        else if (e == KeyCode.Y)
         {
             stopOrder = true;
             givingOrders = true;
             GiveOrders();
+        }
+        else if (e == KeyCode.J)
+        {
+            assignOrder = true;
+            givingOrders = true;
         }
     }
 }

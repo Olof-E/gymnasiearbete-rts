@@ -33,6 +33,7 @@ public class Planet : MonoBehaviour, ISelectable
     private float scaledOrbitalRadius;
     public bool selected { get; set; } = false;
     public bool focused = false;
+    public StarSystem parentSystem;
     public BoxCollider selectionCollider { get; set; }
     private int shaderPlanetPosId;
     public MeshRenderer meshRenderer;
@@ -40,13 +41,15 @@ public class Planet : MonoBehaviour, ISelectable
     public List<Targetable> targetables;
     public SpriteRenderer selectedSprite { get; set; }
 
-    public void Initialize(float _orbitalRadius)
+    public void Initialize(float _orbitalRadius, StarSystem _parentSystem)
     {
         orbitalRadius = _orbitalRadius;
-        scaledOrbitalRadius = orbitalRadius * 80f;
+        scaledOrbitalRadius = orbitalRadius * 8f;
         shaderPlanetPosId = Shader.PropertyToID("_PlanetPosWS");
         mpb = new MaterialPropertyBlock();
         targetables = new List<Targetable>();
+
+        parentSystem = _parentSystem;
 
         //Determine what type of planet this is using orbital radius
         if (orbitalRadius > 0f && orbitalRadius <= 15f)
@@ -83,6 +86,8 @@ public class Planet : MonoBehaviour, ISelectable
         meshRenderer.material = planetProperties.material;
         planetaryStructures = new List<PlanetaryStructure>();
         spaceStructures = new List<SpaceStructure>();
+
+        selectionCollider = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -128,35 +133,66 @@ public class Planet : MonoBehaviour, ISelectable
         return new Vector3(x, 0f, z);
     }
 
+    public void Hide(bool hide)
+    {
+        transform.parent.GetComponent<LineRenderer>().enabled = !hide;
+        MeshRenderer[] planetRenderers = this.GetComponentsInChildren<MeshRenderer>();
+        for (int j = 0; j < planetRenderers.Length; j++)
+        {
+            planetRenderers[j].enabled = !hide;
+        }
+
+        selectionCollider.enabled = !hide;
+    }
+
     public void Focus(bool _focused)
     {
         focused = _focused;
         if (focused)
         {
-            transform.parent.GetComponent<LineRenderer>().enabled = false;
-            transform.localScale = Vector3.one * 25f;
+            transform.localScale = Vector3.one * 17.5f;
+
 
             transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
             CameraController.instance.FocusPosition(transform.position);
 
-            for (int i = 0; i < spaceStructures.Count; i++)
-            {
-                spaceStructures[i].gameObj.SetActive(true);
-            }
+            //Hide(false);
+
             MapManager.instance.activePlanet = this;
         }
         else
         {
-            transform.parent.GetComponent<LineRenderer>().enabled = true;
             transform.localScale = Vector3.one;
             transform.position = EvaluateOrbitalPos(orbitalRadius);
             CameraController.instance.FocusPosition(Vector3.zero);
 
-            for (int i = 0; i < spaceStructures.Count; i++)
-            {
-                spaceStructures[i].gameObj.SetActive(false);
-            }
+            //Hide(true);
+
             UiManager.instance.ActivateActions(-1);
+        }
+
+
+        for (int i = 0; i < spaceStructures.Count; i++)
+        {
+            MeshRenderer[] renderers = spaceStructures[i].GetComponentsInChildren<MeshRenderer>();
+            for (int j = 0; j < renderers.Length; j++)
+            {
+                renderers[j].enabled = focused;
+            }
+            spaceStructures[i].selectionCollider.enabled = focused;
+            spaceStructures[i].selectedSprite.enabled = focused;
+        }
+
+        foreach (Unit unit in targetables.FindAll((Targetable target) => target.GetType().IsSubclassOf(typeof(Unit))))
+        {
+            MeshRenderer[] renderers = unit.GetComponentsInChildren<MeshRenderer>();
+            for (int j = 0; j < renderers.Length; j++)
+            {
+                renderers[j].enabled = focused;
+            }
+
+            unit.selectionCollider.enabled = focused;
+            unit.selectedSprite.enabled = focused;
         }
     }
 }

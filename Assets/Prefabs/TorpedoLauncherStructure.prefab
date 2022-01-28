@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7596976772467414817}
   - component: {fileID: 7596976772467414816}
   - component: {fileID: 7596976772467414823}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TorpedoLauncherStructure
   m_TagString: Untagged
   m_Icon: {fileID: 0}

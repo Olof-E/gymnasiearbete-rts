@@ -80,7 +80,7 @@ public class InputManager : MonoBehaviour
         //Check for drag click
         if (Input.GetMouseButton(0) && !IsPointerOverUIObject())
         {
-            if (Vector3.Distance(startDrag, GetMousePositionOnXZPlane()) > 0.5f)
+            if (Vector3.Distance(startDrag, GetMousePositionOnXZPlane()) > 0.5f && !CameraController.instance.focusing)
             {
                 checkDoubleClick = false;
                 timeDoubleClick = 0f;

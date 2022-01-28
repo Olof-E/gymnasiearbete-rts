@@ -19,7 +19,11 @@ public class UiManager : MonoBehaviour
     public TMP_Text RareMetalText;
     public TMP_Text gasText;
 
+    public TMP_Text selectionInfoText;
+
     public Button switchMapView;
+
+    public GameObject fleetList;
     // public Button buildFusionReactor;
     // public Button buildTritaniumExtractor;
     // public Button buildNanoCarbonExtruder;
@@ -77,6 +81,16 @@ public class UiManager : MonoBehaviour
         //((LargeShipyard)SelectionManager.instance.selected[0]).BuildShip(index);
     }
 
+    public void CreateNewFleet()
+    {
+        UnitManager.instance.CreateFleet();
+    }
+
+    public void DisbandFleet()
+    {
+        UnitManager.instance.DisbandFleet();
+    }
+
     private void Update()
     {
         fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
@@ -89,6 +103,8 @@ public class UiManager : MonoBehaviour
         availablePowerText.SetText($"P: {Player.instance.availablePower}");
         RareMetalText.SetText($"R: {Player.instance.totalRareMetals}");
         gasText.SetText($"G: {Player.instance.totalGas}");
+
+        selectionInfoText.SetText($"Selection: {SelectionManager.instance.selected.Count}");
     }
 
     /*

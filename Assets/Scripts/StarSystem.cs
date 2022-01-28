@@ -34,6 +34,7 @@ public class StarSystem
         starRadius = UnityEngine.Random.Range(2f, 6f);
 
         GameObject starSystemObj = new GameObject($"Starsystem {systemId}");
+        id = systemId;
         star = GameObject.Instantiate(MapManager.instance.starPrefab, Vector3.zero, Quaternion.identity);
         star.transform.SetParent(starSystemObj.transform);
 
@@ -46,10 +47,11 @@ public class StarSystem
             orbitObj.transform.SetParent(starSystemObj.transform);
 
             planets[i] = GameObject.Instantiate(MapManager.instance.planetPrefab).GetComponent<Planet>();
+            planets[i].parentSystem = this;
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
             float orbitRadius = (AU + starRadius) * UnityEngine.Random.Range(0.1f * (i + 1), 10f * (i + 1));
-            planets[i].Initialize(orbitRadius);
+            planets[i].Initialize(orbitRadius, this);
             orbitObj.AddComponent<OrbitalRenderer>();
             orbitObj.GetComponent<OrbitalRenderer>().Initialize(50, orbitRadius);
         }
@@ -57,17 +59,22 @@ public class StarSystem
 
     public void HideSystem(bool hide)
     {
-        star.transform.parent.gameObject.SetActive(!hide);
+        star.SetActive(!hide);
+        for (int i = 0; i < planets.Length; i++)
+        {
+            planets[i].Hide(hide);
+        }
     }
 
     public void FocusPlanet(GameObject planetObj)
     {
+        Debug.Log(Array.IndexOf(planets, planetObj.GetComponent<Planet>()));
         Planet focusedPlanet = planets[Array.IndexOf(planets, planetObj.GetComponent<Planet>())];
         for (int i = 0; i < planets.Length; i++)
         {
             if (planets[i] != focusedPlanet)
             {
-                planets[i].transform.parent.gameObject.SetActive(false);
+                planets[i].Hide(true);
             }
         }
         focusedPlanet.Focus(true);

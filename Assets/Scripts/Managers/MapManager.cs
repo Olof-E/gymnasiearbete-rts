@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum MapState
 {
@@ -23,7 +24,8 @@ public class MapManager : MonoBehaviour
     public PlanetProperties[] planetPropertiesList;
     public StarSystem activeSystem = null;
     public Planet activePlanet = null;
-    private Graph mapGraph;
+    public LineRenderer line;
+    public Graph mapGraph;
     public GameObject[] starMapObjs;
     private StarSystem[] starSystems;
     private GameObject starSystemsObj;
@@ -50,6 +52,8 @@ public class MapManager : MonoBehaviour
         mapSeed = UnityEngine.Random.Range(-9999, 9999);
         mapGraph.Initialize(45, mapSeed);
 
+
+
         starMapObjs = new GameObject[mapGraph.vertices.Length];
         starSystems = new StarSystem[mapGraph.vertices.Length];
         MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
@@ -67,6 +71,11 @@ public class MapManager : MonoBehaviour
         {
 
             starMapObjs[i] = GameObject.Instantiate(starMapPrefab, mapGraph.vertices[i].position, Quaternion.identity);
+            starMapObjs[i].name = $"Star map obj {i}";
+
+            // Text text = starMapObjs[i].AddComponent<Text>();
+            // text.text = $"{mapGraph.vertices[i].connections.Count}";
+
             starMapObjs[i].transform.SetParent(starMapObj.transform);
             starMapObjs[i].GetComponent<MeshRenderer>().GetPropertyBlock(propBlock);
 
@@ -83,8 +92,11 @@ public class MapManager : MonoBehaviour
         {
             GameObject lineRendererGo = new GameObject($"MapLineRenderer {i}");
             lineRendererGo.transform.SetParent(mapLinesObj.transform);
-            lineRendererGo.AddComponent<LineRenderer>();
-            LineRenderer lr = lineRendererGo.GetComponent<LineRenderer>();
+            LineRenderer lr = lineRendererGo.AddComponent<LineRenderer>();
+
+            // Text text = lineRendererGo.AddComponent<Text>();
+            // text.text = $"{mapGraph.edges[i].cost}  {mapGraph.edges[i].vertexA.index}  {mapGraph.edges[i].vertexB.index}";
+
             lr.positionCount = 2;
             lr.startColor = lineColor;
             lr.endColor = lineColor;
@@ -103,9 +115,56 @@ public class MapManager : MonoBehaviour
 
     }
 
+    Vertex vertex1 = null;
+    Vertex vertex2 = null;
+
+    private void Update()
+    {
+        // RaycastHit hit;
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f))
+        //     {
+        //         for (int i = 0; i < mapGraph.vertices.Length; i++)
+        //         {
+        //             if (hit.transform.position == mapGraph.vertices[i].position)
+        //             {
+        //                 if (vertex1 == null)
+        //                 {
+        //                     Debug.Log("vertex 1 choosen");
+        //                     vertex1 = mapGraph.vertices[i];
+        //                 }
+        //                 else if (vertex2 == null)
+        //                 {
+        //                     Debug.Log("vertex 2 choosen");
+        //                     vertex2 = mapGraph.vertices[i];
+        //                 }
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // if (vertex1 != null && vertex2 != null)
+        // {
+        //     List<Vertex> path = Pathfinding.CalculatePath(ref mapGraph, vertex1, vertex2);
+
+        //     line.positionCount = path.Count;
+
+        //     for (int i = 0; i < path.Count; i++)
+        //     {
+        //         line.SetPosition(i, path[i].position);
+        //     }
+        //     vertex1 = null;
+        //     vertex2 = null;
+        // }
+    }
+
     //Get the system object from its world representation
     public StarSystem GetSystem(GameObject systemObj)
     {
+        Debug.Log(Array.IndexOf(starMapObjs, systemObj));
+        Debug.Log(systemObj);
         return starSystems[Array.IndexOf(starMapObjs, systemObj)];
     }
 
@@ -132,7 +191,13 @@ public class MapManager : MonoBehaviour
             mapState = MapState.SYSTEM_VIEW;
             for (int i = 0; i < activeSystem.planets.Length; i++)
             {
-                activeSystem.planets[i].transform.parent.gameObject.SetActive(true);
+                activeSystem.planets[i].Hide(false);
+                // activeSystem.planets[i].transform.parent.GetComponent<LineRenderer>().enabled = true;
+                // MeshRenderer[] renderers = activeSystem.planets[i].GetComponentsInChildren<MeshRenderer>();
+                // for (int j = 0; j < renderers.Length; j++)
+                // {
+                //     renderers[j].enabled = true;
+                // }
             }
             activePlanet.Focus(false);
             activePlanet = null;

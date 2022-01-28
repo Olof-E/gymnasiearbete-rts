@@ -21,6 +21,7 @@ public class DeepSpaceAntennaArray : SpaceStructure
             usedCrystals = 850,
             usedPower = 30,
         };
+        selectionCollider = GetComponent<BoxCollider>();
         LevelUp();
     }
 

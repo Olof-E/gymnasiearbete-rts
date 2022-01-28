@@ -21,6 +21,7 @@ public class LargeShipyard : SpaceStructure
             usedCrystals = 850,
             usedPower = 55,
         };
+        selectionCollider = GetComponent<BoxCollider>();
         LevelUp();
     }
 

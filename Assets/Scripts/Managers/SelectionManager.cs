@@ -35,10 +35,11 @@ public class SelectionManager : MonoBehaviour
     //When mouse event is raised check if it has anything to do with the selection manager
     public void HandleMouseInput(MouseEventArgs e)
     {
-        if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders)
+        if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW)
         {
             if (selected.Count > 0) { selected.ForEach((ISelectable item) => { item.selected = false; }); }
             selected.Clear();
+            UnitManager.instance.selectedFleet = -1;
         }
         //Check for single left click
         if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)
@@ -52,9 +53,9 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (MapManager.instance.mapState == MapState.SYSTEM_VIEW)
                 {
-                    Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
-                    selectedPlanet.selected = true;
-                    selected.Add(selectedPlanet);
+                    // Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
+                    // selectedPlanet.selected = true;
+                    // selected.Add(selectedPlanet);
                     //MapManager.instance.FocusPlanet(MapManager.instance.GetPlanet(hit.collider.gameObject));
                 }
                 else if (MapManager.instance.mapState == MapState.PLANETARY_VIEW)
@@ -101,7 +102,7 @@ public class SelectionManager : MonoBehaviour
         }
 
         //Check for drag selection
-        if (e.mouseBtn == 0 && e.startDrag != Vector3.zero && e.dragging)
+        if (e.mouseBtn == 0 && e.dragging)
         {
             Vector3 dragPos1 = mainCamera.WorldToScreenPoint(e.startDrag);
             Vector3 dragPos2 = mainCamera.WorldToScreenPoint(e.endDrag);
@@ -131,11 +132,9 @@ public class SelectionManager : MonoBehaviour
             selectionBounds.SetMinMax(topLeft, botRight);
 
             Collider[] selections = Physics.OverlapBox(selectionBounds.center, selectionBounds.extents, Quaternion.identity, selectionLayer);
-            Debug.Log(selectionBounds.size);
             for (int i = 0; i < selections.Length; i++)
             {
                 ISelectable selectedObj = selections[i].gameObject.GetComponent<ISelectable>();
-                Debug.Log(selections[i].gameObject.name);
                 if (selectedObj != null)
                 {
                     selectedObj.selected = true;

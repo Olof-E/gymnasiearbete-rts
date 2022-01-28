@@ -22,6 +22,7 @@ public class RailgunStructure : SpaceStructure
             usedCrystals = 500,
             usedPower = 65,
         };
+        selectionCollider = GetComponent<BoxCollider>();
         LevelUp();
     }
 

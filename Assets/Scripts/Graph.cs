@@ -9,7 +9,12 @@ public class Vertex
     public Vector3 position;
     public int index;
     public int numOfCons;
-
+    public List<Edge> connections;
+    public Vertex prevNode;
+    public float hScore;
+    public float gScore;
+    public float fScore;
+    public bool visited;
     public Vertex(Vector3 _position, int _index)
     {
         position = _position;
@@ -27,6 +32,7 @@ public class Edge
 {
     public Vertex vertexA;
     public Vertex vertexB;
+    public float cost;
     public bool isRandomEdge = false;
     public Edge(Vertex _vertexA = null, Vertex _vertexB = null)
     {
@@ -160,12 +166,13 @@ public class Graph
                 ),
                 i
             );
+            vertices[i].connections = new List<Edge>();
+            vertices[i].visited = false;
+
             vertCost[i] = float.MaxValue;
             cheapestCostEdges[i] = new Edge();
         }
-
         List<Vertex> visitedSet = new List<Vertex>();
-
         List<Edge> tempEdges = new List<Edge>();
 
         //Generate the minimum spanning tree of the vertices
@@ -191,14 +198,27 @@ public class Graph
             {
                 currVertex = vertices[Random.Range(0, vertices.Length)];
             }
-
             visitedSet.Add(currVertex);
 
             if (!cheapestCostEdges[currVertex.index].IsNull())
             {
-                cheapestCostEdges[currVertex.index].vertexA.incrementCons();
-                cheapestCostEdges[currVertex.index].vertexB.incrementCons();
-                tempEdges.Add(cheapestCostEdges[currVertex.index]);
+                Edge cheapestEdge = cheapestCostEdges[currVertex.index];
+                cheapestEdge.vertexA.incrementCons();
+                cheapestEdge.vertexB.incrementCons();
+
+                float edgeCost = Vector3.Distance(cheapestEdge.vertexA.position, cheapestEdge.vertexB.position);
+
+                cheapestEdge.vertexA.connections.Add(cheapestEdge);
+                cheapestEdge.vertexA.connections[cheapestEdge.vertexA.connections.Count - 1].cost = edgeCost;
+
+                cheapestEdge.vertexB.connections.Add(
+                    new Edge(
+                        cheapestEdge.vertexB,
+                        cheapestEdge.vertexA
+                    ));
+                cheapestEdge.vertexB.connections[cheapestEdge.vertexB.connections.Count - 1].cost = edgeCost;
+
+                tempEdges.Add(cheapestEdge);
             }
 
             Parallel.For(0, vertices.Length, (int i) =>
@@ -211,12 +231,12 @@ public class Graph
                     if (dist < vertCost[i])
                     {
                         vertCost[i] = dist;
-
                         cheapestCostEdges[i] = new Edge(currVertex, adjVertex);
                     }
                 }
             });
         }
+
         //Generate new random edges that arent already in the graph and add them
         for (int i = 0; i < vertices.Length; i++)
         {
@@ -270,10 +290,23 @@ public class Graph
                     bestEdge.vertexA.incrementCons();
                     bestEdge.vertexB.incrementCons();
                     bestEdge.isRandomEdge = true;
+
+                    float edgeCost = Vector3.Distance(bestEdge.vertexA.position, bestEdge.vertexB.position);
+
+                    bestEdge.vertexA.connections.Add(bestEdge);
+                    bestEdge.vertexA.connections[bestEdge.vertexA.connections.Count - 1].cost = edgeCost;
+
+                    bestEdge.vertexB.connections.Add(new Edge(bestEdge.vertexB, bestEdge.vertexA));
+                    bestEdge.vertexB.connections[bestEdge.vertexB.connections.Count - 1].cost = edgeCost;
+
                     tempEdges.Add(bestEdge);
                 }
             }
         }
         edges = tempEdges.ToArray();
+        // for (int i = 0; i < edges.Length; i++)
+        // {
+        //     edges[i].cost = Vector3.Distance(edges[i].vertexA.position, edges[i].vertexB.position);
+        // }
     }
 }

@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour
     public float maxSpeed = 100f;
     public float rotSpeed = 15f;
     public float offsetDist = 15f;
-    public float edgeMoveThickness = 300f;
+    public float edgeMoveThickness = 100f;
+    public bool focusing = false;
     private float speed = 0f;
     private Camera mainCamera;
     Vector3 moveDir;
@@ -86,6 +87,14 @@ public class CameraController : MonoBehaviour
     public void FocusPosition(Vector3 focusPoint)
     {
         transform.position = focusPoint;
-        offsetDist = 65f;
+        focusing = true;
+        StartCoroutine(Focusing());
+        //offsetDist = 65f;
+    }
+
+    public IEnumerator Focusing()
+    {
+        yield return new WaitForSeconds(0.15f);
+        focusing = false;
     }
 }
