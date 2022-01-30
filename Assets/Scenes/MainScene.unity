@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.035074458, g: 0.061620347, b: 0.07205171, a: 1}
+  m_IndirectSpecularColor: {r: 0.035049867, g: 0.06164164, b: 0.07197396, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5356,7 +5356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21de1c115d5442a4c8307559206b993e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 1
+  maxSpeed: 6.5
   rotSpeed: 12
   offsetDist: 10
   edgeMoveThickness: 150
@@ -6196,6 +6196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fleetLisInfoPrefab: {fileID: 1868277859086115367, guid: b786b4f664bfe174082212713be95b97, type: 3}
+  selectedFleet: 0
 --- !u!1 &1804873888
 GameObject:
   m_ObjectHideFlags: 0
@@ -7692,7 +7693,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 241022949}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.99583334
+  m_Size: 0.9958332
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

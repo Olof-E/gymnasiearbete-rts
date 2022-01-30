@@ -31,7 +31,7 @@ public class CameraController : MonoBehaviour
         mainCamera.transform.position = mainCamera.transform.position - mainCamera.transform.forward * offsetDist;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         moveDir = Vector3.zero;
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
@@ -57,14 +57,15 @@ public class CameraController : MonoBehaviour
         //     moveDir.z = 1;//(Input.mousePosition.y - (Screen.height - edgeMoveThickness)) / (6f * edgeMoveThickness);
         // }
 
-        if (moveDir != Vector3.zero)
-        {
-            speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * 2f);
-        }
-        else
-        {
-            speed = Mathf.Lerp(speed, 0f, Time.fixedDeltaTime * 2f);
-        }
+        // if (moveDir != Vector3.zero)
+        // {
+        //     speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * 2f);
+        // }
+        // else
+        // {
+        //     speed = Mathf.Lerp(speed, 0f, Time.fixedDeltaTime * 2f);
+        // }
+        speed = maxSpeed;
 
         transform.Translate(moveDir.normalized * Time.fixedDeltaTime * speed * Mathf.Exp(0.05f * offsetDist), Space.World);
         //transform.position = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
@@ -77,9 +78,14 @@ public class CameraController : MonoBehaviour
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, newRot, rotSpeed * Time.fixedDeltaTime);
         }
 
+
+    }
+
+    private void Update()
+    {
         if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
-            offsetDist = Mathf.Clamp(offsetDist - Input.mouseScrollDelta.y * 50f * Time.fixedDeltaTime, 5f, 65f);
+            offsetDist = Mathf.Clamp(offsetDist - Input.mouseScrollDelta.y, 5f, 65f);
             mainCamera.transform.position = transform.position - mainCamera.transform.forward * offsetDist;
         }
     }

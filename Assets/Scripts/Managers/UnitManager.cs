@@ -100,6 +100,8 @@ public class UnitManager : MonoBehaviour
     {
         if (assignedUnit.fleetId == fleetId)
             return;
+
+        fleets[assignedUnit.fleetId].units.Remove(assignedUnit);
         fleets[fleetId].units.Add(assignedUnit);
         assignedUnit.fleetId = fleetId;
     }
