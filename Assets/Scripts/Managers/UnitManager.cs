@@ -41,36 +41,34 @@ public class UnitManager : MonoBehaviour
 
     public void CreateFleet()
     {
-        List<Unit> fleetUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
-        Formation newFormation = new Formation(fleetUnits, FormationType.SQUARE);
+        List<Unit> selectedUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
+        Formation newFormation = new Formation(new List<Unit>(), FormationType.SQUARE);
+        int fleetId = fleets.Count - 1;
 
-        if (fleets.Count <= 0)
+        GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
+        RectTransform panelTransform = newFleetInfoPanel.GetComponent<RectTransform>();
+        newFleetInfoPanel.transform.SetParent(UiManager.instance.fleetList.transform, false);
+
+        panelTransform.anchoredPosition = new Vector2(0, -115 * fleetId);
+        newFleetInfoPanel.GetComponentInChildren<TMP_Text>().SetText($"fleet {fleetId}");
+
+        newFleetInfoPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
-            GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
-            RectTransform panelTransform = newFleetInfoPanel.GetComponent<RectTransform>();
-            newFleetInfoPanel.transform.SetParent(UiManager.instance.fleetList.transform, false);
-            panelTransform.anchoredPosition = Vector2.zero;
-        }
-        else
-        {
-            GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
-            RectTransform panelTransform = newFleetInfoPanel.GetComponent<RectTransform>();
-            newFleetInfoPanel.transform.SetParent(UiManager.instance.fleetList.transform, false);
-            panelTransform.anchoredPosition = new Vector2(0, -115 * (fleets.Count - 1));
-            int fleetId = fleets.Count - 1;
-            newFleetInfoPanel.GetComponent<Button>().onClick.AddListener(() =>
+            if (CommandManager.instance.assignOrder)
             {
-                if (CommandManager.instance.assignOrder)
-                {
-                    CommandManager.instance.GiveOrders(fleetId);
-                }
-                else
-                {
-                    SelectFleet(fleetId);
-                }
-            });
-            newFleetInfoPanel.GetComponentInChildren<TMP_Text>().SetText($"fleet {fleetId}");
+                CommandManager.instance.GiveOrders(fleetId);
+            }
+            else
+            {
+                SelectFleet(fleetId);
+            }
+        });
+
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            AssignFleet(selectedUnits[i], fleetId);
         }
+
         UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
     }
 
@@ -83,7 +81,12 @@ public class UnitManager : MonoBehaviour
 
         fleets[selectedFleet].units.ForEach((Unit unit) => { unit.fleetId = -1; });
         fleets.RemoveAt(selectedFleet);
-        UiManager.instance.fleetList.transform.GetChild(selectedFleet).parent = null;
+        UiManager.instance.fleetList.transform.GetChild(selectedFleet).SetParent(null, false);
+        // for (int i = 0; i < UiManager.instance.fleetList.transform.childCount; i++)
+        // {
+        //     UiManager.instance.fleetList.transform.GetChild(i).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -115 * i);
+        // }
+        // UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
     }
 
     public void SelectFleet(int fleetId)
@@ -94,6 +97,7 @@ public class UnitManager : MonoBehaviour
             SelectionManager.instance.selected.Add(fleets[fleetId].units[i]);
         }
         selectedFleet = fleetId;
+        Debug.Log($"Selected fleet: {fleetId}");
     }
 
     public void AssignFleet(Unit assignedUnit, int fleetId)
@@ -101,8 +105,14 @@ public class UnitManager : MonoBehaviour
         if (assignedUnit.fleetId == fleetId)
             return;
 
-        fleets[assignedUnit.fleetId].units.Remove(assignedUnit);
+        if (assignedUnit.fleetId != -1)
+        {
+            Debug.Log("Removing from previous fleet");
+            fleets[assignedUnit.fleetId].units.Remove(assignedUnit);
+        }
+
         fleets[fleetId].units.Add(assignedUnit);
         assignedUnit.fleetId = fleetId;
+        Debug.Log(assignedUnit.fleetId);
     }
 }
