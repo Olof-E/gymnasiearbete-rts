@@ -77,7 +77,7 @@ public class Unit : Targetable, ISelectable
                     transform.rotation = Quaternion.RotateTowards(
                         transform.rotation,
                         Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up),
-                        maneuverability * Time.fixedDeltaTime
+                        maneuverability * Time.deltaTime
                     );
 
                     // transform.rotation = Quaternion.RotateTowards(
@@ -90,7 +90,7 @@ public class Unit : Targetable, ISelectable
                     //             Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
                     //             ) / 180f
                     //     ),
-                    //     maneuverability * 4f * Time.fixedDeltaTime
+                    //     maneuverability * 4f * Time.deltaTime
                     //     );
 
                     if (
@@ -99,7 +99,7 @@ public class Unit : Targetable, ISelectable
                             Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)) < 1f
                         )
                     {
-                        transform.position = Vector3.MoveTowards(transform.position, transform.position + currOrder.movePos - transform.position, speed * Time.fixedDeltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, transform.position + currOrder.movePos - transform.position, speed * Time.deltaTime);
                     }
 
                     pathLineRend.SetPosition(0, transform.position);
@@ -170,7 +170,7 @@ public class Unit : Targetable, ISelectable
                     }
                     else
                     {
-                        transform.position = Vector3.MoveTowards(transform.position, transform.position + (path[1].position - transform.position).normalized, speed * 0.05f * Time.fixedDeltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, transform.position + (path[1].position - transform.position).normalized, speed * 0.05f * Time.deltaTime);
                         pathLineRend.SetPosition(0, transform.position);
 
                         if (Vector3.Distance(transform.position, path[1].position) < 1e-2)
