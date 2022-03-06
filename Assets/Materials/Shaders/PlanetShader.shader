@@ -6,6 +6,7 @@ Shader "Unlit/PlanetShader"
         _MainTex ("Texture", 2D) = "white" {}
         _NormalMap ("Normal Map", 2D) = "bump" {}
         _RoughnessMap ("Roughness Map", 2D) = "grey" {}
+        _SpecularMap ("Specular Map", 2D) = "grey" {}
     }
     SubShader
     {
@@ -47,6 +48,9 @@ Shader "Unlit/PlanetShader"
             sampler2D _RoughnessMap;
             float4 _RoughnessMap_ST;
 
+            sampler2D _SpecularMap;
+            float4 _SpecularMap_ST;
+
             float4 _PlanetPosWS;
 
             Varyings vert (Attributes v)
@@ -69,8 +73,8 @@ Shader "Unlit/PlanetShader"
 
             float4 frag (Varyings i) : SV_Target
             {
-                float4 col = tex2D(_MainTex, i.uv);
 
+                float4 col = tex2D(_MainTex, i.uv);
                 float3 normal = UnpackNormal(tex2D(_NormalMap, i.uv)); 
                 
                 float3x3 tangent2Object =
@@ -79,21 +83,25 @@ Shader "Unlit/PlanetShader"
                     cross(i.tangentWS*i.tangentWS.w, i.normalWS),
                     i.normalWS
                 };
-                tangent2Object=transpose(tangent2Object);
-                normal = mul(tangent2Object, normal);
+                   
+                normal = -TransformTangentToWorld(normal, CreateTangentToWorld(i.normalWS, i.tangentWS,1));
                 float3 worldNormal = normalize(normal);
 
                 float specular = pow(
                     max(0, dot(
                         reflect(normalize(_PlanetPosWS), worldNormal), 
                         GetWorldSpaceNormalizeViewDir(i.positionWS))), 
-                    75);
+                    10)*tex2D(_SpecularMap, i.uv)*2.85;
 
                 
 
-                col *= max(0,dot(worldNormal, -normalize(_PlanetPosWS)))*2;
 
-                col+= (1-tex2D(_RoughnessMap, i.uv)) * specular;
+                col *= pow(max(0, dot(normalize(_PlanetPosWS), worldNormal)), 0.85);
+
+                col +=  specular * (tex2D(_RoughnessMap, i.uv));
+
+                col *= 2;
+
                 return col;
             }
             ENDHLSL

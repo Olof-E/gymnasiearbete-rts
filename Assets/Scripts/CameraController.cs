@@ -3,267 +3,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
-    // //Pan Settings
-    // [Header("Pan Settings")]
-    // public float panSpeed = 15.0f;
-    // public float mousePanMultiplier = 1.0f;
-    // public float mouseDeadZone = 100.0f;
-
-
-    // //Zoom Settings
-    // [Header("Zoom Settings")]
-    // public float zoomSpeed = 1.0f;
-    // public float mouseZoomMultiplier = 5.0f;
-    // public float zoomMin = 2.0f;
-    // public float zoomMax = 50.0f;
-
-
-    // //Rotation Settings
-    // [Header("Rotation Settings")]
-    // public float rotationSpeed = 50.0f;
-    // public float mouseRotationMultiplier = 0.2f;
-
-    // //General Speed Settings
-    // [Header("General Speed Settings")]
-    // public bool smoothing = true;
-    // public float smoothingFactor = 0.1f;
-
-
-    // //Generic Settings
-    // [Header("Generic Settings")]
-    // public float mouseEdgeBoundary = 40.0f;
-    // public static Vector3 cameraTarget;
-    // public Vector3 lastMousePos;
-    // public Vector3 mouseClicked;
-
-    // //Private Settings
-    // private Vector3 lastPanSpeed = Vector3.zero;
-    // private Vector3 cameraPosition;
-    // private GameObject _camera;
-
-    // private void Awake()
-    // {
-    //     if (instance == null)
-    //     {
-    //         instance = this;
-    //     }
-    //     else
-    //     {
-    //         Destroy(this);
-    //         Debug.Log("Camera controller already exists...");
-    //     }
-    // }
-    // // Use this for initialization
-    // void Start()
-    // {
-    //     cameraTarget = transform.position;
-    //     lastMousePos = Vector3.zero;
-    //     mouseClicked = Vector3.zero;
-    //     _camera = transform.Find("Main Camera").gameObject;
-    // }
-
-    // void Update()
-    // {
-    //     Rotate();
-    //     Pan();
-    //     Zoom();
-    //     UpdatePosition();
-
-    //     lastMousePos = Input.mousePosition;
-
-
-    // }
-
-    // private void Pan()
-    // {
-    //     Vector3 whereTo = Vector3.zero;
-
-    //     //Move the camera with the keyboard
-    //     if (KeyboardInput())
-    //     {
-    //         if (Input.GetKey(KeyCode.W))
-    //             whereTo += Vector3.forward;
-
-    //         if (Input.GetKey(KeyCode.A))
-    //             whereTo += Vector3.left;
-
-    //         if (Input.GetKey(KeyCode.S))
-    //             whereTo += Vector3.back;
-
-    //         if (Input.GetKey(KeyCode.D))
-    //             whereTo += Vector3.right;
-    //     }
-
-    //     //Move the camera with the right mouse button (keep pressed and move around)
-    //     if (MouseInput())
-    //     {
-    //         if (Input.GetMouseButton(1) && mouseClicked == Vector3.zero)
-    //             mouseClicked = Input.mousePosition;
-
-    //         if (Input.GetMouseButton(1))
-    //         {
-    //             if (mouseClicked != Vector3.zero)
-    //             {
-    //                 if ((mouseClicked.y < Input.mousePosition.y) && ((Input.mousePosition.y - mouseClicked.y) > mouseDeadZone))
-    //                     whereTo += Vector3.forward * (Input.mousePosition.y - mouseClicked.y) / 150 * mousePanMultiplier;
-
-    //                 if ((mouseClicked.x < Input.mousePosition.x) && ((Input.mousePosition.x - mouseClicked.x) > mouseDeadZone))
-    //                     whereTo += Vector3.right * (Input.mousePosition.x - mouseClicked.x) / 150 * mousePanMultiplier;
-
-    //                 if ((mouseClicked.y > Input.mousePosition.y) && ((mouseClicked.y - Input.mousePosition.y) > mouseDeadZone))
-    //                     whereTo += Vector3.back * (mouseClicked.y - Input.mousePosition.y) / 150 * mousePanMultiplier;
-
-    //                 if ((mouseClicked.x > Input.mousePosition.x) && ((mouseClicked.x - Input.mousePosition.x) > mouseDeadZone))
-    //                     whereTo += Vector3.left * (mouseClicked.x - Input.mousePosition.x) / 150 * mousePanMultiplier;
-    //             }
-    //         }
-    //     }
-
-    //     if (Input.GetMouseButtonUp(1))
-    //         mouseClicked = Vector3.zero;
-
-    //     //Move the camera by placing the mouse cursor on the edges of the screen
-    //     if (MouseOverScreenEdge())
-    //     {
-    //         if (Input.mousePosition.y > (Screen.height - mouseEdgeBoundary))
-    //             whereTo += Vector3.forward * mousePanMultiplier;
-
-    //         if (Input.mousePosition.x > (Screen.width - mouseEdgeBoundary))
-    //             whereTo += Vector3.right * mousePanMultiplier;
-
-    //         if (Input.mousePosition.y < mouseEdgeBoundary)
-    //             whereTo += Vector3.back * mousePanMultiplier;
-
-    //         if (Input.mousePosition.x < mouseEdgeBoundary)
-    //             whereTo += Vector3.left * mousePanMultiplier;
-    //     }
-
-    //     //Now that the destination is set we move the camera
-    //     SmoothIt(whereTo);
-    // }
-
-    // private void Zoom()
-    // {
-    //     Vector3 whereTo = Vector3.zero;
-    //     if (KeyboardInput())
-    //     {
-    //         if (Input.GetKey(KeyCode.R))
-    //             whereTo += Vector3.down * zoomSpeed;
-
-    //         if (Input.GetKey(KeyCode.F))
-    //             whereTo += Vector3.up * zoomSpeed;
-    //     }
-
-    //     if (MouseInput())
-    //     {
-    //         if (Input.GetAxis("Mouse ScrollWheel") > 0)
-    //             whereTo += Vector3.down * mouseZoomMultiplier;
-
-    //         if (Input.GetAxis("Mouse ScrollWheel") < 0)
-    //             whereTo += Vector3.up * mouseZoomMultiplier;
-    //     }
-
-    //     SmoothIt(whereTo);
-    // }
-
-    // private void Rotate()
-    // {
-    //     float yRotation = 0.0f;
-    //     float xRotation = 0.0f;
-
-    //     if (KeyboardInput())
-    //     {
-    //         if (Input.GetKey(KeyCode.Q))
-    //             yRotation = -1.0f;
-
-    //         if (Input.GetKey(KeyCode.E))
-    //             yRotation = 1.0f;
-    //     }
-    //     transform.Rotate(0, yRotation, 0);
-
-    //     if (MouseInput())
-    //     {
-    //         if (Input.GetMouseButton(2))
-    //         {
-    //             Vector3 mousePosition = (Input.mousePosition - lastMousePos);
-    //             if (Input.mousePosition.x != lastMousePos.x)
-    //             {
-    //                 yRotation += mousePosition.x * mouseRotationMultiplier;
-    //                 //Rotate the camera horizontally on the Y axis
-    //                 transform.Rotate(0, yRotation, 0);
-    //             }
-
-    //             if (Input.mousePosition.y != lastMousePos.y)
-    //             {
-    //                 xRotation -= mousePosition.y * mouseRotationMultiplier;
-
-    //                 _camera.transform.Rotate(xRotation, 0, 0);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // private void SmoothIt(Vector3 whereTo)
-    // {
-    //     Vector3 effectivePanSpeed = whereTo;
-    //     if (smoothing)
-    //     {
-    //         effectivePanSpeed = Vector3.Lerp(lastPanSpeed, whereTo, smoothingFactor);
-    //         lastPanSpeed = effectivePanSpeed;
-    //     }
-
-    //     cameraTarget = cameraTarget + transform.TransformDirection(effectivePanSpeed) * panSpeed * Time.deltaTime;
-    //     cameraPosition = transform.position;
-    // }
-
-    // private void UpdatePosition()
-    // {
-    //     transform.position = cameraTarget;
-    // }
-
-    // #region Helpers
-
-    // public static bool KeyboardInput()
-    // {
-    //     if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) ||
-    //         Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.F))
-    //         return true;
-    //     else return false;
-    // }
-
-    // private bool MouseInput()
-    // {
-    //     if (Input.GetMouseButton(1) || Input.GetMouseButton(2) || Input.GetAxis("Mouse ScrollWheel") != 0)
-    //         return true;
-    //     else return false;
-    // }
-
-    // private bool MouseOverScreenEdge()
-    // {
-    //     if (Input.mousePosition.x < mouseEdgeBoundary ||
-    //         Input.mousePosition.x > Screen.width - mouseEdgeBoundary ||
-    //         Input.mousePosition.y < mouseEdgeBoundary ||
-    //         Input.mousePosition.y > Screen.height - mouseEdgeBoundary)
-    //         return true;
-    //     else return false;
-    // }
-
-    // #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static CameraController instance;
     public float maxSpeed = 100f;
     public float rotSpeed = 15f;
@@ -275,7 +14,7 @@ public class CameraController : MonoBehaviour
     Vector3 lastMoveDir;
     Vector3 targetMoveDir;
     float lastZoomPos;
-    float targetZoomPos;
+    float targetZoomPos = 15f;
     Vector2 orbitAngles;
 
     private void Awake()
@@ -324,19 +63,12 @@ public class CameraController : MonoBehaviour
         //     moveDir.z = 1;//(Input.mousePosition.y - (Screen.height - edgeMoveThickness)) / (6f * edgeMoveThickness);
         // }
 
-        // if (moveDir != Vector3.zero)
-        // {
-        //     speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * 2f);
-        // }
-        // else
-        // {
-        //     speed = Mathf.Lerp(speed, 0f, Time.fixedDeltaTime * 2f);
-        // }
+
         Vector3 moveDir = Vector3.Lerp(lastMoveDir, targetMoveDir, 0.25f);
         lastMoveDir = moveDir;
         speed = maxSpeed;
 
-        transform.Translate(moveDir * Time.deltaTime * speed, Space.World);
+        transform.Translate(transform.TransformDirection(moveDir) * Time.deltaTime * speed, Space.World);
         //transform.position = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
         //transform.LookAt(target.transform.position, Vector3.up);
 
@@ -355,8 +87,11 @@ public class CameraController : MonoBehaviour
 
             orbitAngles = new Vector2(Mathf.Clamp(orbitAngles.x, -85f, 85f), orbitAngles.y);
         }
-        Quaternion lookRot = Quaternion.Euler(orbitAngles);
-        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, lookRot, 0.1f);
+        Quaternion targetLookRot = Quaternion.Euler(0f, orbitAngles.y, 0f);
+        Quaternion cameraLookRot = Quaternion.Euler(orbitAngles.x, 0f, 0f);
+
+        transform.rotation = Quaternion.Slerp(transform.localRotation, targetLookRot, 0.1f);
+        mainCamera.transform.localRotation = Quaternion.Slerp(mainCamera.transform.localRotation, cameraLookRot, 0.1f);
     }
 
     private void Update()
@@ -376,7 +111,7 @@ public class CameraController : MonoBehaviour
         transform.position = focusPoint;
         focusing = true;
         StartCoroutine(Focusing());
-        //offsetDist = 65f;
+        offsetDist = 65f;
     }
 
     public IEnumerator Focusing()

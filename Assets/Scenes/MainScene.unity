@@ -5358,7 +5358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 6.5
   rotSpeed: 1241.2
-  offsetDist: 10
+  offsetDist: 15
   edgeMoveThickness: 150
   focusing: 0
 --- !u!1 &1662351434

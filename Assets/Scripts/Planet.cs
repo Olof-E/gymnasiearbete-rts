@@ -45,11 +45,12 @@ public class Planet : MonoBehaviour, ISelectable
     {
         orbitalRadius = _orbitalRadius;
         scaledOrbitalRadius = orbitalRadius * 8f;
+        orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
+        transform.localScale = Vector3.one * Random.Range(1.25f, 4f);
+        parentSystem = _parentSystem;
+
         shaderPlanetPosId = Shader.PropertyToID("_PlanetPosWS");
         mpb = new MaterialPropertyBlock();
-        targetables = new List<Targetable>();
-
-        parentSystem = _parentSystem;
 
         //Determine what type of planet this is using orbital radius
         if (orbitalRadius > 0f && orbitalRadius <= 15f)
@@ -82,11 +83,11 @@ public class Planet : MonoBehaviour, ISelectable
         }
 
         planetProperties = MapManager.instance.planetPropertiesList[(int)planetType];
-        orbitalSpeed = Random.Range(0.0005f, 0.001f);
         meshRenderer.material = planetProperties.material;
+
         planetaryStructures = new List<PlanetaryStructure>();
         spaceStructures = new List<SpaceStructure>();
-
+        targetables = new List<Targetable>();
         selectionCollider = GetComponent<BoxCollider>();
     }
 
@@ -120,8 +121,6 @@ public class Planet : MonoBehaviour, ISelectable
         mpb.SetVector(shaderPlanetPosId, transform.position);
 
         meshRenderer.SetPropertyBlock(mpb);
-
-
     }
     //Evaluate the planets orbital position 
     public Vector3 EvaluateOrbitalPos(float radius)

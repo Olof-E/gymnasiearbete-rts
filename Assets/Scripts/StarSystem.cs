@@ -50,7 +50,7 @@ public class StarSystem
             planets[i].parentSystem = this;
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
-            float orbitRadius = (AU + starRadius) * UnityEngine.Random.Range(0.1f * (i + 1), 10f * (i + 1));
+            float orbitRadius = (AU + starRadius) * UnityEngine.Random.Range(1f * (i + 1), 5f * (i + 1));
             planets[i].Initialize(orbitRadius, this);
             orbitObj.AddComponent<OrbitalRenderer>();
             orbitObj.GetComponent<OrbitalRenderer>().Initialize(50, orbitRadius);

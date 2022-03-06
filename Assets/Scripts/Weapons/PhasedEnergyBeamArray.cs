@@ -55,6 +55,6 @@ public class PhasedEnergyBeamArray : Weapon
 
     private void OnDrawGizmos()
     {
-        Handles.DrawWireDisc(transform.position, Vector3.up, targetingRadius);
+        //Handles.DrawWireDisc(transform.position, Vector3.up, targetingRadius);
     }
 }

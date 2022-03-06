@@ -38,6 +38,6 @@ public class TorpedoLauncher : Weapon
 
     private void OnDrawGizmosSelected()
     {
-        Handles.DrawWireDisc(transform.position, Vector3.up, targetingRadius);
+        //Handles.DrawWireDisc(transform.position, Vector3.up, targetingRadius);
     }
 }
