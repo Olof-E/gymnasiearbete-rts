@@ -120,7 +120,8 @@ public class SelectionManager : MonoBehaviour
         {
             if (MapManager.instance.mapState != MapState.PLANETARY_VIEW)
             {
-                //return;
+                selectionRect = Rect.zero;
+                return;
             }
 
             selectionRect = Rect.zero;

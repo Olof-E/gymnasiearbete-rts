@@ -91,16 +91,16 @@ Shader "Unlit/PlanetShader"
                     max(0, dot(
                         reflect(normalize(_PlanetPosWS), worldNormal), 
                         GetWorldSpaceNormalizeViewDir(i.positionWS))), 
-                    10)*tex2D(_SpecularMap, i.uv)*2.85;
+                    7.5)*tex2D(_SpecularMap, i.uv)*1.2;
 
                 
 
 
-                col *= pow(max(0, dot(normalize(_PlanetPosWS), worldNormal)), 0.85);
+                col *= pow(max(0, dot(normalize(_PlanetPosWS), worldNormal)), 0.75);
 
                 col +=  specular * (tex2D(_RoughnessMap, i.uv));
 
-                col *= 2;
+                col *= 1.5;
 
                 return col;
             }

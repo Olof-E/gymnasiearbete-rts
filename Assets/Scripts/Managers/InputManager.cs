@@ -80,6 +80,7 @@ public class InputManager : MonoBehaviour
         //Check for drag click
         if (Input.GetMouseButton(0) && !IsPointerOverUIObject())
         {
+            Debug.Log(GetMousePositionOnXZPlane());
             if (Vector3.Distance(startDrag, GetMousePositionOnXZPlane()) > 0.5f && !CameraController.instance.focusing)
             {
                 checkDoubleClick = false;
@@ -101,6 +102,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && isDragging)
         {
             isDragging = false;
+            Debug.Log("this did happen");
             MouseEventOccured(
                 new MouseEventArgs()
                 {
@@ -134,14 +136,13 @@ public class InputManager : MonoBehaviour
     {
         float distance;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (XZPlane.Raycast(ray, out distance))
-        {
-            Vector3 hitPoint = ray.GetPoint(distance);
-            //Ensure y position is exactly zero
-            hitPoint.y = 0;
-            return hitPoint;
-        }
-        return Vector3.zero;
+        XZPlane.Raycast(ray, out distance);
+        Vector3 hitPoint = ray.GetPoint(distance);
+
+        //Ensure y position is exactly zero
+        hitPoint.y = 0;
+
+        return hitPoint;
     }
 
     public void PrintMouseInput(MouseEventArgs e)

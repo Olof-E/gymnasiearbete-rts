@@ -8,8 +8,10 @@ Shader "Unlit/PlanetAtmosphereShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Blend OneMinusDstColor One
         LOD 100
+        CULL BACK
 
         Pass
         {
@@ -40,6 +42,8 @@ Shader "Unlit/PlanetAtmosphereShader"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
+            float4 _Color;
+
             float4 _PlanetPosWS;
 
             Varyings vert (Attributes v)
@@ -62,12 +66,11 @@ Shader "Unlit/PlanetAtmosphereShader"
 
             float4 frag (Varyings i) : SV_Target
             {
-                float4 col = ;//tex2D(_MainTex, i.uv);                
+                float4 col = _Color;//tex2D(_MainTex, i.uv);                
 
-                col *= max(0,dot(worldNormal, -normalize(_PlanetPosWS)))*2;
+                float fresnel = pow(1-max(0,dot(i.normalWS, GetWorldSpaceNormalizeViewDir(i.positionWS))),1)*max(0,dot(i.normalWS, -normalize(_PlanetPosWS)));
 
-                col+= (1-tex2D(_RoughnessMap, i.uv)) * specular;
-                return col;
+                return col*fresnel*5;
             }
             ENDHLSL
         }

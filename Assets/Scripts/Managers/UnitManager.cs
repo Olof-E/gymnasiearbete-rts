@@ -91,6 +91,7 @@ public class UnitManager : MonoBehaviour
 
     public void SelectFleet(int fleetId)
     {
+        SelectionManager.instance.selected.Clear();
         for (int i = 0; i < fleets[fleetId].units.Count; i++)
         {
             fleets[fleetId].units[i].selected = true;

@@ -116,11 +116,18 @@ public class Planet : MonoBehaviour, ISelectable
             UiManager.instance.ActivateActions(-1);
             UiManager.instance.ActivateActions(1);
         }
-        meshRenderer.GetPropertyBlock(mpb);
+        meshRenderer.GetPropertyBlock(mpb, 0);
 
         mpb.SetVector(shaderPlanetPosId, transform.position);
 
-        meshRenderer.SetPropertyBlock(mpb);
+        meshRenderer.SetPropertyBlock(mpb, 0);
+
+
+        meshRenderer.GetPropertyBlock(mpb, 1);
+
+        mpb.SetVector(shaderPlanetPosId, transform.position);
+
+        meshRenderer.SetPropertyBlock(mpb, 1);
     }
     //Evaluate the planets orbital position 
     public Vector3 EvaluateOrbitalPos(float radius)
