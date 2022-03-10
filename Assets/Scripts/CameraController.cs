@@ -4,12 +4,12 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public static CameraController instance;
-    public float maxSpeed = 100f;
+    public float maxSpeed = 6.5f;
     public float rotSpeed = 15f;
     public float offsetDist = 15f;
     public float edgeMoveThickness = 100f;
     public bool focusing = false;
-    private float speed = 0f;
+    public float speed = 100f;
     private Camera mainCamera;
     Vector3 lastMoveDir;
     Vector3 targetMoveDir;
@@ -66,7 +66,7 @@ public class CameraController : MonoBehaviour
 
         Vector3 moveDir = Vector3.Lerp(lastMoveDir, targetMoveDir, 0.25f);
         lastMoveDir = moveDir;
-        speed = maxSpeed;
+        speed = maxSpeed * (Mathf.Exp(offsetDist / 30));
 
         transform.Translate(transform.TransformDirection(moveDir) * Time.deltaTime * speed, Space.World);
         //transform.position = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
@@ -98,9 +98,9 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
-            targetZoomPos = targetZoomPos - Input.mouseScrollDelta.y;
+            targetZoomPos = targetZoomPos - Input.mouseScrollDelta.y * Mathf.Clamp(Mathf.Exp(offsetDist / 65f), 1f, 15f);
         }
-        offsetDist = Mathf.Lerp(lastZoomPos, targetZoomPos, 0.075f);
+        offsetDist = Mathf.Clamp(Mathf.Lerp(lastZoomPos, targetZoomPos, 0.075f), 2f, 85f);
         lastZoomPos = offsetDist;
 
         mainCamera.transform.position = transform.position - mainCamera.transform.forward * offsetDist;
@@ -111,7 +111,7 @@ public class CameraController : MonoBehaviour
         transform.position = focusPoint;
         focusing = true;
         StartCoroutine(Focusing());
-        offsetDist = 65f;
+        targetZoomPos = 65f;
     }
 
     public IEnumerator Focusing()

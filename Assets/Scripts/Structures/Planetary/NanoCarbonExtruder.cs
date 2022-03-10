@@ -18,7 +18,7 @@ public class NanoCarbonExtruder : PlanetaryStructure
     }
     public override void Execute()
     {
-        Player.instance.totalNanoCarbon += 25f * Time.fixedDeltaTime * level * parentBody.planetProperties.carbonMultiplier;
+        Player.instance.totalNanoCarbon += 25f * Time.fixedDeltaTime * (1f + 1f / (level + 1f)) * parentBody.planetProperties.carbonMultiplier;
     }
     public override void LevelUp()
     {

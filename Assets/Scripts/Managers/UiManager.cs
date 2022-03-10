@@ -95,14 +95,14 @@ public class UiManager : MonoBehaviour
     {
         fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
 
-        creditsText.SetText($"¢: {Player.instance.totalCredits}");
-        scienceText.SetText($"S: {Player.instance.totalScience}");
-        tritaniumText.SetText($"T: {Player.instance.totalTritanium}");
-        crystalText.SetText($"C: {Player.instance.totalCrystals}");
-        nanoCarbonText.SetText($"NC: {Player.instance.totalNanoCarbon}");
+        creditsText.SetText($"¢: {Mathf.RoundToInt(Player.instance.totalCredits)}");
+        scienceText.SetText($"S: {Mathf.RoundToInt(Player.instance.totalScience)}");
+        tritaniumText.SetText($"T: {Mathf.RoundToInt(Player.instance.totalTritanium)}");
+        crystalText.SetText($"C: {Mathf.RoundToInt(Player.instance.totalCrystals)}");
+        nanoCarbonText.SetText($"NC: {Mathf.RoundToInt(Player.instance.totalNanoCarbon)}");
         availablePowerText.SetText($"P: {Player.instance.availablePower}");
-        RareMetalText.SetText($"R: {Player.instance.totalRareMetals}");
-        gasText.SetText($"G: {Player.instance.totalGas}");
+        RareMetalText.SetText($"R: {Mathf.RoundToInt(Player.instance.totalRareMetals)}");
+        gasText.SetText($"G: {Mathf.RoundToInt(Player.instance.totalGas)}");
 
         selectionInfoText.SetText($"Selection: {SelectionManager.instance.selected.Count}");
     }

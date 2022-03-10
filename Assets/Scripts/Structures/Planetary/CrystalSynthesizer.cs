@@ -18,7 +18,7 @@ public class CrystalSynthesizer : PlanetaryStructure
     }
     public override void Execute()
     {
-        Player.instance.totalCrystals += 25f * Time.fixedDeltaTime * level * parentBody.planetProperties.crystalMultiplier;
+        Player.instance.totalCrystals += 25f * Time.fixedDeltaTime * (1f + 1f / (level + 1f)) * parentBody.planetProperties.crystalMultiplier;
     }
 
     public override void LevelUp()

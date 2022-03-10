@@ -17,7 +17,7 @@ public class ResearchFacility : PlanetaryStructure
     }
     public override void Execute()
     {
-        Player.instance.totalScience += 1f * Time.fixedDeltaTime * level;
+        Player.instance.totalScience += 1f * Time.fixedDeltaTime * (1f + 1f / (level + 1f));
     }
 
     public override void LevelUp()

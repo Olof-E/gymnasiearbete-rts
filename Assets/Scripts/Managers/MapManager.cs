@@ -180,6 +180,7 @@ public class MapManager : MonoBehaviour
         {
             MapManager.instance.mapState = MapState.SYSTEM_VIEW;
         }
+        CameraController.instance.FocusPosition(Vector3.zero);
     }
 
     //Switch to the map view above the current one

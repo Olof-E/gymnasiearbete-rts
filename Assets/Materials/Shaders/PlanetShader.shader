@@ -96,7 +96,7 @@ Shader "Unlit/PlanetShader"
                 
 
 
-                col *= pow(max(0, dot(normalize(_PlanetPosWS), worldNormal)), 0.75);
+                col *= pow(max(0.05, dot(normalize(_PlanetPosWS), worldNormal)), 0.75);
 
                 col +=  specular * (tex2D(_RoughnessMap, i.uv));
 

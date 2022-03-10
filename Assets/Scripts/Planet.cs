@@ -94,13 +94,18 @@ public class Planet : MonoBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
+        orbitalProgress += Time.deltaTime * orbitalSpeed;
+        orbitalProgress %= 1f;
+
         if (!focused)
         {
-            orbitalProgress += Time.deltaTime * orbitalSpeed;
-            orbitalProgress %= 1f;
-
             transform.position = EvaluateOrbitalPos(orbitalRadius);
         }
+        else
+        {
+            transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
+        }
+
         for (int i = 0; i < planetaryStructures.Count; i++)
         {
             planetaryStructures[i].Execute();
@@ -154,17 +159,17 @@ public class Planet : MonoBehaviour, ISelectable
     public void Focus(bool _focused)
     {
         focused = _focused;
+        transform.parent.GetComponent<LineRenderer>().enabled = !focused;
         if (focused)
         {
             transform.localScale = Vector3.one * 17.5f;
 
-
             transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
             CameraController.instance.FocusPosition(transform.position);
 
-            //Hide(false);
-
             MapManager.instance.activePlanet = this;
+
+            CameraController.instance.transform.SetParent(this.transform);
         }
         else
         {
@@ -172,9 +177,9 @@ public class Planet : MonoBehaviour, ISelectable
             transform.position = EvaluateOrbitalPos(orbitalRadius);
             CameraController.instance.FocusPosition(Vector3.zero);
 
-            //Hide(true);
-
             UiManager.instance.ActivateActions(-1);
+
+            CameraController.instance.transform.SetParent(null);
         }
 
 
