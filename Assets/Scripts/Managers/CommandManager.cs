@@ -34,11 +34,13 @@ public class CommandManager : MonoBehaviour
     public bool attackOrder = false;
     public bool givingOrders = false;
     private Camera mainCamera;
+    private LineRenderer commandLineRend;
     private void Awake()
     {
         if (instance == null)
         {
             mainCamera = Camera.main;
+            commandLineRend = GetComponent<LineRenderer>();
             Debug.Log("This actually happend");
             instance = this;
         }

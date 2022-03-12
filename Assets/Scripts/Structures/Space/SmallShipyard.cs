@@ -56,7 +56,7 @@ public class SmallShipyard : SpaceStructure
     {
         GameObject shipGo = GameObject.Instantiate(shipPrefabs[shipIndex], transform.position + Vector3.right * 5f, Quaternion.identity);
         Unit newUnit = shipGo.GetComponent<Unit>();
-        newUnit.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+        newUnit.transform.SetParent(MapManager.instance.activePlanet.transform);
         newUnit.parentBody = MapManager.instance.activePlanet;
         newUnit.parentBody.targetables.Add(newUnit);
     }

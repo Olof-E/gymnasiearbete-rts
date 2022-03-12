@@ -76,35 +76,35 @@ public class BuildingManager : MonoBehaviour
         {
             buildingPlacement = true;
             buildingBlueprint = GameObject.Instantiate(buildingPrefabs[0]);
-            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform);
             Debug.Log("Start construction of small shipyard");
         }
         else if (buildingIndex == 1)
         {
             buildingPlacement = true;
             buildingBlueprint = GameObject.Instantiate(buildingPrefabs[1]);
-            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform);
             Debug.Log("Start construction of large shipyard");
         }
         else if (buildingIndex == 2)
         {
             buildingPlacement = true;
             buildingBlueprint = GameObject.Instantiate(buildingPrefabs[2]);
-            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform);
             Debug.Log("Start construction of phased energy beam");
         }
         else if (buildingIndex == 3)
         {
             buildingPlacement = true;
             buildingBlueprint = GameObject.Instantiate(buildingPrefabs[3]);
-            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform);
             Debug.Log("Start construction of torpedo launcher");
         }
         else if (buildingIndex == 4)
         {
             buildingPlacement = true;
             buildingBlueprint = GameObject.Instantiate(buildingPrefabs[4]);
-            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
+            buildingBlueprint.transform.SetParent(MapManager.instance.activePlanet.transform);
             Debug.Log("Start construction of railgun cannon");
         }
     }
