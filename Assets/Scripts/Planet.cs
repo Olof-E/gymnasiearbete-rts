@@ -30,7 +30,7 @@ public class Planet : MonoBehaviour, ISelectable
     private float orbitalSpeed;
     private float orbitalProgress = 0f;
     public float orbitalRadius;
-    private float scaledOrbitalRadius;
+    public float scaledOrbitalRadius;
     public bool selected { get; set; } = false;
     public bool focused = false;
     public StarSystem parentSystem;
@@ -40,13 +40,14 @@ public class Planet : MonoBehaviour, ISelectable
     private MaterialPropertyBlock mpb;
     public List<Targetable> targetables;
     public SpriteRenderer selectedSprite { get; set; }
-
+    private Vector3 planetSize;
     public void Initialize(float _orbitalRadius, StarSystem _parentSystem)
     {
         orbitalRadius = _orbitalRadius;
         scaledOrbitalRadius = orbitalRadius * 8f;
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
-        transform.localScale = Vector3.one * Random.Range(1.25f, 4f);
+        planetSize = Vector3.one * Random.Range(1.25f, 4f);
+        transform.localScale = planetSize;
         parentSystem = _parentSystem;
 
         shaderPlanetPosId = Shader.PropertyToID("_PlanetPosWS");
@@ -100,10 +101,6 @@ public class Planet : MonoBehaviour, ISelectable
         if (!focused)
         {
             transform.position = EvaluateOrbitalPos(orbitalRadius);
-        }
-        else
-        {
-            transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
         }
 
         for (int i = 0; i < planetaryStructures.Count; i++)
@@ -162,24 +159,20 @@ public class Planet : MonoBehaviour, ISelectable
         transform.parent.GetComponent<LineRenderer>().enabled = !focused;
         if (focused)
         {
-            transform.localScale = Vector3.one * 17.5f;
+            transform.localScale = planetSize * 7.5f;
 
             transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
             CameraController.instance.FocusPosition(transform.position);
 
             MapManager.instance.activePlanet = this;
-
-            CameraController.instance.transform.SetParent(this.transform);
         }
         else
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = planetSize;
             transform.position = EvaluateOrbitalPos(orbitalRadius);
             CameraController.instance.FocusPosition(Vector3.zero);
 
             UiManager.instance.ActivateActions(-1);
-
-            CameraController.instance.transform.SetParent(null);
         }
 
 

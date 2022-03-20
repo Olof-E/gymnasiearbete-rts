@@ -34,14 +34,13 @@ public class CommandManager : MonoBehaviour
     public bool attackOrder = false;
     public bool givingOrders = false;
     private Camera mainCamera;
-    private LineRenderer commandLineRend;
+    public LineRenderer cmdDirectorLineRend;
+    public GameObject cmdDirectorHead;
     private void Awake()
     {
         if (instance == null)
         {
             mainCamera = Camera.main;
-            commandLineRend = GetComponent<LineRenderer>();
-            Debug.Log("This actually happend");
             instance = this;
         }
         else
@@ -54,6 +53,17 @@ public class CommandManager : MonoBehaviour
     //Selected
     //Press order button
     //Depending on button (Pos, (Pos, Radius), None, fleetId, None, Target)
+
+    private void Update()
+    {
+        if (givingOrders)
+        {
+            Vector3 mousePosWS = InputManager.GetMousePositionOnXZPlane();
+            cmdDirectorLineRend.SetPosition(0, ((Unit)SelectionManager.instance.selected[0]).transform.position);
+            cmdDirectorLineRend.SetPosition(1, mousePosWS);
+            cmdDirectorHead.transform.position = mousePosWS;
+        }
+    }
 
     public void GiveOrders(object orderData = null)
     {
@@ -208,13 +218,13 @@ public class CommandManager : MonoBehaviour
         {
             GiveOrders(e.startDrag);
         }
-        else if (givingOrders)
-        {
-            attackOrder = false;
-            moveOrder = false;
-            stopOrder = false;
-            givingOrders = false;
-        }
+
+        attackOrder = false;
+        moveOrder = false;
+        stopOrder = false;
+        givingOrders = false;
+        cmdDirectorLineRend.enabled = false;
+        cmdDirectorHead.SetActive(false);
     }
 
     public void HandleKeyInput(KeyCode e)
@@ -223,31 +233,39 @@ public class CommandManager : MonoBehaviour
         {
             return;
         }
+        else
+        {
+            attackOrder = false;
+            moveOrder = false;
+            stopOrder = false;
 
-        attackOrder = false;
-        moveOrder = false;
-        stopOrder = false;
+            if (e == KeyCode.G)
+            {
+                attackOrder = true;
+                givingOrders = true;
+            }
+            else if (e == KeyCode.Q)
+            {
+                moveOrder = true;
+                givingOrders = true;
+            }
+            else if (e == KeyCode.Y)
+            {
+                stopOrder = true;
+                givingOrders = true;
+                GiveOrders();
+            }
+            else if (e == KeyCode.J)
+            {
+                assignOrder = true;
+                givingOrders = true;
+            }
 
-        if (e == KeyCode.G)
-        {
-            attackOrder = true;
-            givingOrders = true;
-        }
-        else if (e == KeyCode.Q)
-        {
-            moveOrder = true;
-            givingOrders = true;
-        }
-        else if (e == KeyCode.Y)
-        {
-            stopOrder = true;
-            givingOrders = true;
-            GiveOrders();
-        }
-        else if (e == KeyCode.J)
-        {
-            assignOrder = true;
-            givingOrders = true;
+            if (givingOrders)
+            {
+                cmdDirectorLineRend.enabled = true;
+                cmdDirectorHead.SetActive(true);
+            }
         }
     }
 }

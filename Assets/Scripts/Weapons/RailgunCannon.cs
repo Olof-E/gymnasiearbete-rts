@@ -16,7 +16,7 @@ public class RailgunCannon : Weapon
     {
         if (target != null)
         {
-            if ((target.gameObj.transform.position - transform.position).magnitude > targetingRadius)
+            if (Vector3.Distance(transform.position, target.gameObj.transform.position) > targetingRadius)
             {
                 target = null;
             }
