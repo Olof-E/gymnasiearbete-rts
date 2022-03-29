@@ -15,6 +15,7 @@ public class PhasedEnergyBeamStructure : SpaceStructure
         armor = 1000;
         shields = 1500;
         beamArrray.parent = this;
+        isOrderable = true;
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,
@@ -33,9 +34,27 @@ public class PhasedEnergyBeamStructure : SpaceStructure
         {
             return;
         }
-        if (beamArrray.target == null)
+        if (beamArrray.target == null && target != null)
         {
-            beamArrray.FindTarget(parentBody.targetables);
+            beamArrray.target = target;
+        }
+        else if (beamArrray.target != null && target == null)
+        {
+            beamArrray.target = null;
+        }
+        if (selected)
+        {
+            if (!selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(false);
+            }
         }
         ExecuteOrder();
     }

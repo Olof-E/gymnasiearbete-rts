@@ -14,6 +14,7 @@ public class TorpedoLauncherStructure : SpaceStructure
         armor = 1000;
         shields = 1500;
         torpedoLauncher.parent = this;
+        isOrderable = true;
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,
@@ -32,9 +33,27 @@ public class TorpedoLauncherStructure : SpaceStructure
         {
             return;
         }
-        if (torpedoLauncher.target == null)
+        if (torpedoLauncher.target == null && target != null)
         {
-            torpedoLauncher.FindTarget(parentBody.targetables);
+            torpedoLauncher.target = target;
+        }
+        else if (torpedoLauncher.target != null && target == null)
+        {
+            torpedoLauncher.target = null;
+        }
+        if (selected)
+        {
+            if (!selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(false);
+            }
         }
         ExecuteOrder();
     }

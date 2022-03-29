@@ -34,6 +34,8 @@ public class SpaceStructure : Targetable, ISelectable
     public BoxCollider selectionCollider { get; set; }
     public SpriteRenderer selectedSprite { get; set; }
     public Queue<Order> orderQueue { get; set; }
+    public bool isOrderable { get; set; } = false;
+    public Targetable target { get; set; }
     private Order currOrder { get; set; }
     private bool executingOrder { get; set; }
     public virtual void LevelUp()
@@ -59,10 +61,18 @@ public class SpaceStructure : Targetable, ISelectable
         }
         if (currOrder != null)
         {
-            Debug.Log(currOrder);
             if (currOrder.orderType == OrderType.ATTACK_ORDER)
             {
-
+                target = currOrder.target;
+                executingOrder = false;
+                currOrder = null;
+            }
+            else if (currOrder.orderType == OrderType.STOP_ORDER)
+            {
+                target = null;
+                orderQueue.Clear();
+                currOrder = null;
+                executingOrder = false;
             }
         }
     }

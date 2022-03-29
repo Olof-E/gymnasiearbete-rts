@@ -40,6 +40,8 @@ public class Planet : MonoBehaviour, ISelectable
     private MaterialPropertyBlock mpb;
     public List<Targetable> targetables;
     public SpriteRenderer selectedSprite { get; set; }
+    public bool isOrderable { get; set; } = false;
+
     private Vector3 planetSize;
     public void Initialize(float _orbitalRadius, StarSystem _parentSystem)
     {

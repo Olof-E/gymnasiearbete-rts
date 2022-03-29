@@ -50,6 +50,7 @@ MonoBehaviour:
   planetType: 0
   planetProperties: {fileID: 0}
   orbitalRadius: 0
+  scaledOrbitalRadius: 0
   focused: 0
   meshRenderer: {fileID: 5407196926503864881}
   targetables: []
@@ -64,7 +65,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.75, y: 1.75, z: 1.75}
+  m_Size: {x: 2.25, y: 2.25, z: 2.25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8227965974053652295
 PrefabInstance:

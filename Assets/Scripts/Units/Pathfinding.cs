@@ -27,8 +27,6 @@ public static class Pathfinding
 
         while (!test)
         {
-            Debug.Log(openSet.Contains(end));
-            Debug.Log(closedSet.Contains(end));
             foreach (Edge edgeCnn in current.connections)
             {
                 Vertex adjNode = edgeCnn.vertexB;
@@ -36,22 +34,17 @@ public static class Pathfinding
                 {
                     adjNode.prevNode = current;
                     test = true;
-                    //openSet.Clear();
                     Debug.Log("Path found");
                     break;
                 }
                 if (!closedSet.Contains(adjNode) && !openSet.Contains(adjNode))
                 {
                     openSet.Add(adjNode);
-                    //float newGScore = current.gScore + edgeCnn.cost;
+                    adjNode.gScore = current.gScore + edgeCnn.cost;
                     float newFScore = adjNode.gScore + adjNode.hScore;
-                    // Debug.Log($"gscore: {newGScore}");
-                    // Debug.Log($"fscore: {newFScore}");
                     if (newFScore < adjNode.fScore)
                     {
-                        //adjNode.gScore = newGScore;
                         adjNode.fScore = newFScore;
-
                         adjNode.prevNode = current;
                     }
                 }

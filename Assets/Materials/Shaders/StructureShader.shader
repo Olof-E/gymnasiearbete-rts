@@ -79,7 +79,7 @@ Shader "Unlit/StructureShader"
                 float3 worldNormal = normalize(normal);
                 //float3 combinedNormals = float3(i.normalWS.x+normalMapWS.x, i.normalWS.y+normalMapWS.y, i.normalWS.z);
                 
-                col *= max(0.05,dot(worldNormal, -normalize(i.positionWS)))*1.5;
+                col *= max(0.075,dot(worldNormal, -normalize(i.positionWS)))*1.5;
                 return col;
             }
             ENDHLSL

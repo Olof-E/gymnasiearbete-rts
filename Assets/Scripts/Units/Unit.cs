@@ -12,6 +12,7 @@ public class Unit : Targetable, ISelectable
     public Planet parentBody { get; set; }
     public Queue<Order> orderQueue;
     public List<Weapon> weapons;
+    public bool isOrderable { get; set; } = true;
     private Order currOrder;
     private bool executingOrder = false;
     public SpriteRenderer selectedSprite { get; set; }
@@ -74,32 +75,37 @@ public class Unit : Targetable, ISelectable
                 //Debug.Log($"target body is: {currOrder.targetBody}");
                 if (parentBody == currOrder.targetBody)
                 {
-                    transform.rotation = Quaternion.RotateTowards(
-                        transform.rotation,
-                        Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up),
-                        maneuverability * Time.deltaTime
-                    );
-
                     // transform.rotation = Quaternion.RotateTowards(
                     //     transform.rotation,
-                    //     Quaternion.Euler(
-                    //         transform.rotation.eulerAngles.x,
-                    //         transform.rotation.eulerAngles.y,
-                    //         maneuverability * 4f * -Quaternion.Angle(
-                    //             Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
-                    //             Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
-                    //             ) / 180f
-                    //     ),
-                    //     maneuverability * 4f * Time.deltaTime
-                    //     );
+                    //     Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up),
+                    //     maneuverability * Time.deltaTime
+                    // );
+
+                    transform.rotation = Quaternion.RotateTowards(
+                        transform.rotation,
+                        Quaternion.Euler(
+                            transform.rotation.eulerAngles.x,
+                            Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up).eulerAngles.y,
+                            transform.rotation.eulerAngles.z
+                        // maneuverability * 4f * -Quaternion.Angle(
+                        // Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
+                        // Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
+                        // ) / 360f
+                        ),
+                        maneuverability * 4f * Time.deltaTime
+                        );
 
                     if (
                         Quaternion.Angle(
-                            Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f),
-                            Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)) < 1f
+                            Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.z),
+                            Quaternion.LookRotation(Vector3.Normalize(currOrder.movePos - transform.position), Vector3.up)) < 45f
                         )
                     {
-                        transform.position = Vector3.MoveTowards(transform.position, transform.position + currOrder.movePos - transform.position, speed * Time.deltaTime);
+                        float angle = Quaternion.Angle(
+                            Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f),
+                            Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up));
+
+                        transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, speed * (1f / Mathf.Clamp(angle, 1f, 45f)) * Time.deltaTime);
                     }
 
                     pathLineRend.SetPosition(0, transform.position);
@@ -229,6 +235,8 @@ public class Unit : Targetable, ISelectable
                     {
                         weapon.target = currOrder.target;
                     });
+                    executingOrder = false;
+                    currOrder = null;
                 }
             }
             else if (currOrder.orderType == OrderType.ASSIGN_ORDER)
@@ -246,6 +254,12 @@ public class Unit : Targetable, ISelectable
 
         if (recievedOrder.orderType == OrderType.STOP_ORDER)
         {
+            pathLineRend.positionCount = 0;
+            currPathLine.Clear();
+            weapons.ForEach((Weapon weapon) =>
+            {
+                weapon.target = null;
+            });
             executingOrder = false;
             currOrder = null;
             orderQueue.Clear();

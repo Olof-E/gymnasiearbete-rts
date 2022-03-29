@@ -14,6 +14,7 @@ public class RailgunStructure : SpaceStructure
         armor = 1000;
         shields = 1500;
         railgunCannon.parent = this;
+        isOrderable = true;
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,
@@ -32,9 +33,27 @@ public class RailgunStructure : SpaceStructure
         {
             return;
         }
-        if (railgunCannon.target == null)
+        if (railgunCannon.target == null && target != null)
         {
-            railgunCannon.FindTarget(parentBody.targetables);
+            railgunCannon.target = target;
+        }
+        else if (railgunCannon.target != null && target == null)
+        {
+            railgunCannon.target = null;
+        }
+        if (selected)
+        {
+            if (!selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (selectedSprite.gameObject.activeInHierarchy)
+            {
+                selectedSprite.gameObject.SetActive(false);
+            }
         }
         ExecuteOrder();
     }

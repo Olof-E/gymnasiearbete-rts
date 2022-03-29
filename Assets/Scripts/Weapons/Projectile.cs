@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
             transform.Translate(transform.forward * speed * Time.fixedDeltaTime, Space.World);
             timeSinceFired += Time.fixedDeltaTime;
         }
-        if (timeSinceFired >= 6f)
+        if (timeSinceFired >= 4f)
         {
             Destroy(this.gameObject);
         }

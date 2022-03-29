@@ -45,7 +45,7 @@ public class SelectionManager : MonoBehaviour
         if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)
         {
             RaycastHit hit;
-            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, 100f, selectionLayer))
+            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, selectionLayer))
             {
                 if (MapManager.instance.mapState == MapState.GALAXY_VIEW)
                 {
@@ -87,7 +87,7 @@ public class SelectionManager : MonoBehaviour
         if (e.mouseBtn == 0 && e.doubleClick)
         {
             RaycastHit hit;
-            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, 100f, selectionLayer))
+            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, selectionLayer))
             {
                 if (MapManager.instance.mapState == MapState.GALAXY_VIEW)
                 {

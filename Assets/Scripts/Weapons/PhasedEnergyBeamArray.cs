@@ -10,15 +10,14 @@ public class PhasedEnergyBeamArray : Weapon
     {
         beamGameObj = GetComponent<LineRenderer>();
         targetingRadius = 40f;
-        reloadTime = 5f;
+        reloadTime = 2.5f;
     }
 
     private void Update()
     {
         if (target != null)
         {
-            Debug.Log("We have target " + target);
-            Debug.Log(transform.parent.name);
+            beamGameObj.enabled = true;
             if ((target.gameObj.transform.position - transform.position).magnitude > targetingRadius)
             {
                 target = null;
@@ -33,7 +32,7 @@ public class PhasedEnergyBeamArray : Weapon
             {
                 timeSinceFired += Time.deltaTime;
             }
-            if (timeSinceFired > 2.5f)
+            if (timeSinceFired > 0.9f)
             {
                 loaded = false;
                 timeSinceFired = 0f;
@@ -49,7 +48,9 @@ public class PhasedEnergyBeamArray : Weapon
         }
         else
         {
-            beamGameObj.SetPosition(1, Vector3.zero);
+            beamGameObj.SetPosition(0, transform.position);
+            beamGameObj.SetPosition(1, transform.position);
+            beamGameObj.enabled = false;
         }
     }
 
