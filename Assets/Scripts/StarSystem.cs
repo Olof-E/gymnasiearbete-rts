@@ -41,6 +41,7 @@ public class StarSystem
         int planetCount = UnityEngine.Random.Range(1, 9);
         planets = new Planet[planetCount];
 
+        float prevOrbitRadius = 0f;
         for (int i = 0; i < planets.Length; i++)
         {
             GameObject orbitObj = new GameObject($"Orbit {i}");
@@ -50,8 +51,11 @@ public class StarSystem
             planets[i].parentSystem = this;
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
-            float orbitRadius = (AU + starRadius) * UnityEngine.Random.Range(1f * (i + 1), 5f * (i + 1));
-            planets[i].Initialize(orbitRadius, this);
+            planets[i].Initialize(i, this);
+            float orbitRadius = Mathf.Clamp((AU + starRadius) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.1f, Mathf.Infinity);
+            prevOrbitRadius = orbitRadius + planets[i].planetSize.x;
+            planets[i].orbitalRadius = orbitRadius;
+            planets[i].scaledOrbitalRadius = orbitRadius * 8f;
             orbitObj.AddComponent<OrbitalRenderer>();
             orbitObj.GetComponent<OrbitalRenderer>().Initialize(50, orbitRadius);
         }

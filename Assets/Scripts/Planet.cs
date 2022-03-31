@@ -42,13 +42,11 @@ public class Planet : MonoBehaviour, ISelectable
     public SpriteRenderer selectedSprite { get; set; }
     public bool isOrderable { get; set; } = false;
 
-    private Vector3 planetSize;
-    public void Initialize(float _orbitalRadius, StarSystem _parentSystem)
+    public Vector3 planetSize;
+    public void Initialize(int index, StarSystem _parentSystem)
     {
-        orbitalRadius = _orbitalRadius;
-        scaledOrbitalRadius = orbitalRadius * 8f;
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
-        planetSize = Vector3.one * Random.Range(1.25f, 4f);
+        planetSize = Vector3.one * Random.Range(0.8f, 3f);
         transform.localScale = planetSize;
         parentSystem = _parentSystem;
 
