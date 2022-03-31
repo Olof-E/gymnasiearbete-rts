@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.VFX;
 
 // O (hottest) --> M (coolest)
 public enum StarType
@@ -29,6 +27,7 @@ public class StarSystem
 
     public StarSystem(int systemId, float _starTemperature)
     {
+        MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
         starType = (StarType)Mathf.FloorToInt(7 - (_starTemperature % 1450));
         starTemperature = _starTemperature;
         starRadius = UnityEngine.Random.Range(2f, 6f);
@@ -37,6 +36,20 @@ public class StarSystem
         id = systemId;
         star = GameObject.Instantiate(MapManager.instance.starPrefab, Vector3.zero, Quaternion.identity);
         star.transform.SetParent(starSystemObj.transform);
+
+        star.GetComponent<MeshRenderer>().GetPropertyBlock(propBlock);
+        propBlock.SetColor("_PrimaryColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 35f);
+        float hue;
+        float saturation;
+        float intensity;
+        Color.RGBToHSV(Mathf.CorrelatedColorTemperatureToRGB(starTemperature), out hue, out saturation, out intensity);
+        propBlock.SetColor("_SecondaryColor", Color.HSVToRGB(hue + UnityEngine.Random.Range(-0.2f, 0.2f), saturation, intensity, true) / 5f);
+        star.GetComponent<MeshRenderer>().SetPropertyBlock(propBlock);
+        star.transform.GetChild(0).GetComponent<VisualEffect>().SetVector4("_MainColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 6.5f);
+
+
+        propBlock.Clear();
+        propBlock = null;
 
         int planetCount = UnityEngine.Random.Range(1, 9);
         planets = new Planet[planetCount];
@@ -52,7 +65,7 @@ public class StarSystem
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
             planets[i].Initialize(i, this);
-            float orbitRadius = Mathf.Clamp((AU + starRadius) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.1f, Mathf.Infinity);
+            float orbitRadius = Mathf.Clamp((AU + starRadius + planets[i].planetSize.x) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.2f, Mathf.Infinity);
             prevOrbitRadius = orbitRadius + planets[i].planetSize.x;
             planets[i].orbitalRadius = orbitRadius;
             planets[i].scaledOrbitalRadius = orbitRadius * 8f;

@@ -118,13 +118,13 @@ Shader "Unlit/StarShader"
             {
                 float timeScale = 1000;
                 //Calculate noise coords to warp the final noise
-                float noiseCol1 = fnoise(float4(i.position, _Time.y/timeScale), 8,3.0);
-                float noiseCol2 = fnoise(float4(i.position+noiseCol1.xxx, _Time.y/timeScale), 32.0, 1.0);
-                float noiseCol3 = fnoise(float4(i.position+float3(noiseCol1, noiseCol2, lerp(noiseCol1, noiseCol2, 0.5)), _Time.y/timeScale), 24.0, 1.0);
+                float noiseCol1 = fnoise(float4(i.position, _Time.y/timeScale), 6, 3);
+                float noiseCol2 = fnoise(float4(i.position+noiseCol1.xxx, _Time.y/timeScale), 64, 1);
+                float noiseCol3 = fnoise(float4(i.position+float3(noiseCol1, noiseCol2, lerp(noiseCol1, noiseCol2, 0.5)), _Time.y/timeScale), 32, 1);
                 //float warpedNoise = fnoise(float4((i.position + float3(noiseCol1,noiseCol2,noiseCol3)*15), _Time.y/timeScale), 3.75, 2.0);
 
                 // Calculate final color
-                return lerp(_PrimaryColor, _SecondaryColor, pow(noiseCol3*noiseCol1,1.75));//pow(lerp(noiseCol1,warpedNoise,0.525),3.25));
+                return lerp(_SecondaryColor, _PrimaryColor, pow(noiseCol3*noiseCol1,1.85));//pow(lerp(noiseCol1,warpedNoise,0.525),3.25));
             }
             ENDHLSL
         }
