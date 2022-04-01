@@ -22,10 +22,12 @@ public class Unit : Targetable, ISelectable
     private List<Vector3> currPathLine = new List<Vector3>();
     private LineRenderer pathLineRend;
 
-    public void Initialize(float _speed, float _maneuverability)
+    public void Initialize(float _speed, float _maneuverability, int _armor, int _shields)
     {
         orderQueue = new Queue<Order>();
         speed = _speed;
+        armor = _armor;
+        shields = _shields;
         maneuverability = _maneuverability;
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         weapons = new List<Weapon>();
@@ -37,6 +39,10 @@ public class Unit : Targetable, ISelectable
 
     public void ExecuteOrder()
     {
+        if (destroyed)
+        {
+            Destroy(this.gameObject);
+        }
         if (selected)
         {
             if (!selectedSprite.gameObject.activeInHierarchy)
@@ -72,28 +78,21 @@ public class Unit : Targetable, ISelectable
         {
             if (currOrder.orderType == OrderType.MOVE_ORDER)
             {
-                //Debug.Log($"target body is: {currOrder.targetBody}");
                 if (parentBody == currOrder.targetBody)
                 {
-                    // transform.rotation = Quaternion.RotateTowards(
-                    //     transform.rotation,
-                    //     Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up),
-                    //     maneuverability * Time.deltaTime
-                    // );
-
                     transform.rotation = Quaternion.RotateTowards(
                         transform.rotation,
-                        Quaternion.Euler(
-                            transform.rotation.eulerAngles.x,
-                            Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up).eulerAngles.y,
-                            transform.rotation.eulerAngles.z
-                        // maneuverability * 4f * -Quaternion.Angle(
-                        // Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
-                        // Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
-                        // ) / 360f
-                        ),
+                        Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up),
+                    // Quaternion.Euler(
+                    //     transform.rotation.eulerAngles.x,
+                    //                         maneuverability * 4f * -Quaternion.Angle(
+                    // Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
+                    // Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up)
+                    // ),//Quaternion.LookRotation(currOrder.movePos - transform.position, Vector3.up).eulerAngles.y,
+                    //     transform.rotation.eulerAngles.z
+                    // ),
                         maneuverability * 4f * Time.deltaTime
-                        );
+                    );
 
                     if (
                         Quaternion.Angle(

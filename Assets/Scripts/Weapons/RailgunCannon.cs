@@ -24,6 +24,7 @@ public class RailgunCannon : Weapon
             {
                 //Instaniate railgun projectile and fire at targe
                 firedProjectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
+                firedProjectile.target = target;
                 firedProjectile.Fire(target.gameObj.transform.position);
                 loaded = false;
             }

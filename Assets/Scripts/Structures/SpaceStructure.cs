@@ -51,6 +51,10 @@ public class SpaceStructure : Targetable, ISelectable
     }
     public virtual void ExecuteOrder()
     {
+        if (destroyed)
+        {
+            Destroy(this.gameObject);
+        }
         if (orderQueue.Count > 0)
         {
             if (!executingOrder)

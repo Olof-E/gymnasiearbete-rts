@@ -111,7 +111,7 @@ public class CameraController : MonoBehaviour
         transform.position = focusPoint;
         focusing = true;
         StartCoroutine(Focusing());
-        targetZoomPos = 65f;
+        targetZoomPos = 35f;
     }
 
     public IEnumerator Focusing()
