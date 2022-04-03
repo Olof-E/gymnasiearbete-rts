@@ -30,11 +30,12 @@ public class StarSystem
         MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
         starType = (StarType)Mathf.FloorToInt(7 - (_starTemperature % 1450));
         starTemperature = _starTemperature;
-        starRadius = UnityEngine.Random.Range(2f, 6f);
+        starRadius = UnityEngine.Random.Range(12f, 16f);
 
         GameObject starSystemObj = new GameObject($"Starsystem {systemId}");
         id = systemId;
         star = GameObject.Instantiate(MapManager.instance.starPrefab, Vector3.zero, Quaternion.identity);
+        star.transform.localScale = Vector3.one * starRadius;
         star.transform.SetParent(starSystemObj.transform);
 
         star.GetComponent<MeshRenderer>().GetPropertyBlock(propBlock);
@@ -65,7 +66,7 @@ public class StarSystem
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
             planets[i].Initialize(i, this);
-            float orbitRadius = Mathf.Clamp((AU + starRadius + planets[i].planetSize.x) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.2f, Mathf.Infinity);
+            float orbitRadius = Mathf.Clamp((AU + starRadius / 2f + planets[i].planetSize.x) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.2f, Mathf.Infinity);
             prevOrbitRadius = orbitRadius + planets[i].planetSize.x;
             planets[i].orbitalRadius = orbitRadius;
             planets[i].scaledOrbitalRadius = orbitRadius * 8f;

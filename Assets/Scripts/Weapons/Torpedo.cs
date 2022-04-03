@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Torpedo : MonoBehaviour
 {
+    public float dmg = 20f;
     public Targetable target;
     public float maxSpeed = 1000f;
     public float angularSpeed = 75f;
@@ -55,5 +56,6 @@ public class Torpedo : MonoBehaviour
     {
         Debug.Log("Hit target obj");
         Destroy(this.gameObject);
+        target.TakeDamage(dmg);
     }
 }

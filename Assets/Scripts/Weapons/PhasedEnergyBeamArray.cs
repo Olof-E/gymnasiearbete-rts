@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 public class PhasedEnergyBeamArray : Weapon
 {
+    public float dmg = 7.5f;
     private LineRenderer beamGameObj;
     private bool firing = false;
     private float timeSinceFired = 0f;
@@ -27,6 +28,7 @@ public class PhasedEnergyBeamArray : Weapon
                 beamGameObj.SetPosition(0, transform.position);
                 beamGameObj.SetPosition(1, target.gameObj.transform.position);
                 firing = true;
+                target.TakeDamage(dmg);
             }
             if (firing)
             {
