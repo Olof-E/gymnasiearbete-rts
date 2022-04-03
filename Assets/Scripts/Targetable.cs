@@ -16,6 +16,7 @@ public class Targetable : MonoBehaviour
         else
         {
             shields -= dmg;
+
         }
     }
 }
