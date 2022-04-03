@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2716067422882382211}
   - component: {fileID: 2716067422882382209}
   - component: {fileID: 4559432816164100945}
+  - component: {fileID: 5980264509141251464}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -144,8 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 25
-  speed: 500
+  speed: 250
   fired: 0
+  target: {fileID: 0}
 --- !u!65 &4559432816164100945
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -154,8 +156,24 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2716067422882382210}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.15, y: 0.15, z: 0.3}
+  m_Size: {x: 1, y: 1, z: 4.69}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5980264509141251464
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716067422882382210}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2

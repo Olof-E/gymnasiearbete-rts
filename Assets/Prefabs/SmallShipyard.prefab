@@ -1391,6 +1391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armor: 1000
   shields: 1500
+  destroyed: 0
   gameObj: {fileID: 7856627992674246600}
   shipPrefabs:
   - {fileID: 4476911176958901980, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
@@ -1405,7 +1406,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 5, z: 6.5}
+  m_Size: {x: 12, y: 6, z: 10}
   m_Center: {x: 0, y: -0.85, z: 0}
 --- !u!1 &7962319801086234057
 GameObject:

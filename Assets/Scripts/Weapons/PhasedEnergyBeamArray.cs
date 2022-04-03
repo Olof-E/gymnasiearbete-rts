@@ -28,7 +28,6 @@ public class PhasedEnergyBeamArray : Weapon
                 beamGameObj.SetPosition(0, transform.position);
                 beamGameObj.SetPosition(1, target.gameObj.transform.position);
                 firing = true;
-                target.TakeDamage(dmg);
             }
             if (firing)
             {
@@ -39,6 +38,7 @@ public class PhasedEnergyBeamArray : Weapon
                 loaded = false;
                 timeSinceFired = 0f;
                 firing = false;
+                target.TakeDamage(dmg);
             }
             if (!loaded && !loading)
             {
