@@ -10,7 +10,7 @@ public class RareMetalsExtractor : PlanetaryStructure
     }
     public override void Execute()
     {
-        Player.instance.totalRareMetals += 10f * Time.fixedDeltaTime * (1f + 1f / (level + 1f)) * parentBody.planetProperties.rareMetalsMultiplier;
+        Player.instance.totalRareMetals += 10f * Time.unscaledDeltaTime * ((level + 1f) / (maxLevel) + 1) * parentBody.planetProperties.rareMetalsMultiplier;
     }
     public override void LevelUp()
     {

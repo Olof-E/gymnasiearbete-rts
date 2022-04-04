@@ -18,7 +18,7 @@ public class GasSeparator : PlanetaryStructure
     }
     public override void Execute()
     {
-        Player.instance.totalGas += 20f * Time.fixedDeltaTime * (1f + 1f / (level + 1f)) * parentBody.planetProperties.gasMultiplier;
+        Player.instance.totalGas += 20f * Time.unscaledDeltaTime * ((level + 1f) / (maxLevel) + 1) * parentBody.planetProperties.gasMultiplier;
     }
 
     public override void LevelUp()
