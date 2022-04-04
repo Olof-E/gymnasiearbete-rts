@@ -27,39 +27,42 @@ public class ShieldManager : MonoBehaviour
 
     public void AddNewHit(Vector3 hitPos, float strength)
     {
-        int i;
-        currHitCount++;
+
         if (currHitCount < maxHitCount)
         {
+            int i;
+            currHitCount++;
             i = currHitCount - 1;
+            hitPosArr[i] = transform.InverseTransformPoint(hitPos);
+            hitIntensityArr[i] = 1f;
+            hitTimer[i] = 0f;
+            Debug.Log($"new hit at: {hitPos}");
         }
         else
         {
-            float minTimer = float.MaxValue;
-            int minId = 0;
-            for (int j = 0; j < maxHitCount; j++)
-            {
-                if (minTimer > hitTimer[j])
-                {
-                    minTimer = hitTimer[j];
-                    minId = j;
-                }
-            }
-            i = minId;
+            // float minTimer = float.MaxValue;
+            // int minId = 0;
+            // for (int j = 0; j < maxHitCount; j++)
+            // {
+            //     if (minTimer > hitTimer[j])
+            //     {
+            //         minTimer = hitTimer[j];
+            //         minId = j;
+            //     }
+            // }
+            // i = minId;
         }
 
-        hitPosArr[i] = hitPos;
-        hitIntensityArr[i] = 1f;
-        hitTimer[i] = 0f;
+
     }
 
 
     private void Update()
     {
-        for (int i = 0; i < currHitCount; i++)
+        for (int i = 0; i < currHitCount;)
         {
             hitTimer[i] += Time.deltaTime;
-            if (hitTimer[i] > 3f)
+            if (hitTimer[i] > 2.5f)
             {
                 int idLast = currHitCount - 1;
                 hitPosArr[i] = hitPosArr[idLast];
@@ -67,16 +70,27 @@ public class ShieldManager : MonoBehaviour
                 hitIntensityArr[i] = hitIntensityArr[idLast];
                 currHitCount--;
             }
+            else
+            {
+                i++;
+            }
         }
         for (int i = 0; i < currHitCount; i++)
         {
-            hitIntensityArr[i] = 1 - Mathf.Clamp01(hitTimer[i] / 3f);
+            hitIntensityArr[i] = 1 - Mathf.Clamp01(hitTimer[i] / 2.5f);
         }
         rend.GetPropertyBlock(mpb);
 
+        mpb.SetInt("_HitsCount", currHitCount);
         mpb.SetVectorArray(hitPosArrId, hitPosArr.ToList());
         mpb.SetFloatArray(hitIntensityId, hitIntensityArr.ToList());
 
         rend.SetPropertyBlock(mpb);
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawWireSphere(hitPosArr[0], 0.3f);
     }
 }

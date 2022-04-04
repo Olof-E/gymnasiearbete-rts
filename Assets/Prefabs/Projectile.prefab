@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 25
-  speed: 250
+  speed: 125
   fired: 0
   target: {fileID: 0}
 --- !u!65 &4559432816164100945
@@ -159,7 +159,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 4.69}
+  m_Size: {x: 0.1, y: 0.1, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5980264509141251464
 Rigidbody:

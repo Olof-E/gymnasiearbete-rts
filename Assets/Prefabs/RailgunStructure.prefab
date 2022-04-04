@@ -194,7 +194,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armor: 0
   shields: 0
+  destroyed: 0
   gameObj: {fileID: 0}
+  shieldManager: {fileID: 0}
   railgunCannon: {fileID: 5074793638007352869}
 --- !u!1001 &1306844969593535734
 PrefabInstance:
@@ -217,7 +219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6075234393922196178, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.79
       objectReference: {fileID: 0}
     - target: {fileID: 6075234393922196178, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
       propertyPath: m_LocalPosition.z

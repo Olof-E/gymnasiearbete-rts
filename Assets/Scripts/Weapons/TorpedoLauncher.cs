@@ -23,7 +23,7 @@ public class TorpedoLauncher : Weapon
             else if (loaded)
             {
                 //Instaniate torpedo and fire at target 
-                launchedTorpedo = Instantiate(torpedoPrefab, transform.position + new Vector3(3f, 0f, 3f), Quaternion.identity).GetComponent<Torpedo>();
+                launchedTorpedo = Instantiate(torpedoPrefab, transform.position, Quaternion.identity).GetComponent<Torpedo>();
                 launchedTorpedo.target = target;
                 loaded = false;
             }

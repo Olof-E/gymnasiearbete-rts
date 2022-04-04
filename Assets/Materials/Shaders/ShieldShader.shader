@@ -33,6 +33,7 @@ Shader "Unlit/ShieldShader"
                 float4 vertex     : SV_POSITION;
                 float2 uv         : TEXCOORD0;
                 float3 positionWS : TEXCOORD1;
+                float3 positionOS : TEXCOORD2;
             };
 
             sampler2D _MainTex;
@@ -49,7 +50,7 @@ Shader "Unlit/ShieldShader"
             
             float DrawRing(float intensity, float radius, float dist)
             {
-                float border = 0.25;
+                float border = 0.08;
                 float currentRadius = lerp(0, radius, 1 - intensity);//expand radius over time 
                 return intensity * (1 - smoothstep(currentRadius, currentRadius + border, dist) - (1 - smoothstep(currentRadius - border, currentRadius, dist)));
             }
@@ -60,7 +61,7 @@ Shader "Unlit/ShieldShader"
                 for (int i = 0; i < _HitsCount; i++)
                 {
                     float distanceToHit = distance(objectPosition, _HitsPosition[i]);
-                    factor += DrawRing(_HitsIntensity[i], _HitsRadius[i], distanceToHit);
+                    factor += DrawRing(_HitsIntensity[i], 0.6, distanceToHit);
                 }
                 factor = saturate(factor);
             }
@@ -72,6 +73,7 @@ Shader "Unlit/ShieldShader"
                 VertexPositionInputs vertexInputs = GetVertexPositionInputs(v.vertex.xyz);
                 o.vertex = vertexInputs.positionCS;
                 o.positionWS = vertexInputs.positionWS;
+                o.positionOS = v.vertex.xyz;
 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
@@ -82,15 +84,9 @@ Shader "Unlit/ShieldShader"
                 float3 col = tex2D(_MainTex, i.uv);
                 float mask; //1 - saturate((distance(i.positionWS, _HitPosWS) - 0.25) / (1 - 0.1));
                 
-                _HitsCount = 2;
-                _HitsRadius[0] = 2;
-                _HitsPosition[0] = float3(0,0, 2.14);
-                _HitsIntensity[0] = (1-(sin(_Time.y*2)*0.5+0.5));
-                _HitsRadius[1] = 2;
-                _HitsPosition[1] = float3(0,0, -2.14);
-                _HitsIntensity[1] = (1-(sin(_Time.y*1)*0.5+0.5));
 
-                CalculateHitsFactor_float(i.positionWS, mask);
+
+                CalculateHitsFactor_float(i.positionOS, mask);
                 return float4(col, mask)*_Color;
             }
             ENDHLSL

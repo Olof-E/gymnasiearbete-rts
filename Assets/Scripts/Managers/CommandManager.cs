@@ -161,16 +161,20 @@ public class CommandManager : MonoBehaviour
             if (attackOrder)
             {
                 Targetable target;
-                RaycastHit hitInfo;
-                if (Physics.Raycast(mainCamera.transform.position, Vector3.Normalize((Vector3)orderData - mainCamera.transform.position), out hitInfo))
+                RaycastHit[] hitsInfo = Physics.SphereCastAll(mainCamera.transform.position, 1f, Vector3.Normalize((Vector3)orderData - mainCamera.transform.position));
+                if (hitsInfo.Length > 0)
                 {
-                    if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
+                    foreach (RaycastHit hit in hitsInfo)
                     {
-                        for (int i = 0; i < selectedStrucs.Count; i++)
+                        if (hit.collider.gameObject.TryGetComponent<Targetable>(out target))
                         {
-                            selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                            for (int i = 0; i < selectedStrucs.Count; i++)
+                            {
+                                selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                            }
+                            attackOrder = false;
+                            return;
                         }
-                        attackOrder = false;
                     }
                 }
             }

@@ -35,6 +35,6 @@ public class Projectile : MonoBehaviour
     {
         Debug.Log("Hit target obj");
         Destroy(this.gameObject);
-        target.TakeDamage(dmg, other.contacts[0].point);
+        target.TakeDamage(dmg, other.GetContact(0).point);
     }
 }

@@ -194,7 +194,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armor: 0
   shields: 0
+  destroyed: 0
   gameObj: {fileID: 0}
+  shieldManager: {fileID: 0}
   torpedoLauncher: {fileID: 6670006476974505720}
 --- !u!1001 &7596976771512120024
 PrefabInstance:
@@ -217,7 +219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3890403722311830561, guid: 2d995656dce11424794c4d523563c47d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.779
       objectReference: {fileID: 0}
     - target: {fileID: 3890403722311830561, guid: 2d995656dce11424794c4d523563c47d, type: 3}
       propertyPath: m_LocalPosition.z
