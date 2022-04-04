@@ -33,7 +33,7 @@ public class Unit : Targetable, ISelectable
         weapons = new List<Weapon>();
         weapons.AddRange(GetComponentsInChildren<Weapon>());
         pathLineRend = transform.Find("PathLine").GetComponent<LineRenderer>();
-
+        shieldManager.Initialize();
         selectionCollider = GetComponent<BoxCollider>();
     }
 

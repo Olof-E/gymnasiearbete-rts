@@ -770,7 +770,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armor: 0
   shields: 0
+  destroyed: 0
   gameObj: {fileID: 4476911176958901980}
+  shieldManager: {fileID: 1589872565795503952}
   weapons: []
 --- !u!65 &1620977317
 BoxCollider:
@@ -897,6 +899,7 @@ GameObject:
   - component: {fileID: 6765432135403445300}
   - component: {fileID: 3819342012618828861}
   - component: {fileID: 7050660630080718799}
+  - component: {fileID: 1589872565795503952}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -980,6 +983,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1589872565795503952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5872528235678517161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6f717b4268cadb45a4eb1cb82c5f2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6172647020990174995
 GameObject:
   m_ObjectHideFlags: 0

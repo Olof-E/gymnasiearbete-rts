@@ -38,7 +38,9 @@ public class PhasedEnergyBeamArray : Weapon
                 loaded = false;
                 timeSinceFired = 0f;
                 firing = false;
-                target.TakeDamage(dmg);
+                RaycastHit hitInfo;
+                Physics.Raycast(transform.position, (target.gameObj.transform.position - transform.position), out hitInfo);
+                target.TakeDamage(dmg, hitInfo.point);
             }
             if (!loaded && !loading)
             {

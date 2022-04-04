@@ -7,8 +7,8 @@ public class Targetable : MonoBehaviour
     public float shields;
     public bool destroyed = false;
     public GameObject gameObj;
-
-    public void TakeDamage(float dmg)
+    public ShieldManager shieldManager;
+    public void TakeDamage(float dmg, Vector3 hitPos)
     {
         if (shields <= 0f)
         {
@@ -20,8 +20,8 @@ public class Targetable : MonoBehaviour
         }
         else
         {
+            shieldManager.AddNewHit(hitPos, 1);
             shields -= dmg;
-
         }
     }
 }

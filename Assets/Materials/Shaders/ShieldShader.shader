@@ -44,7 +44,7 @@ Shader "Unlit/ShieldShader"
 
             int _HitsCount = 0;
             float _HitsRadius[10];
-            float3 _HitsObjectPosition[10];
+            float3 _HitsPosition[10];
             float _HitsIntensity[10];
             
             float DrawRing(float intensity, float radius, float dist)
@@ -59,7 +59,7 @@ Shader "Unlit/ShieldShader"
                 factor = 0;
                 for (int i = 0; i < _HitsCount; i++)
                 {
-                    float distanceToHit = distance(objectPosition, _HitsObjectPosition[i]);
+                    float distanceToHit = distance(objectPosition, _HitsPosition[i]);
                     factor += DrawRing(_HitsIntensity[i], _HitsRadius[i], distanceToHit);
                 }
                 factor = saturate(factor);
@@ -84,10 +84,10 @@ Shader "Unlit/ShieldShader"
                 
                 _HitsCount = 2;
                 _HitsRadius[0] = 2;
-                _HitsObjectPosition[0] = float3(0,0, 2.14);
+                _HitsPosition[0] = float3(0,0, 2.14);
                 _HitsIntensity[0] = (1-(sin(_Time.y*2)*0.5+0.5));
                 _HitsRadius[1] = 2;
-                _HitsObjectPosition[1] = float3(0,0, -2.14);
+                _HitsPosition[1] = float3(0,0, -2.14);
                 _HitsIntensity[1] = (1-(sin(_Time.y*1)*0.5+0.5));
 
                 CalculateHitsFactor_float(i.positionWS, mask);
