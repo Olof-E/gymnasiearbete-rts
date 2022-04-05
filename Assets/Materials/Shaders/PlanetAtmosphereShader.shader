@@ -4,7 +4,7 @@ Shader "Unlit/PlanetAtmosphereShader"
     {
         //[PreRendererData] _PlanetPosWS ("planet pos", vector) = (0,0,0,0)
         _MainTex ("Texture", 2D) = "white" {}
-        _Color ("Atmopshere Color", Color) = (1,1,1,1)
+        [HDR] _Color ("Atmopshere Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -68,9 +68,9 @@ Shader "Unlit/PlanetAtmosphereShader"
             {
                 float4 col = _Color;//tex2D(_MainTex, i.uv);                
 
-                float fresnel = pow(1-max(0,dot(i.normalWS, GetWorldSpaceNormalizeViewDir(i.positionWS))),1)*max(0,dot(i.normalWS, -normalize(_PlanetPosWS)));
+                float fresnel = pow(1-max(0,dot(i.normalWS, GetWorldSpaceNormalizeViewDir(i.positionWS))),0.8)*max(0,dot(i.normalWS, -normalize(_PlanetPosWS)));
 
-                return col*fresnel*5;
+                return col*fresnel;
             }
             ENDHLSL
         }

@@ -23,11 +23,14 @@ public class PhasedEnergyBeamArray : Weapon
             {
                 target = null;
             }
-            else if (loaded)
+            else if (loaded && !firing)
             {
                 beamGameObj.SetPosition(0, transform.position);
                 beamGameObj.SetPosition(1, target.gameObj.transform.position);
                 firing = true;
+                RaycastHit hitInfo;
+                Physics.Raycast(transform.position, (target.gameObj.transform.position - transform.position), out hitInfo);
+                target.TakeDamage(dmg, hitInfo.point);
             }
             if (firing)
             {
@@ -38,9 +41,8 @@ public class PhasedEnergyBeamArray : Weapon
                 loaded = false;
                 timeSinceFired = 0f;
                 firing = false;
-                RaycastHit hitInfo;
-                Physics.Raycast(transform.position, (target.gameObj.transform.position - transform.position), out hitInfo);
-                target.TakeDamage(dmg, hitInfo.point);
+
+
             }
             if (!loaded && !loading)
             {
