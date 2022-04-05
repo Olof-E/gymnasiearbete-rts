@@ -28,19 +28,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a2e9445cd6985a9458a246e5a4f087ec, type: 3}
+        m_Texture: {fileID: 2800000, guid: 97f2ea84aab42724bb8e9ccd894803ea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: dc718d7c7f59e5f429cce2245b1f49c0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 464620a405038604984ff0867b973bf3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RoughnessMap:
-        m_Texture: {fileID: 2800000, guid: ecb72a135b2a7744ea255329e8266cc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5432dca0580967946acb76c4b7495782, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecularMap:
-        m_Texture: {fileID: 2800000, guid: 4596bcfad3e1c1d42b0a9eaaeb42c0ef, type: 3}
+        m_Texture: {fileID: 2800000, guid: 227197ef231c9114b86aee0fc6fec7a9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats: []
