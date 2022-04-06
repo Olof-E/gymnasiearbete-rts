@@ -16,17 +16,11 @@ public class Unit : Targetable, ISelectable
     private Order currOrder;
     private bool executingOrder = false;
     public SpriteRenderer selectedSprite { get; set; }
-    public Slider shieldBar;
-    public Slider armorBar;
-    public int fleetId
-    { get; set; } = -1;
+    public int fleetId { get; set; } = -1;
     private bool pathFound = false;
     private List<Vertex> path;
     private List<Vector3> currPathLine = new List<Vector3>();
     private LineRenderer pathLineRend;
-    private float maxShields;
-    private float maxArmor;
-
 
     public void Initialize(float _speed, float _maneuverability, int _armor, int _shields)
     {

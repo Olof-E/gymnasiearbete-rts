@@ -13,8 +13,11 @@ public class RailgunStructure : SpaceStructure
         maxLevel = 8;
         armor = 1000;
         shields = 1500;
+        maxShields = shields;
+        maxArmor = armor;
         railgunCannon.parent = this;
         isOrderable = true;
+        shieldManager.Initialize();
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 /*
 Planetary structures:
 - Fusion reactor
@@ -55,6 +57,8 @@ public class SpaceStructure : Targetable, ISelectable
         {
             Destroy(this.gameObject);
         }
+        shieldBar.value = shields / maxShields;
+        armorBar.value = armor / maxArmor;
         if (orderQueue.Count > 0)
         {
             if (!executingOrder)

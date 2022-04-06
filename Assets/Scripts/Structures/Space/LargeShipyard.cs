@@ -13,6 +13,9 @@ public class LargeShipyard : SpaceStructure
         maxLevel = 8;
         armor = 1000;
         shields = 1500;
+        maxShields = shields;
+        maxArmor = armor;
+        shieldManager.Initialize();
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 3000,

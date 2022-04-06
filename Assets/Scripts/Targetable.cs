@@ -1,10 +1,16 @@
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Targetable : MonoBehaviour
 {
     public float armor;
     public float shields;
+    public float maxArmor;
+    public float maxShields;
+    public Slider shieldBar;
+    public Slider armorBar;
+
     public bool destroyed = false;
     public GameObject gameObj;
     public ShieldManager shieldManager;
