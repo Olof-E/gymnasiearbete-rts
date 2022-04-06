@@ -106,7 +106,7 @@ Shader "Unlit/PlanetSurfaceShader"
 
                 col *= 1.5;
 
-                return lerp(col, tex2D(_EmissionMap, i.uv)*0.8, tex2D(_EmissionMap, i.uv).r);
+                return lerp(col, tex2D(_EmissionMap, i.uv)*0.9, tex2D(_EmissionMap, i.uv).r);
             }
             ENDHLSL
         }

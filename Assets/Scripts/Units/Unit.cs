@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Unit : Targetable, ISelectable
 {
     public Targetable target { get; set; }
@@ -16,11 +16,17 @@ public class Unit : Targetable, ISelectable
     private Order currOrder;
     private bool executingOrder = false;
     public SpriteRenderer selectedSprite { get; set; }
-    public int fleetId { get; set; } = -1;
+    public Slider shieldBar;
+    public Slider armorBar;
+    public int fleetId
+    { get; set; } = -1;
     private bool pathFound = false;
     private List<Vertex> path;
     private List<Vector3> currPathLine = new List<Vector3>();
     private LineRenderer pathLineRend;
+    private float maxShields;
+    private float maxArmor;
+
 
     public void Initialize(float _speed, float _maneuverability, int _armor, int _shields)
     {
@@ -28,6 +34,8 @@ public class Unit : Targetable, ISelectable
         speed = _speed;
         armor = _armor;
         shields = _shields;
+        maxShields = shields;
+        maxArmor = armor;
         maneuverability = _maneuverability;
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         weapons = new List<Weapon>();
@@ -43,6 +51,9 @@ public class Unit : Targetable, ISelectable
         {
             Destroy(this.gameObject);
         }
+        shieldBar.value = shields / maxShields;
+        armorBar.value = armor / maxArmor;
+
         if (selected)
         {
             if (!selectedSprite.gameObject.activeInHierarchy)

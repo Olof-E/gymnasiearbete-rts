@@ -22,4 +22,4 @@ MonoBehaviour:
   roughnessMap: {fileID: 2800000, guid: dbd91b20c7546954ca5d1ec104513742, type: 3}
   specularMap: {fileID: 2800000, guid: f5a03c3965e6d5c40a6c6bedcb6d28d7, type: 3}
   emissionMap: {fileID: 2800000, guid: fbe529ec1c58be4459cf69c12deee585, type: 3}
-  atmosphereColor: {r: 1.2005416, g: 0.49027354, b: 0.35199127, a: 0.74509805}
+  atmosphereColor: {r: 1.6688638, g: 0.50067365, b: 0.32275194, a: 0.74509805}
