@@ -17,4 +17,9 @@ MonoBehaviour:
   carbonMultiplier: 0.1
   rareMetalsMultiplier: 0.7
   gasMultiplier: 0.2
-  material: {fileID: 2100000, guid: bf8b50b486d5e9449b7c59b390c602c3, type: 2}
+  diffuseMap: {fileID: 2800000, guid: 221e3d4746167c24a926b32fe34fef17, type: 3}
+  normalMap: {fileID: 2800000, guid: b39665650febb094c8155739515afb77, type: 3}
+  roughnessMap: {fileID: 2800000, guid: dbd91b20c7546954ca5d1ec104513742, type: 3}
+  specularMap: {fileID: 2800000, guid: f5a03c3965e6d5c40a6c6bedcb6d28d7, type: 3}
+  emissionMap: {fileID: 2800000, guid: fbe529ec1c58be4459cf69c12deee585, type: 3}
+  atmosphereColor: {r: 1.2005416, g: 0.49027354, b: 0.35199127, a: 0.74509805}

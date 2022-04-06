@@ -46,7 +46,6 @@ public class Planet : MonoBehaviour, ISelectable
     public void Initialize(int index, StarSystem _parentSystem)
     {
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
-        planetSize = Vector3.one * Random.Range(0.8f, 3f);
         transform.localScale = planetSize;
         parentSystem = _parentSystem;
 
@@ -54,37 +53,59 @@ public class Planet : MonoBehaviour, ISelectable
         mpb = new MaterialPropertyBlock();
 
         //Determine what type of planet this is using orbital radius
-        if (orbitalRadius > 0f && orbitalRadius <= 15f)
-        {
-            planetType = PlanetType.CLASS_Y;
-        }
-        else if (orbitalRadius > 15f && orbitalRadius <= 30f)
-        {
-            planetType = PlanetType.CLASS_O;
-        }
+        // if (orbitalRadius > 0f && orbitalRadius <= 2.5f)
+        // {
+        //     planetType = PlanetType.CLASS_Y;
+        // }
+        // else if (orbitalRadius > 2.5f && orbitalRadius <= 4f)
+        // {
+        //     planetType = PlanetType.CLASS_O;
+        // }
 
-        else if (orbitalRadius > 30f && orbitalRadius <= 45f)
-        {
-            planetType = Random.Range(0f, 1f) > 0.7f ? PlanetType.CLASS_M : PlanetType.CLASS_L;
-        }
+        // else if (orbitalRadius > 4f && orbitalRadius <= 5f)
+        // {
+        //     planetType = Random.Range(0f, 1f) > 0.7f ? PlanetType.CLASS_M : PlanetType.CLASS_L;
+        // }
 
-        else if (orbitalRadius > 45f && orbitalRadius <= 60f)
-        {
-            planetType = Random.Range(0f, 1f) > 0.4f ? PlanetType.CLASS_M : PlanetType.CLASS_L;
-        }
+        // else if (orbitalRadius > 5f && orbitalRadius <= 7.5f)
+        // {
+        //     planetType = Random.Range(0f, 1f) > 0.4f ? PlanetType.CLASS_M : PlanetType.CLASS_L;
+        // }
 
-        else if (orbitalRadius > 60f && orbitalRadius <= 75f)
-        {
-            planetType = Random.Range(0f, 1f) > 0.4f ? PlanetType.CLASS_O : PlanetType.CLASS_H;
-        }
+        // else if (orbitalRadius > 7.5f && orbitalRadius <= 10f)
+        // {
+        //     planetType = Random.Range(0f, 1f) > 0.4f ? PlanetType.CLASS_O : PlanetType.CLASS_O;
+        // }
 
-        else if (orbitalRadius > 75f && orbitalRadius <= 90f)
-        {
-            planetType = Random.Range(0f, 1f) > 0.6f ? PlanetType.CLASS_O : PlanetType.CLASS_H;
-        }
+        // else if (orbitalRadius > 10f && orbitalRadius <= 12f)
+        // {
+        //     planetType = Random.Range(0f, 1f) > 0.6f ? PlanetType.CLASS_O : PlanetType.CLASS_O;
+        // }
+        planetType = (PlanetType)UnityEngine.Random.Range(0, 5);
+        Debug.Log(planetType);
 
         planetProperties = MapManager.instance.planetPropertiesList[(int)planetType];
-        meshRenderer.material = planetProperties.material;
+
+        meshRenderer.GetPropertyBlock(mpb, 0);
+
+        mpb.SetTexture("_MainTex", planetProperties.diffuseMap);
+        mpb.SetTexture("_NormalMap", planetProperties.normalMap);
+        mpb.SetTexture("_RoughnessMap", planetProperties.roughnessMap);
+        mpb.SetTexture("_SpecularMap", planetProperties.specularMap);
+        if (planetProperties.emissionMap != null)
+        {
+            mpb.SetTexture("_EmissionMap", planetProperties.emissionMap);
+        }
+
+        meshRenderer.SetPropertyBlock(mpb, 0);
+        mpb.Clear();
+
+        meshRenderer.GetPropertyBlock(mpb, 1);
+
+        mpb.SetColor("_Color", planetProperties.atmosphereColor);
+
+        meshRenderer.SetPropertyBlock(mpb, 1);
+        mpb.Clear();
 
         planetaryStructures = new List<PlanetaryStructure>();
         spaceStructures = new List<SpaceStructure>();

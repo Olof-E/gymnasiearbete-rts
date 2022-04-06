@@ -7,6 +7,7 @@ Shader "Unlit/PlanetSurfaceShader"
         _NormalMap ("Normal Map", 2D) = "bump" {}
         _RoughnessMap ("Roughness Map", 2D) = "grey" {}
         _SpecularMap ("Specular Map", 2D) = "grey" {}
+        _EmissionMap ("Emission Map", 2D) = "black" {}
     }
     SubShader
     {
@@ -20,7 +21,7 @@ Shader "Unlit/PlanetSurfaceShader"
             #pragma fragment frag
             
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+            //#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 
             struct Attributes
             {
@@ -50,6 +51,9 @@ Shader "Unlit/PlanetSurfaceShader"
 
             sampler2D _SpecularMap;
             float4 _SpecularMap_ST;
+
+            sampler2D _EmissionMap;
+            float4 _EmissionMap_ST;
 
             float3 _PlanetPosWS;
 
@@ -102,7 +106,7 @@ Shader "Unlit/PlanetSurfaceShader"
 
                 col *= 1.5;
 
-                return col;
+                return lerp(col, tex2D(_EmissionMap, i.uv)*0.8, tex2D(_EmissionMap, i.uv).r);
             }
             ENDHLSL
         }

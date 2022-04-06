@@ -65,11 +65,12 @@ public class StarSystem
             planets[i].parentSystem = this;
             planets[i].gameObject.name = $"Planet {i}";
             planets[i].transform.SetParent(orbitObj.transform);
-            planets[i].Initialize(i, this);
+            planets[i].planetSize = Vector3.one * UnityEngine.Random.Range(0.8f, 3f);
             float orbitRadius = Mathf.Clamp((AU + starRadius / 2f + planets[i].planetSize.x) * UnityEngine.Random.Range(1f * (i + 1), 2f * (i + 1)), prevOrbitRadius * 1.2f, Mathf.Infinity);
             prevOrbitRadius = orbitRadius + planets[i].planetSize.x;
             planets[i].orbitalRadius = orbitRadius;
             planets[i].scaledOrbitalRadius = orbitRadius * 8f;
+            planets[i].Initialize(i, this);
             orbitObj.AddComponent<OrbitalRenderer>();
             orbitObj.GetComponent<OrbitalRenderer>().Initialize(50, orbitRadius);
         }
