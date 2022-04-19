@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public bool fired = false;
     private float timeSinceFired = 0f;
     public Targetable target;
+    public ShieldManager ignoreShield;
     private void Start()
     {
 
@@ -23,6 +24,17 @@ public class Projectile : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        RaycastHit hitInfo;
+        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 0.5f))
+        {
+            if (hitInfo.collider.gameObject == ignoreShield.gameObject)
+            {
+                return;
+            }
+            Debug.Log("Hit target obj: " + hitInfo.collider.name);
+            target.TakeDamage(dmg, hitInfo.point);
+            Destroy(this.gameObject);
+        }
     }
 
     public void Fire(Vector3 targetPos)
@@ -31,10 +43,8 @@ public class Projectile : MonoBehaviour
         fired = true;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnDrawGizmos()
     {
-        Debug.Log("Hit target obj");
-        Destroy(this.gameObject);
-        target.TakeDamage(dmg, other.GetContact(0).point);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f);
     }
 }

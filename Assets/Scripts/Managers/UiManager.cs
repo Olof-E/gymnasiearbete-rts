@@ -11,18 +11,14 @@ public class UiManager : MonoBehaviour
 
     public TMP_Text creditsText;
     public TMP_Text scienceText;
-    public TMP_Text foodText;
     public TMP_Text tritaniumText;
     public TMP_Text crystalText;
     public TMP_Text nanoCarbonText;
     public TMP_Text availablePowerText;
     public TMP_Text RareMetalText;
     public TMP_Text gasText;
-
     public TMP_Text selectionInfoText;
-
     public Button switchMapView;
-
     public GameObject fleetList;
     // public Button buildFusionReactor;
     // public Button buildTritaniumExtractor;
@@ -94,7 +90,6 @@ public class UiManager : MonoBehaviour
     private void Update()
     {
         fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
-
         creditsText.SetText($"¢: {Mathf.RoundToInt(Player.instance.totalCredits)}");
         scienceText.SetText($"S: {Mathf.RoundToInt(Player.instance.totalScience)}");
         tritaniumText.SetText($"T: {Mathf.RoundToInt(Player.instance.totalTritanium)}");

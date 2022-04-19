@@ -15,6 +15,7 @@ public class Formation
     public List<Unit> units;
     public FormationType type;
     public Queue<Order> orderQueue;
+    public int id;
     private Order currOrder;
     private bool executingOrder = false;
 
@@ -24,7 +25,7 @@ public class Formation
         type = _type;
         orderQueue = new Queue<Order>();
 
-        UnitManager.instance.fleets.Add(this);
+        //UnitManager.instance.fleets.Add(this);
     }
 
     public void Update()

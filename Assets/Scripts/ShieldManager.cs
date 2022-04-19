@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ShieldManager : MonoBehaviour
 {
+    public Targetable parent;
     private int maxHitCount = 10;
     private int currHitCount = 0;
     private Vector4[] hitPosArr;
@@ -14,8 +15,9 @@ public class ShieldManager : MonoBehaviour
     private MaterialPropertyBlock mpb;
     private int hitPosArrId;
     private int hitIntensityId;
-    public void Initialize()
+    public void Initialize(Targetable _parent)
     {
+        parent = _parent;
         hitPosArr = new Vector4[maxHitCount];
         hitIntensityArr = new float[maxHitCount];
         hitTimer = new float[maxHitCount];

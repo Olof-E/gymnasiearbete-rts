@@ -18,7 +18,7 @@ public class PhasedEnergyBeamStructure : SpaceStructure
         maxArmor = armor;
         beamArrray.parent = this;
         isOrderable = true;
-        shieldManager.Initialize();
+        shieldManager.Initialize(this);
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,

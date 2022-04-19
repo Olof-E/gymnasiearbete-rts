@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance;
-    public List<Formation> fleets;
+    public Dictionary<GameObject, Formation> fleets;
     public GameObject fleetLisInfoPrefab;
 
-    public int selectedFleet;
+    public GameObject selectedFleetKey;
     //public List<Formation> tempFormations;
     private void Awake()
     {
         if (instance == null)
         {
-            fleets = new List<Formation>();
+            fleets = new Dictionary<GameObject, Formation>();
             //tempFormations = new List<Formation>();
             instance = this;
         }
@@ -29,9 +29,9 @@ public class UnitManager : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < fleets.Count; i++)
+        foreach (KeyValuePair<GameObject, Formation> fleet in fleets)
         {
-            fleets[i].Update();
+            fleet.Value.Update();
         }
         // for (int i = 0; i < tempFormations.Count; i++)
         // {
@@ -43,9 +43,11 @@ public class UnitManager : MonoBehaviour
     {
         List<Unit> selectedUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
         Formation newFormation = new Formation(new List<Unit>(), FormationType.SQUARE);
+        GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
+
+        fleets.Add(newFleetInfoPanel, newFormation);
         int fleetId = fleets.Count - 1;
 
-        GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
         RectTransform panelTransform = newFleetInfoPanel.GetComponent<RectTransform>();
         newFleetInfoPanel.transform.SetParent(UiManager.instance.fleetList.transform, false);
 
@@ -54,19 +56,20 @@ public class UnitManager : MonoBehaviour
 
         newFleetInfoPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
+            Debug.Log("this is from a listener(first): " + fleetId);
             if (CommandManager.instance.assignOrder)
             {
-                CommandManager.instance.GiveOrders(fleetId);
+                CommandManager.instance.GiveOrders(newFleetInfoPanel);
             }
             else
             {
-                SelectFleet(fleetId);
+                SelectFleet(newFleetInfoPanel);
             }
         });
 
         for (int i = 0; i < selectedUnits.Count; i++)
         {
-            AssignFleet(selectedUnits[i], fleetId);
+            AssignFleet(selectedUnits[i], newFleetInfoPanel);
         }
 
         UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
@@ -74,46 +77,68 @@ public class UnitManager : MonoBehaviour
 
     public void DisbandFleet()
     {
-        if (selectedFleet == -1)
+        if (selectedFleetKey == null)
         {
             return;
         }
 
-        fleets[selectedFleet].units.ForEach((Unit unit) => { unit.fleetId = -1; });
-        fleets.RemoveAt(selectedFleet);
-        UiManager.instance.fleetList.transform.GetChild(selectedFleet).SetParent(null, false);
-        // for (int i = 0; i < UiManager.instance.fleetList.transform.childCount; i++)
-        // {
-        //     UiManager.instance.fleetList.transform.GetChild(i).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -115 * i);
-        // }
-        // UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
+        fleets[selectedFleetKey].units.ForEach((Unit unit) => { unit.fleetId = -1; });
+        fleets.Remove(selectedFleetKey);
+        selectedFleetKey.transform.SetParent(null, false);
+        for (int i = 0; i < fleets.Count; i++)
+        {
+            UiManager.instance.fleetList.transform.GetChild(i).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -115 * i);
+            //             Debug.Log(UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.GetPersistentEventCount()
+            // );
+            //             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.RemoveAllListeners();
+            //             Debug.Log(UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.GetPersistentEventCount()
+            // );
+            //             Debug.Log("index:" + i);
+            //             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(() =>
+            //             {
+            //                 Debug.Log("this is from a listener(not first): " + i);
+            //                 if (CommandManager.instance.assignOrder)
+            //                 {
+            //                     CommandManager.instance.GiveOrders(UiManager.instance.fleetList.transform.GetChild(i).gameObject);
+            //                 }
+            //                 else
+            //                 {
+            //                     SelectFleet(UiManager.instance.fleetList.transform.GetChild(i).gameObject);
+            //                 }
+            //             });
+        }
+        Debug.Log("--------");
+        Debug.Log($"{fleets.Count} {UiManager.instance.fleetList.transform.childCount}");
+        Debug.Log("--------");
+        UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
     }
 
-    public void SelectFleet(int fleetId)
+    public void SelectFleet(GameObject fleetKey)
     {
         SelectionManager.instance.selected.Clear();
-        for (int i = 0; i < fleets[fleetId].units.Count; i++)
+        //Debug.Log($"we care about this: {fleetId}");
+        for (int i = 0; i < fleets[fleetKey].units.Count; i++)
         {
-            fleets[fleetId].units[i].selected = true;
-            SelectionManager.instance.selected.Add(fleets[fleetId].units[i]);
+            fleets[fleetKey].units[i].selected = true;
+            SelectionManager.instance.selected.Add(fleets[fleetKey].units[i]);
         }
-        selectedFleet = fleetId;
-        Debug.Log($"Selected fleet: {fleetId}");
+        selectedFleetKey = fleetKey;
+        Debug.Log($"Selected fleet: {fleets[fleetKey].id}");
     }
 
-    public void AssignFleet(Unit assignedUnit, int fleetId)
+    public void AssignFleet(Unit assignedUnit, GameObject fleetKey)
     {
-        if (assignedUnit.fleetId == fleetId)
+        if (assignedUnit.fleetId == fleets[fleetKey].id)
             return;
 
         if (assignedUnit.fleetId != -1)
         {
             Debug.Log("Removing from previous fleet");
-            fleets[assignedUnit.fleetId].units.Remove(assignedUnit);
+            fleets[fleetKey].units.Remove(assignedUnit);
         }
 
-        fleets[fleetId].units.Add(assignedUnit);
-        assignedUnit.fleetId = fleetId;
+        fleets[fleetKey].units.Add(assignedUnit);
+        assignedUnit.fleetId = fleets[fleetKey].id;
         Debug.Log(assignedUnit.fleetId);
     }
 }

@@ -15,7 +15,7 @@ public class SmallShipyard : SpaceStructure
         shields = 1500;
         maxShields = shields;
         maxArmor = armor;
-        shieldManager.Initialize();
+        shieldManager.Initialize(this);
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,

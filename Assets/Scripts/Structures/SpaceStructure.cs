@@ -59,6 +59,15 @@ public class SpaceStructure : Targetable, ISelectable
         }
         shieldBar.value = shields / maxShields;
         armorBar.value = armor / maxArmor;
+        if (selected && !shieldBar.gameObject.activeInHierarchy)
+        {
+            shieldBar.transform.parent.gameObject.SetActive(true);
+        }
+        else if (!selected && shieldBar.gameObject.activeInHierarchy)
+        {
+            shieldBar.transform.parent.gameObject.SetActive(false);
+        }
+
         if (orderQueue.Count > 0)
         {
             if (!executingOrder)

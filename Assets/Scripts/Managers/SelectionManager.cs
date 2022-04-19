@@ -35,11 +35,11 @@ public class SelectionManager : MonoBehaviour
     //When mouse event is raised check if it has anything to do with the selection manager
     public void HandleMouseInput(MouseEventArgs e)
     {
-        if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW)
+        if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW && !Input.GetKey(KeyCode.LeftControl))
         {
             if (selected.Count > 0) { selected.ForEach((ISelectable item) => { item.selected = false; }); }
             selected.Clear();
-            UnitManager.instance.selectedFleet = -1;
+            UnitManager.instance.selectedFleetKey = null;
         }
         //Check for single left click
         if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)

@@ -24,6 +24,7 @@ public class TorpedoLauncher : Weapon
             {
                 //Instaniate torpedo and fire at target 
                 launchedTorpedo = Instantiate(torpedoPrefab, transform.position, Quaternion.identity).GetComponent<Torpedo>();
+                launchedTorpedo.ignoreShield = parent.shieldManager;
                 launchedTorpedo.target = target;
                 loaded = false;
             }

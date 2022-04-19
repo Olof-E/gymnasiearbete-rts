@@ -17,7 +17,7 @@ public class RailgunStructure : SpaceStructure
         maxArmor = armor;
         railgunCannon.parent = this;
         isOrderable = true;
-        shieldManager.Initialize();
+        shieldManager.Initialize(this);
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,

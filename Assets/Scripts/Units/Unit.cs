@@ -35,7 +35,7 @@ public class Unit : Targetable, ISelectable
         weapons = new List<Weapon>();
         weapons.AddRange(GetComponentsInChildren<Weapon>());
         pathLineRend = transform.Find("PathLine").GetComponent<LineRenderer>();
-        shieldManager.Initialize();
+        shieldManager.Initialize(this);
         selectionCollider = GetComponent<BoxCollider>();
     }
 
@@ -53,6 +53,7 @@ public class Unit : Targetable, ISelectable
             if (!selectedSprite.gameObject.activeInHierarchy)
             {
                 selectedSprite.gameObject.SetActive(true);
+                shieldBar.transform.parent.gameObject.SetActive(true);
             }
             if (!pathLineRend.gameObject.activeInHierarchy)
             {
@@ -64,6 +65,7 @@ public class Unit : Targetable, ISelectable
             if (selectedSprite.gameObject.activeInHierarchy)
             {
                 selectedSprite.gameObject.SetActive(false);
+                shieldBar.transform.parent.gameObject.SetActive(false);
             }
             if (pathLineRend.gameObject.activeInHierarchy)
             {
@@ -245,7 +247,7 @@ public class Unit : Targetable, ISelectable
             }
             else if (currOrder.orderType == OrderType.ASSIGN_ORDER)
             {
-                UnitManager.instance.AssignFleet(this, currOrder.newFleetId);
+                UnitManager.instance.AssignFleet(this, currOrder.newFleetKey);
                 executingOrder = false;
                 currOrder = null;
             }

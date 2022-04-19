@@ -17,7 +17,7 @@ public class TorpedoLauncherStructure : SpaceStructure
         maxArmor = armor;
         torpedoLauncher.parent = this;
         isOrderable = true;
-        shieldManager.Initialize();
+        shieldManager.Initialize(this);
         constructionCost = new ResourceConsumtion()
         {
             usedTritanium = 2000,

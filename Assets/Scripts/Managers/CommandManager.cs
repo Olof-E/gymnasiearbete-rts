@@ -18,7 +18,7 @@ public class Order
     public Vector3 movePos { get; set; }
     public Planet targetBody { get; set; }
     public float patrolRadius { get; set; }
-    public int newFleetId { get; set; }
+    public GameObject newFleetKey { get; set; }
     public Targetable target { get; set; }
 
 }
@@ -34,7 +34,6 @@ public class CommandManager : MonoBehaviour
     public bool attackOrder = false;
     public bool givingOrders = false;
     private Camera mainCamera;
-    public LineRenderer cmdDirectorLineRend;
     public GameObject cmdDirectorHead;
     private void Awake()
     {
@@ -59,15 +58,15 @@ public class CommandManager : MonoBehaviour
         if (givingOrders)
         {
             Vector3 mousePosWS = InputManager.GetMousePositionOnXZPlane();
-            if (SelectionManager.instance.selected[0].GetType().IsSubclassOf(typeof(Unit)))
-            {
-                cmdDirectorLineRend.SetPosition(0, ((Unit)SelectionManager.instance.selected[0]).transform.position);
-            }
-            else
-            {
-                cmdDirectorLineRend.SetPosition(0, ((SpaceStructure)SelectionManager.instance.selected[0]).transform.position);
-            }
-            cmdDirectorLineRend.SetPosition(1, mousePosWS);
+            // if (SelectionManager.instance.selected[0].GetType().IsSubclassOf(typeof(Unit)))
+            // {
+            //     cmdDirectorLineRend.SetPosition(0, ((Unit)SelectionManager.instance.selected[0]).transform.position);
+            // }
+            // else
+            // {
+            //     cmdDirectorLineRend.SetPosition(0, ((SpaceStructure)SelectionManager.instance.selected[0]).transform.position);
+            // }
+            // cmdDirectorLineRend.SetPosition(1, mousePosWS);
             cmdDirectorHead.transform.position = mousePosWS;
         }
     }
@@ -121,14 +120,23 @@ public class CommandManager : MonoBehaviour
             else if (attackOrder)
             {
                 Targetable target;
+                ShieldManager targetShields;
                 RaycastHit hitInfo;
                 if (Physics.Raycast(mainCamera.transform.position, ((Vector3)orderData) - mainCamera.transform.position, out hitInfo, 100f))
                 {
+                    Debug.Log("The hit was: " + hitInfo.collider.name);
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
                         for (int i = 0; i < selectedUnits.Count; i++)
                         {
                             selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
+                        }
+                    }
+                    else if (hitInfo.collider.gameObject.TryGetComponent<ShieldManager>(out targetShields))
+                    {
+                        for (int i = 0; i < selectedUnits.Count; i++)
+                        {
+                            selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = targetShields.parent });
                         }
                     }
                 }
@@ -146,7 +154,7 @@ public class CommandManager : MonoBehaviour
             {
                 for (int i = 0; i < selectedUnits.Count; i++)
                 {
-                    selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ASSIGN_ORDER, newFleetId = (int)orderData });
+                    selectedUnits[i].RecieveOrder(new Order() { orderType = OrderType.ASSIGN_ORDER, newFleetKey = (GameObject)orderData });
                 }
 
                 assignOrder = false;
@@ -200,7 +208,7 @@ public class CommandManager : MonoBehaviour
         moveOrder = false;
         stopOrder = false;
         givingOrders = false;
-        cmdDirectorLineRend.enabled = false;
+        //cmdDirectorLineRend.enabled = false;
         cmdDirectorHead.SetActive(false);
     }
 
@@ -242,7 +250,7 @@ public class CommandManager : MonoBehaviour
 
             if (givingOrders)
             {
-                cmdDirectorLineRend.enabled = true;
+                //cmdDirectorLineRend.enabled = true;
                 cmdDirectorHead.SetActive(true);
             }
         }
