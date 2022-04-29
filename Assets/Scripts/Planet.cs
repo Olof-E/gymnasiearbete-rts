@@ -43,6 +43,8 @@ public class Planet : MonoBehaviour, ISelectable
     public bool isOrderable { get; set; } = false;
 
     public Vector3 planetSize;
+
+    //Initialize planet properties
     public void Initialize(int index, StarSystem _parentSystem)
     {
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
@@ -81,8 +83,7 @@ public class Planet : MonoBehaviour, ISelectable
         // {
         //     planetType = Random.Range(0f, 1f) > 0.6f ? PlanetType.CLASS_O : PlanetType.CLASS_O;
         // }
-        planetType = (PlanetType)UnityEngine.Random.Range(0, 5);
-        Debug.Log(planetType);
+        planetType = (PlanetType)Mathf.FloorToInt(Random.value * 5f);
 
         planetProperties = MapManager.instance.planetPropertiesList[(int)planetType];
 
@@ -152,6 +153,7 @@ public class Planet : MonoBehaviour, ISelectable
 
         meshRenderer.SetPropertyBlock(mpb, 1);
     }
+
     //Evaluate the planets orbital position 
     public Vector3 EvaluateOrbitalPos(float radius)
     {
@@ -162,6 +164,7 @@ public class Planet : MonoBehaviour, ISelectable
         return new Vector3(x, 0f, z);
     }
 
+    //Toggle all renderers of the planet 
     public void Hide(bool hide)
     {
         transform.parent.GetComponent<LineRenderer>().enabled = !hide;
@@ -174,6 +177,7 @@ public class Planet : MonoBehaviour, ISelectable
         selectionCollider.enabled = !hide;
     }
 
+    //Focus this planet and toggle all interactables
     public void Focus(bool _focused)
     {
         focused = _focused;
