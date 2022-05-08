@@ -37,7 +37,7 @@ Shader "Unlit/PlanetSurfaceShader"
                 float3 positionWS : TEXCOORD0;
                 float2 uv         : TEXCOORD1;
                 float3 normalWS   : TEXCOORD2;
-                float4 tangentWS   : TEXCOORD3;
+                float4 tangentWS  : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -70,14 +70,12 @@ Shader "Unlit/PlanetSurfaceShader"
 
                 real sign = v.tangent.w * GetOddNegativeScale();
                 o.tangentWS = float4(vertexNormalInputs.tangentWS.xyz, sign);
-
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
 
             float4 frag (Varyings i) : SV_Target
             {
-
                 float4 col = tex2D(_MainTex, i.uv);
                 float3 normal = UnpackNormal(tex2D(_NormalMap, i.uv)); 
                 

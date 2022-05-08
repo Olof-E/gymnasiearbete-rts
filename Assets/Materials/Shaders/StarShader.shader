@@ -2,20 +2,25 @@ Shader "Unlit/StarShader"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _BaseMap ("Texture", 2D) = "white" {}
         [Hdr] _PrimaryColor ("Prim Col", Color) = (1,1,1,1)
         [Hdr] _SecondaryColor ("Sec Col", Color) = (1,1,1,1)
     }
     SubShader
-    {
+    {        
         Tags { "RenderType"="Opaque" }
+        ZTest LEqual
         LOD 100
+
 
         Pass
         {
             HLSLPROGRAM
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+                        #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
             #pragma vertex vert
             #pragma fragment frag
@@ -98,7 +103,7 @@ Shader "Unlit/StarShader"
             struct v2f
             {   
                 float4 vertex : SV_POSITION;
-                float3 position : TEXCOORD2;
+                float3 position  : TEXCOORD1;
             };
 
             float4 _PrimaryColor;
@@ -128,5 +133,38 @@ Shader "Unlit/StarShader"
             }
             ENDHLSL
         }
+
+        Pass
+        {
+            Name "DepthOnly"
+            Tags{"LightMode" = "DepthOnly"}
+
+            ZWrite On
+            ColorMask 0
+            Cull Off
+
+            HLSLPROGRAM
+            #pragma exclude_renderers gles gles3 glcore
+            #pragma target 4.5
+
+            #pragma vertex DepthOnlyVertex
+            #pragma fragment DepthOnlyFragment
+
+            // -------------------------------------
+            // Material Keywords
+            #pragma shader_feature_local_fragment _ALPHATEST_ON
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+
+            //--------------------------------------
+            // GPU Instancing
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/DepthOnlyPass.hlsl"
+            ENDHLSL
+        }
+        
+
     }
 }
