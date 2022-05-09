@@ -103,10 +103,7 @@ Shader "Unlit/StructureShader"
 
                 //float3 combinedNormals = float3(i.normalWS.x+normalMapWS.x, i.normalWS.y+normalMapWS.y, i.normalWS.z);
                 
-<<<<<<< HEAD
-                col *= max(0.075,dot(worldNormal, -normalize(i.positionWS)))*1.5;
-=======
-                col *= max(0.075,dot(worldNormal, -normalize(i.positionWS)))*1.5;
+                col *= max(0.385,dot(worldNormal, -normalize(i.positionWS)))*1.5;
 
                     #ifdef _ADDITIONAL_LIGHTS
                         // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
@@ -116,7 +113,6 @@ Shader "Unlit/StructureShader"
                             col += float4(light.color * light.distanceAttenuation * light.shadowAttenuation, 0);
                         }
                     #endif
->>>>>>> 47a22f92ef1e1d1bd4e82ca963028aa0fcd67db7
                 return col;
             }
             ENDHLSL
