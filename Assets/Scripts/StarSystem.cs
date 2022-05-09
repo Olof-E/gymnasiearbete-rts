@@ -39,12 +39,12 @@ public class StarSystem
         star.transform.SetParent(starSystemObj.transform);
 
         star.GetComponent<MeshRenderer>().GetPropertyBlock(propBlock);
-        propBlock.SetColor("_PrimaryColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 35f);
+        propBlock.SetColor("_PrimaryColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 32.5f);
         float hue;
         float saturation;
         float intensity;
         Color.RGBToHSV(Mathf.CorrelatedColorTemperatureToRGB(starTemperature), out hue, out saturation, out intensity);
-        propBlock.SetColor("_SecondaryColor", Color.HSVToRGB(hue + UnityEngine.Random.Range(-0.2f, 0.2f), saturation, intensity, true) / 5f);
+        propBlock.SetColor("_SecondaryColor", Color.HSVToRGB(hue + UnityEngine.Random.Range(-0.3f, 0.3f), saturation, intensity, true) / 5f);
         star.GetComponent<MeshRenderer>().SetPropertyBlock(propBlock);
         star.transform.GetChild(0).GetComponent<VisualEffect>().SetVector4("_MainColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 6.5f);
 

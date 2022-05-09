@@ -8,6 +8,7 @@ Shader "Unlit/PlanetAtmosphereShader"
     }
     SubShader
     {
+        ZWRITE On
         Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         Blend OneMinusDstColor One
         LOD 100
@@ -54,7 +55,6 @@ Shader "Unlit/PlanetAtmosphereShader"
                 o.vertex = vertexInputs.positionCS;
                 o.positionWS = vertexInputs.positionWS;
                 VertexNormalInputs vertexNormalInputs = GetVertexNormalInputs(v.normal, v.tangent);
-
                 o.normalWS = vertexNormalInputs.normalWS;
 
                 real sign = v.tangent.w * GetOddNegativeScale();
