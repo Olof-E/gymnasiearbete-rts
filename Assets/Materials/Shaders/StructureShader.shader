@@ -5,10 +5,12 @@ Shader "Unlit/StructureShader"
         //[PreRendererData] _PlanetPosWS ("planet pos", vector) = (0,0,0,0)
         [MainTexture] _BaseMap("Base Map (RGB) Smoothness / Alpha (A)", 2D) = "white" {}
         [MainColor]   _BaseColor("Base Color", Color) = (1, 1, 1, 1)
-	
-        [Toggle(_ALPHATEST_ON)] _AlphaTestToggle ("Alpha Clipping", Float) = 0
-        _Cutoff ("Alpha Cutoff", Float) = 0.5
-        _BumpMap ("Normal Map", 2D) = "bump" {}
+
+        [NoScaleOffset] _BumpMap ("Normal Map", 2D) = "bump" {}
+        [NoScaleOffset] _RoughnessMap("Roughness Map", 2D) = "grey" {}
+        [NoScaleOffset] _EmissionMap ("Emission Map", 2D) = "white" {}
+        _Roughness("Roughness Value", Range(0.0, 1.0)) = 0.0
+        _Specular("Specular Value", Range(0.0, 1.0)) = 0.0
     }
     SubShader
     {
@@ -65,7 +67,11 @@ Shader "Unlit/StructureShader"
             };
 
             float4 _StructurePosWS;
-            //sampler2D _BumpMap;
+            sampler2D _RoughnessMap;
+            float4 _RoughnessMap_ST;
+
+            float _Specular;
+            float _Roughness;
 
             Varyings vert (Attributes v)
             {
@@ -87,9 +93,9 @@ Shader "Unlit/StructureShader"
 
             float4 frag (Varyings i) : SV_Target
             {
-                float4 col = float4(0.4,0.4,0.4,1);//tex2D(_MainTex, i.uv);
-
-                float3 normal = UnpackNormal(tex2D(sampler_BumpMap, i.uv)); 
+                float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
+                col = pow(col, 1.5)*3.5;
+                float3 normal = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv)); 
                 
                 float3x3 tangent2Object =
                 {
@@ -97,13 +103,21 @@ Shader "Unlit/StructureShader"
                     cross(i.tangentWS*i.tangentWS.w, i.normalWS),
                     i.normalWS
                 };
-                tangent2Object=transpose(tangent2Object);
-                normal = mul(tangent2Object, normal);
+                tangent2Object = transpose(tangent2Object);
+                normal = mul(normal,tangent2Object);
                 float3 worldNormal = normalize(normal);
 
                 //float3 combinedNormals = float3(i.normalWS.x+normalMapWS.x, i.normalWS.y+normalMapWS.y, i.normalWS.z);
                 
-                col *= max(0.385,dot(worldNormal, -normalize(i.positionWS)))*1.5;
+                // float specular = pow(
+                //     max(0, saturate(dot(
+                //         reflect(normalize(-_StructurePosWS), worldNormal), 
+                //         -GetWorldSpaceNormalizeViewDir(i.positionWS)))), 
+                //     1);
+
+                float specular = saturate(pow(dot(i.normalWS,normalize(normalize(-_StructurePosWS)+GetWorldSpaceNormalizeViewDir(i.positionWS))), 1))*_Specular;
+
+                col *= max(0.3,saturate(dot(worldNormal, normalize(-i.positionWS))));
 
                     #ifdef _ADDITIONAL_LIGHTS
                         // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
@@ -113,7 +127,9 @@ Shader "Unlit/StructureShader"
                             col += float4(light.color * light.distanceAttenuation * light.shadowAttenuation, 0);
                         }
                     #endif
-                return col;
+
+                col += pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 2);//lerp(0,pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5), pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5)*2);
+                return lerp(col, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv)*4.25, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).r) * _BaseColor;
             }
             ENDHLSL
         }
@@ -143,6 +159,7 @@ Shader "Unlit/StructureShader"
             #pragma multi_compile_instancing
             #pragma multi_compile _ DOTS_INSTANCING_ON
 
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
         
             ENDHLSL
