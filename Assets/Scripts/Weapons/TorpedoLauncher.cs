@@ -8,7 +8,7 @@ public class TorpedoLauncher : Weapon
     public GameObject torpedoPrefab;
     private void Start()
     {
-        targetingRadius = 50f;
+        targetingRadius = 500f;
         reloadTime = 7.5f;
     }
 
