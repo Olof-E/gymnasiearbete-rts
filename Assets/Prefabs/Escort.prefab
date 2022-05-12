@@ -2135,11 +2135,39 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc5b3dc30807a634db68b59fd01b5e9d, type: 3}
+--- !u!23 &269214918781872850 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: fc5b3dc30807a634db68b59fd01b5e9d, type: 3}
+  m_PrefabInstance: {fileID: 1476587126192092758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1438721232033108413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fc5b3dc30807a634db68b59fd01b5e9d, type: 3}
   m_PrefabInstance: {fileID: 1476587126192092758}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1782455661248187143 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fc5b3dc30807a634db68b59fd01b5e9d, type: 3}
+  m_PrefabInstance: {fileID: 1476587126192092758}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4081424349038218595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782455661248187143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce707f3aefa3c049876637d26867310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRenderer: {fileID: 269214918781872850}
+  diffuseMap: {fileID: 2800000, guid: 4f87d57c7b7a53d4a9881d8607baffc0, type: 3}
+  normalMap: {fileID: 2800000, guid: a9cd842f08b195b4ab8d1d1e8908a8b0, type: 3}
+  roughnessMap: {fileID: 2800000, guid: 5044e4f879c81ee42b8593bbe01054c5, type: 3}
+  specularMap: {fileID: 0}
+  emissionMap: {fileID: 2800000, guid: 61e36b9b70da47047acb14666db18416, type: 3}
 --- !u!1001 &3021424710054736292
 PrefabInstance:
   m_ObjectHideFlags: 0

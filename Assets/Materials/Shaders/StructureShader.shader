@@ -93,8 +93,11 @@ Shader "Unlit/StructureShader"
 
             float4 frag (Varyings i) : SV_Target
             {
+                //return tex2D(_RoughnessMap, i.uv);
+
                 float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
                 col = pow(col, 1.5)*3.5;
+            
                 float3 normal = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv)); 
                 
                 float3x3 tangent2Object =
