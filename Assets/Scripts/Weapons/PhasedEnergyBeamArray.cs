@@ -34,6 +34,7 @@ public class PhasedEnergyBeamArray : Weapon
             }
             if (firing)
             {
+                beamGameObj.SetPosition(0, transform.position);
                 timeSinceFired += Time.deltaTime;
             }
             if (timeSinceFired > 0.9f)

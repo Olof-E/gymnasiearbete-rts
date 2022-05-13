@@ -10,6 +10,8 @@ public class CustomLitShaderProperties : MonoBehaviour
     public Texture roughnessMap;
     public Texture specularMap;
     public Texture emissionMap;
+    public float colorIntensity;
+    public float emissionIntenisty;
     private MaterialPropertyBlock mpb;
 
     // Start is called before the first frame update
@@ -25,6 +27,8 @@ public class CustomLitShaderProperties : MonoBehaviour
         mpb.SetTexture("_RoughnessMap", roughnessMap);
         //mpb.SetTexture("_SpecularMap", specularMap);
         mpb.SetTexture("_EmissionMap", emissionMap);
+        mpb.SetFloat("_ColorIntensity", colorIntensity);
+        mpb.SetFloat("_EmissionIntensity", emissionIntenisty);
 
         mainRenderer.SetPropertyBlock(mpb);
 

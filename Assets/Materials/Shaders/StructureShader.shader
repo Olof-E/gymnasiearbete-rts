@@ -11,6 +11,8 @@ Shader "Unlit/StructureShader"
         [NoScaleOffset] _EmissionMap ("Emission Map", 2D) = "white" {}
         _Roughness("Roughness Value", Range(0.0, 1.0)) = 0.0
         _Specular("Specular Value", Range(0.0, 1.0)) = 0.0
+        _ColorIntensity("Color Intensity", Float) = 1.0
+        _EmissionIntensity("Emission Intensity", Float) = 1.0
     }
     SubShader
     {
@@ -72,6 +74,8 @@ Shader "Unlit/StructureShader"
 
             float _Specular;
             float _Roughness;
+            float _ColorIntensity;
+            float _EmissionIntensity;
 
             Varyings vert (Attributes v)
             {
@@ -96,8 +100,7 @@ Shader "Unlit/StructureShader"
                 //return tex2D(_RoughnessMap, i.uv);
 
                 float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
-                col = pow(col, 1.5)*3.5;
-            
+                col = pow(col, 1.15)*_ColorIntensity;
                 float3 normal = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv)); 
                 
                 float3x3 tangent2Object =
@@ -120,7 +123,10 @@ Shader "Unlit/StructureShader"
 
                 float specular = saturate(pow(dot(i.normalWS,normalize(normalize(-_StructurePosWS)+GetWorldSpaceNormalizeViewDir(i.positionWS))), 1))*_Specular;
 
-                col *= max(0.3,saturate(dot(worldNormal, normalize(-i.positionWS))));
+                float lightDot = clamp(saturate(dot(worldNormal, normalize(-i.positionWS))), -1, 1);
+
+                col *= exp(-pow(1*(1 - lightDot), 0.9));
+                return col;
 
                     #ifdef _ADDITIONAL_LIGHTS
                         // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
@@ -132,7 +138,7 @@ Shader "Unlit/StructureShader"
                     #endif
 
                 col += pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 2);//lerp(0,pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5), pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5)*2);
-                return lerp(col, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv)*4.25, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).r) * _BaseColor;
+                return lerp(col, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv)*_EmissionIntensity, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).r) * _BaseColor;
             }
             ENDHLSL
         }
