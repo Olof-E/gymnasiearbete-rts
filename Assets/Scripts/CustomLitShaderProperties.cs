@@ -21,12 +21,15 @@ public class CustomLitShaderProperties : MonoBehaviour
         mpb = new MaterialPropertyBlock();
         mainRenderer.GetPropertyBlock(mpb);
 
+        if (diffuseMap != null)
+            mpb.SetTexture("_BaseMap", diffuseMap);
+        if (normalMap != null)
+            mpb.SetTexture("_BumpMap", normalMap);
+        if (roughnessMap != null)
+            mpb.SetTexture("_RoughnessMap", roughnessMap);
+        if (emissionMap != null)
+            mpb.SetTexture("_EmissionMap", emissionMap);
 
-        mpb.SetTexture("_BaseMap", diffuseMap);
-        mpb.SetTexture("_BumpMap", normalMap);
-        mpb.SetTexture("_RoughnessMap", roughnessMap);
-        //mpb.SetTexture("_SpecularMap", specularMap);
-        mpb.SetTexture("_EmissionMap", emissionMap);
         mpb.SetFloat("_ColorIntensity", colorIntensity);
         mpb.SetFloat("_EmissionIntensity", emissionIntenisty);
 

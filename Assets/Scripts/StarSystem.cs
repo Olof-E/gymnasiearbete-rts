@@ -78,6 +78,7 @@ public class StarSystem
 
     public void HideSystem(bool hide)
     {
+        star.transform.position = Vector3.zero;
         star.SetActive(!hide);
         for (int i = 0; i < planets.Length; i++)
         {
@@ -87,7 +88,6 @@ public class StarSystem
 
     public void FocusPlanet(GameObject planetObj)
     {
-        Debug.Log(Array.IndexOf(planets, planetObj.GetComponent<Planet>()));
         Planet focusedPlanet = planets[Array.IndexOf(planets, planetObj.GetComponent<Planet>())];
         for (int i = 0; i < planets.Length; i++)
         {
@@ -98,6 +98,7 @@ public class StarSystem
         }
         focusedPlanet.Focus(true);
         MapManager.instance.mapState = MapState.PLANETARY_VIEW;
+        star.transform.position = Vector3.Normalize(star.transform.position - focusedPlanet.transform.position) * 250f;
         UiManager.instance.ActivateActions(0);
     }
 

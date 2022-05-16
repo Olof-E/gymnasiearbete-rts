@@ -83,6 +83,16 @@ public class CommandManager : MonoBehaviour
             if (moveOrder)
             {
                 List<Vector3> unitPos = Formation.CalculateFormationPos(FormationType.SQUARE, selectedUnits.Count, (Vector3)orderData);
+                Planet targetPlanet = MapManager.instance.activePlanet ?? null;
+                if (targetPlanet == null)
+                {
+                    RaycastHit hitInfo;
+                    if (Physics.Raycast(CameraController.instance.mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
+                    {
+                        hitInfo.transform.TryGetComponent<Planet>(out targetPlanet);
+                        Debug.Log("target planet hit " + targetPlanet);
+                    }
+                }
                 for (int i = 0; i < selectedUnits.Count; i++)
                 {
                     selectedUnits[i].RecieveOrder(
@@ -90,17 +100,10 @@ public class CommandManager : MonoBehaviour
                         {
                             orderType = OrderType.MOVE_ORDER,
                             movePos = unitPos[i],
-                            targetBody = MapManager.instance.activePlanet
+                            targetBody = targetPlanet
                         });
                 }
-                // Formation tempFormation = new Formation(SelectionManager.instance.selected.Cast<Unit>().ToList(), FormationType.SQUARE, true);
-                // tempFormation.RecieveOrder(
-                //     new Order()
-                //     {
-                //         orderType = OrderType.MOVE_ORDER,
-                //         movePos = (Vector3)orderData,
-                //         targetBody = MapManager.instance.activePlanet
-                //     });
+
                 moveOrder = false;
             }
             else if (patrolOrder)
@@ -176,8 +179,10 @@ public class CommandManager : MonoBehaviour
                     {
                         if (hit.collider.gameObject.TryGetComponent<Targetable>(out target))
                         {
+
                             for (int i = 0; i < selectedStrucs.Count; i++)
                             {
+                                Debug.Log(selectedStrucs[i]);
                                 selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
                             }
                             attackOrder = false;
@@ -216,7 +221,7 @@ public class CommandManager : MonoBehaviour
     {
         bool selectionIsOrderable = SelectionManager.instance.selected.TrueForAll((ISelectable obj) => { return obj.isOrderable; });
 
-        if (e == KeyCode.None || SelectionManager.instance.selected.Count <= 0 || !selectionIsOrderable)
+        if (e == KeyCode.None || e == KeyCode.LeftControl || SelectionManager.instance.selected.Count <= 0 || !selectionIsOrderable)
         {
             return;
         }

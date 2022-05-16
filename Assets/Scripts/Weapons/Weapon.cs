@@ -27,6 +27,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public virtual void Hide(bool hide)
+    {
+
+    }
+
     public IEnumerator Reload()
     {
         yield return new WaitForSeconds(reloadTime);

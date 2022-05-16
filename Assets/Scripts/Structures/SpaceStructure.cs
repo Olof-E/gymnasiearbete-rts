@@ -38,8 +38,18 @@ public class SpaceStructure : Targetable, ISelectable
     public Queue<Order> orderQueue { get; set; }
     public bool isOrderable { get; set; } = false;
     public Targetable target { get; set; }
+    [field: SerializeField]
+    public Renderer boundsRenderer { get; set; }
+    public Vector3 selectablePosition { get; set; }
+    public List<Weapon> weapons { get; private set; }
     private Order currOrder { get; set; }
     private bool executingOrder { get; set; }
+
+    public void Initialize()
+    {
+        weapons = new List<Weapon>();
+        weapons.AddRange(GetComponentsInChildren<Weapon>());
+    }
     public virtual void LevelUp()
     {
         if (level < maxLevel)
@@ -47,10 +57,7 @@ public class SpaceStructure : Targetable, ISelectable
             level++;
         }
     }
-    public void RecieveOrder(Order recievedOrder)
-    {
-        orderQueue.Enqueue(recievedOrder);
-    }
+
     public virtual void ExecuteOrder()
     {
         if (destroyed)
@@ -84,13 +91,46 @@ public class SpaceStructure : Targetable, ISelectable
                 executingOrder = false;
                 currOrder = null;
             }
-            else if (currOrder.orderType == OrderType.STOP_ORDER)
+        }
+    }
+
+    public void RecieveOrder(Order recievedOrder)
+    {
+        Debug.Log(recievedOrder);
+        if (recievedOrder.orderType == OrderType.STOP_ORDER)
+        {
+            target = null;
+            orderQueue.Clear();
+            currOrder = null;
+            executingOrder = false;
+        }
+        else
+        {
+            if (!Input.GetKey(KeyCode.LeftControl))
             {
                 target = null;
                 orderQueue.Clear();
                 currOrder = null;
                 executingOrder = false;
             }
+            orderQueue.Enqueue(recievedOrder);
         }
+    }
+
+    public void Hide(bool hide)
+    {
+        MeshRenderer[] renderers = this.GetComponentsInChildren<MeshRenderer>();
+        for (int j = 0; j < renderers.Length; j++)
+        {
+            renderers[j].enabled = !hide;
+        }
+
+        for (int j = 0; j < weapons.Count; j++)
+        {
+            weapons[j].Hide(hide);
+        }
+
+        selectionCollider.enabled = !hide;
+        selectedSprite.enabled = !hide;
     }
 }

@@ -20,6 +20,7 @@ public class UiManager : MonoBehaviour
     public TMP_Text selectionInfoText;
     public Button switchMapView;
     public GameObject fleetList;
+    public bool actionsActive { get; private set; } = true;
     // public Button buildFusionReactor;
     // public Button buildTritaniumExtractor;
     // public Button buildNanoCarbonExtruder;
@@ -87,9 +88,9 @@ public class UiManager : MonoBehaviour
         UnitManager.instance.DisbandFleet();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
+        //fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
         creditsText.SetText($"¢: {Mathf.RoundToInt(Player.instance.totalCredits)}");
         scienceText.SetText($"S: {Mathf.RoundToInt(Player.instance.totalScience)}");
         tritaniumText.SetText($"T: {Mathf.RoundToInt(Player.instance.totalTritanium)}");
@@ -99,7 +100,7 @@ public class UiManager : MonoBehaviour
         RareMetalText.SetText($"R: {Mathf.RoundToInt(Player.instance.totalRareMetals)}");
         gasText.SetText($"G: {Mathf.RoundToInt(Player.instance.totalGas)}");
 
-        selectionInfoText.SetText($"Selection: {SelectionManager.instance.selected.Count}");
+        //selectionInfoText.SetText($"Selection: {SelectionManager.instance.selected.Count}");
     }
 
     /*
@@ -112,12 +113,17 @@ public class UiManager : MonoBehaviour
     */
     public void ActivateActions(int actionsId)
     {
+        // if (actionsId != -1 && actionsActive)
+        // {
+        //     return;
+        // }
         if (actionsId == -1)
         {
             for (int i = 0; i < actions.Length; i++)
             {
                 actions[i].SetActive(false);
             }
+            actionsActive = false;
         }
         else
         {
@@ -126,6 +132,10 @@ public class UiManager : MonoBehaviour
                 actions[i].SetActive(false);
             }
             actions[actionsId].SetActive(true);
+            if (actionsId != 1)
+            {
+                actionsActive = true;
+            }
         }
     }
 }

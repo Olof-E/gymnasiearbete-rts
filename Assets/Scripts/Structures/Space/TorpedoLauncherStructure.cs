@@ -5,6 +5,7 @@ using UnityEngine;
 public class TorpedoLauncherStructure : SpaceStructure
 {
     public TorpedoLauncher torpedoLauncher;
+    private MaterialPropertyBlock mpb;
     private void Start()
     {
         orderQueue = new Queue<Order>();
@@ -27,6 +28,8 @@ public class TorpedoLauncherStructure : SpaceStructure
             usedPower = 50,
         };
         selectionCollider = GetComponent<BoxCollider>();
+        mpb = new MaterialPropertyBlock();
+        Initialize();
         LevelUp();
     }
 
@@ -57,6 +60,14 @@ public class TorpedoLauncherStructure : SpaceStructure
             {
                 selectedSprite.gameObject.SetActive(false);
             }
+        }
+        if (parentBody == MapManager.instance.activePlanet)
+        {
+            this.transform.Find("DefenseEmplacement").GetComponent<MeshRenderer>().GetPropertyBlock(mpb);
+
+            mpb.SetVector("_StructurePosWS", transform.position);
+
+            this.transform.Find("DefenseEmplacement").GetComponent<MeshRenderer>().SetPropertyBlock(mpb);
         }
         ExecuteOrder();
     }

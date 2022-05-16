@@ -89,18 +89,15 @@ Shader "Unlit/PlanetSurfaceShader"
                 normal = -TransformTangentToWorld(normal, CreateTangentToWorld(i.normalWS, i.tangentWS,1));
                 float3 worldNormal = normalize(normal);
 
-                float specular = pow(
-                    max(0, dot(
-                        reflect(normalize(_PlanetPosWS), worldNormal), 
-                        GetWorldSpaceNormalizeViewDir(i.positionWS))), 
-                    7.5)*tex2D(_SpecularMap, i.uv)*1.2;
-
+                float3 r = normalize(2 * dot(normalize(_PlanetPosWS), i.normalWS) * i.normalWS - normalize(_PlanetPosWS));
                 
+                float specular = max(0, pow(dot(r, -GetWorldSpaceNormalizeViewDir(i.positionWS)), 3))*tex2D(_SpecularMap, i.uv);
 
 
-                col *= pow(max(0.05, dot(normalize(_PlanetPosWS), worldNormal)), 0.75);
-
-                col +=  specular * (tex2D(_RoughnessMap, i.uv));
+                float lightDot = clamp(saturate(dot(worldNormal, normalize(_PlanetPosWS))), -1, 1);
+                col +=  specular * (1-tex2D(_RoughnessMap, i.uv))*  3;
+                
+                col *= exp(-pow(2.2*(1 - lightDot), 0.8));
 
                 col *= 1.5;
 

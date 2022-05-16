@@ -9,6 +9,7 @@ public class Torpedo : MonoBehaviour
     public float angularSpeed = 75f;
     public float acceleration = 3.5f;
     public ShieldManager ignoreShield;
+    public BoxCollider ignoreSelectionColl;
     private Rigidbody rb;
     private float speed = 0f;
     private Vector3 oldPos = Vector3.zero;
@@ -56,12 +57,20 @@ public class Torpedo : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject == ignoreShield.gameObject)
+        if (other.gameObject == ignoreShield.gameObject || other.gameObject == ignoreSelectionColl.gameObject)
         {
             return;
         }
-        Debug.Log("Hit target obj");
         Destroy(this.gameObject);
-        target.TakeDamage(dmg, other.contacts[0].point);
+        Targetable hit;
+        ShieldManager shieldHit;
+        if (other.transform.TryGetComponent<Targetable>(out hit))
+        {
+            hit.TakeDamage(dmg, other.contacts[0].point);
+        }
+        else if (other.transform.gameObject.TryGetComponent<ShieldManager>(out shieldHit))
+        {
+            shieldHit.parent.TakeDamage(dmg, other.contacts[0].point);
+        }
     }
 }

@@ -38,8 +38,8 @@ public class SelectionManager : MonoBehaviour
         if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW && !Input.GetKey(KeyCode.LeftControl))
         {
             if (selected.Count > 0) { selected.ForEach((ISelectable item) => { item.selected = false; }); }
-            selected.Clear();
             UnitManager.instance.selectedFleetKey = null;
+            selected.Clear();
         }
         //Check for single left click
         if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)
@@ -53,33 +53,31 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (MapManager.instance.mapState == MapState.SYSTEM_VIEW)
                 {
-                    // Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
-                    // selectedPlanet.selected = true;
-                    // selected.Add(selectedPlanet);
-                    //MapManager.instance.FocusPlanet(MapManager.instance.GetPlanet(hit.collider.gameObject));
                 }
                 else if (MapManager.instance.mapState == MapState.PLANETARY_VIEW)
                 {
                     ISelectable currSelection;
                     if (hit.collider.gameObject.TryGetComponent<ISelectable>(out currSelection))
                     {
-                        currSelection.selected = true;
-                        selected.Add(currSelection);
+                        if (currSelection.selected)
+                        {
+                            currSelection.selected = false;
+                            selected.Remove(currSelection);
+                        }
+                        else
+                        {
+                            currSelection.selected = true;
+                            selected.Add(currSelection);
+                        }
                     }
-                    // if (hit.collider.gameObject.GetComponent<ISelectable>().GetType() == typeof(Planet))
-                    // {
-                    //     Planet selectedPlanet = hit.collider.gameObject.GetComponent<Planet>();
-                    //     selectedPlanet.selected = true;
-                    //     selected.Add(selectedPlanet);
-                    // }
-                    // else if (hit.collider.gameObject.GetComponent<ISelectable>().GetType().IsSubclassOf(typeof(Unit)))
-                    // {
-                    //     Unit selectedUnit = hit.collider.gameObject.GetComponent<Unit>();
-                    //     selectedUnit.selected = true;
-                    //     selected.Add(selectedUnit);
-                    // }
                 }
-
+            }
+            else
+            {
+                if (UiManager.instance.actionsActive)
+                {
+                    UiManager.instance.ActivateActions(-1);
+                }
             }
         }
 
@@ -97,6 +95,10 @@ public class SelectionManager : MonoBehaviour
                 {
                     MapManager.instance.activeSystem.FocusPlanet(hit.collider.gameObject);
                     //MapManager.instance.FocusPlanet(MapManager.instance.GetPlanet(hit.collider.gameObject));
+                }
+                else if (MapManager.instance.mapState == MapState.PLANETARY_VIEW)
+                {
+                    CameraController.instance.FocusPosition(hit.transform.position);
                 }
             }
         }
@@ -123,26 +125,58 @@ public class SelectionManager : MonoBehaviour
                 selectionRect = Rect.zero;
                 return;
             }
-
-            selectionRect = Rect.zero;
-            Vector3 viewPos1 = e.startDrag;
-            Vector3 viewPos2 = e.endDrag;
-
-            Vector3 topLeft = Vector3.Min(viewPos1, viewPos2);
-            Vector3 botRight = Vector3.Max(viewPos1, viewPos2);
-            selectionBounds.SetMinMax(topLeft, botRight);
-
-            Collider[] selections = Physics.OverlapBox(selectionBounds.center, selectionBounds.extents, Quaternion.identity, selectionLayer);
-            for (int i = 0; i < selections.Length; i++)
+            List<ISelectable> selectables = MapManager.instance.activePlanet.selectables;
+            for (int i = 0; i < selectables.Count; i++)
             {
-                ISelectable selectedObj = selections[i].gameObject.GetComponent<ISelectable>();
-                if (selectedObj != null)
+                if (selectionRect.Overlaps(GUI3dRectWithObject(selectables[i].boundsRenderer)))
                 {
-                    selectedObj.selected = true;
-                    selected.Add(selectedObj);
+                    if (selectables[i].selected)
+                    {
+                        selectables[i].selected = false;
+                        selected.Remove(selectables[i]);
+                    }
+                    else
+                    {
+                        selectables[i].selected = true;
+                        selected.Add(selectables[i]);
+                    }
                 }
             }
+            selectionRect = Rect.zero;
         }
+    }
+
+    public static Rect GUI3dRectWithObject(Renderer selectableRenderer)
+    {
+
+        Vector3 cen = selectableRenderer.bounds.center;
+        Vector3 ext = selectableRenderer.bounds.extents;
+        Vector2[] extentPoints = new Vector2[8]
+        {
+            WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z-ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z-ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z+ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z+ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z-ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z-ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z+ext.z)),
+            WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z+ext.z))
+        };
+        Vector2 min = extentPoints[0];
+        Vector2 max = extentPoints[0];
+        foreach (Vector2 v in extentPoints)
+        {
+            min = Vector2.Min(min, v);
+            max = Vector2.Max(max, v);
+        }
+        return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+    }
+
+    public static Vector2 WorldToGUIPoint(Vector3 world)
+    {
+        Vector2 screenPoint = Camera.main.WorldToScreenPoint(world);
+        screenPoint.y = (float)Screen.height - screenPoint.y;
+        return screenPoint;
     }
 
     private void OnDrawGizmos()

@@ -38,7 +38,6 @@ public class ShieldManager : MonoBehaviour
             hitPosArr[i] = transform.InverseTransformPoint(hitPos);
             hitIntensityArr[i] = 1f;
             hitTimer[i] = 0f;
-            Debug.Log($"new hit at: {hitPos}");
         }
         else
         {

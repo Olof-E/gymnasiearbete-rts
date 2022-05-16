@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1.059}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4144814040901218490}
   m_RootOrder: 1
@@ -43,6 +44,7 @@ TrailRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -159,6 +161,7 @@ GameObject:
   - component: {fileID: 4144814039937355040}
   - component: {fileID: 4144814039937355041}
   - component: {fileID: 4144814039937355042}
+  - component: {fileID: 574354752016561682}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -176,6 +179,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4144814040901218490}
   m_RootOrder: 0
@@ -199,6 +203,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -207,7 +212,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8cb5cd620aaaddc44affdd1e8cc8362a, type: 2}
+  - {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,6 +248,26 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &574354752016561682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4144814039937355036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce707f3aefa3c049876637d26867310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRenderer: {fileID: 4144814039937355041}
+  diffuseMap: {fileID: 0}
+  normalMap: {fileID: 0}
+  roughnessMap: {fileID: 0}
+  specularMap: {fileID: 0}
+  emissionMap: {fileID: 0}
+  colorIntensity: 5
+  emissionIntenisty: 1
 --- !u!1 &4144814040901218484
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +296,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.25, z: 0.45}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4144814039937355043}
   - {fileID: 1077937587}
@@ -289,10 +315,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4391eacc6c0ad84bb2a53a8e60f2ce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dmg: 20
   target: {fileID: 0}
   maxSpeed: 1250
   angularSpeed: 80
   acceleration: 0.2
+  ignoreShield: {fileID: 0}
+  ignoreSelectionColl: {fileID: 0}
 --- !u!54 &443000398
 Rigidbody:
   m_ObjectHideFlags: 0

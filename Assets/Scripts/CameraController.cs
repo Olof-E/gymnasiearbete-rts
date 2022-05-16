@@ -10,12 +10,13 @@ public class CameraController : MonoBehaviour
     public float edgeMoveThickness = 100f;
     public bool focusing = false;
     public float speed = 100f;
-    private Camera mainCamera;
+    public Camera mainCamera { get; private set; }
     Vector3 lastMoveDir;
     Vector3 targetMoveDir;
     float lastZoomPos;
     float targetZoomPos = 15f;
     Vector2 orbitAngles;
+    Vector3 focusPos;
 
     private void Awake()
     {
@@ -69,6 +70,14 @@ public class CameraController : MonoBehaviour
         speed = maxSpeed * (Mathf.Exp(offsetDist / 30));
 
         transform.Translate(transform.TransformDirection(moveDir) * Time.deltaTime * speed, Space.World);
+        if (focusing)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, focusPos, speed * Vector3.Distance(transform.position, focusPos) * Time.deltaTime);
+            if (Vector3.Distance(transform.position, focusPos) < 0.5f)
+            {
+                focusing = false;
+            }
+        }
         //transform.position = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
         //transform.LookAt(target.transform.position, Vector3.up);
 
@@ -108,15 +117,15 @@ public class CameraController : MonoBehaviour
 
     public void FocusPosition(Vector3 focusPoint)
     {
-        transform.position = focusPoint;
+        focusPos = focusPoint;
         focusing = true;
-        StartCoroutine(Focusing());
+        //StartCoroutine(Focusing());
         targetZoomPos = 35f;
     }
 
-    public IEnumerator Focusing()
-    {
-        yield return new WaitForSeconds(0.15f);
-        focusing = false;
-    }
+    // public IEnumerator Focusing()
+    // {
+    //     yield return new WaitForSeconds(0.15f);
+    //     focusing = false;
+    // }
 }

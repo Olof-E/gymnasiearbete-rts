@@ -6,6 +6,7 @@ public class TorpedoLauncher : Weapon
 {
     public Torpedo launchedTorpedo;
     public GameObject torpedoPrefab;
+    private bool hidden = false;
     private void Start()
     {
         targetingRadius = 500f;
@@ -24,7 +25,24 @@ public class TorpedoLauncher : Weapon
             {
                 //Instaniate torpedo and fire at target 
                 launchedTorpedo = Instantiate(torpedoPrefab, transform.position, Quaternion.identity).GetComponent<Torpedo>();
+                if (hidden)
+                {
+                    for (int i = 0; i < launchedTorpedo.transform.childCount; i++)
+                    {
+                        launchedTorpedo.transform.GetChild(i).gameObject.SetActive(false);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < launchedTorpedo.transform.childCount; i++)
+                    {
+                        launchedTorpedo.transform.GetChild(i).gameObject.SetActive(true);
+                    }
+                }
+                Debug.Log("Launched");
+                Debug.Log(parent.shieldManager);
                 launchedTorpedo.ignoreShield = parent.shieldManager;
+                launchedTorpedo.ignoreSelectionColl = ((ISelectable)parent).selectionCollider;
                 launchedTorpedo.target = target;
                 loaded = false;
             }
@@ -33,6 +51,29 @@ public class TorpedoLauncher : Weapon
                 StartCoroutine(Reload());
                 Debug.Log("Starting loading sequece of torpedos");
                 loading = true;
+            }
+        }
+
+    }
+
+    public override void Hide(bool hide)
+    {
+        hidden = hide;
+        if (launchedTorpedo != null)
+        {
+            if (hidden)
+            {
+                for (int i = 0; i < launchedTorpedo.transform.childCount; i++)
+                {
+                    launchedTorpedo.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < launchedTorpedo.transform.childCount; i++)
+                {
+                    launchedTorpedo.transform.GetChild(i).gameObject.SetActive(true);
+                }
             }
         }
     }

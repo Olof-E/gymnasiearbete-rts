@@ -7,9 +7,14 @@ public class PhasedEnergyBeamArray : Weapon
     private LineRenderer beamGameObj;
     private bool firing = false;
     private float timeSinceFired = 0f;
+    public ShieldManager ignoreShield;
+    public BoxCollider ignoreSelectionColl;
+    private bool hidden = false;
     private void Start()
     {
         beamGameObj = GetComponent<LineRenderer>();
+        ignoreShield = parent.shieldManager;
+        ignoreSelectionColl = ((ISelectable)parent).selectionCollider;
         targetingRadius = 400f;
         reloadTime = 2.5f;
     }
@@ -18,19 +23,43 @@ public class PhasedEnergyBeamArray : Weapon
     {
         if (target != null)
         {
-            beamGameObj.enabled = true;
+            beamGameObj.enabled = !hidden;
             if ((target.gameObj.transform.position - transform.position).magnitude > targetingRadius)
             {
                 target = null;
             }
             else if (loaded && !firing)
             {
+                RaycastHit[] hitInfo = Physics.RaycastAll(transform.position, Vector3.Normalize(target.gameObj.transform.position - transform.position));
+                RaycastHit closestHit = new RaycastHit();
+                float minDist = float.MaxValue;
+                for (int i = 0; i < hitInfo.Length; i++)
+                {
+                    if (hitInfo[i].collider.gameObject == ignoreShield.gameObject || hitInfo[i].collider.gameObject == ignoreSelectionColl.gameObject)
+                    {
+                        continue;
+                    }
+                    if (hitInfo[i].distance < minDist)
+                    {
+                        minDist = hitInfo[i].distance;
+                        closestHit = hitInfo[i];
+                    }
+                }
+
                 beamGameObj.SetPosition(0, transform.position);
-                beamGameObj.SetPosition(1, target.gameObj.transform.position);
+                beamGameObj.SetPosition(1, closestHit.point);
                 firing = true;
-                RaycastHit hitInfo;
-                Physics.Raycast(transform.position, (target.gameObj.transform.position - transform.position), out hitInfo);
-                target.TakeDamage(dmg, hitInfo.point);
+
+                Targetable hit;
+                ShieldManager shieldHit;
+                if (closestHit.transform.TryGetComponent<Targetable>(out hit))
+                {
+                    hit.TakeDamage(dmg, closestHit.point);
+                }
+                else if (closestHit.transform.gameObject.TryGetComponent<ShieldManager>(out shieldHit))
+                {
+                    shieldHit.parent.TakeDamage(dmg, closestHit.point);
+                }
             }
             if (firing)
             {
@@ -57,8 +86,12 @@ public class PhasedEnergyBeamArray : Weapon
         {
             beamGameObj.SetPosition(0, transform.position);
             beamGameObj.SetPosition(1, transform.position);
-            beamGameObj.enabled = false;
         }
+    }
+
+    public override void Hide(bool hide)
+    {
+        hidden = hide;
     }
 
     private void OnDrawGizmos()

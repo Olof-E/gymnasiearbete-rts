@@ -39,17 +39,23 @@ public class Planet : MonoBehaviour, ISelectable
     public MeshRenderer meshRenderer;
     private MaterialPropertyBlock mpb;
     public List<Targetable> targetables;
+    public List<ISelectable> selectables;
     public SpriteRenderer selectedSprite { get; set; }
     public bool isOrderable { get; set; } = false;
-
+    public Vector3 selectablePosition { get; set; }
+    [field: SerializeField]
+    public Renderer boundsRenderer { get; set; }
     public Vector3 planetSize;
 
     //Initialize planet properties
     public void Initialize(int index, StarSystem _parentSystem)
     {
+        orbitalProgress = Random.Range(0f, 1f);
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
         transform.localScale = planetSize;
         parentSystem = _parentSystem;
+
+        selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
 
         shaderPlanetPosId = Shader.PropertyToID("_PlanetPosWS");
         mpb = new MaterialPropertyBlock();
@@ -111,6 +117,8 @@ public class Planet : MonoBehaviour, ISelectable
         planetaryStructures = new List<PlanetaryStructure>();
         spaceStructures = new List<SpaceStructure>();
         targetables = new List<Targetable>();
+        selectables = new List<ISelectable>();
+        selectables.Add(this);
         selectionCollider = GetComponent<BoxCollider>();
     }
 
@@ -120,9 +128,10 @@ public class Planet : MonoBehaviour, ISelectable
         orbitalProgress += Time.deltaTime * orbitalSpeed;
         orbitalProgress %= 1f;
 
-        if (!focused)
+        if (!focused && MapManager.instance.activeSystem == parentSystem)
         {
             transform.position = EvaluateOrbitalPos(orbitalRadius);
+            selectablePosition = transform.position;
         }
 
         for (int i = 0; i < planetaryStructures.Count; i++)
@@ -130,28 +139,48 @@ public class Planet : MonoBehaviour, ISelectable
             planetaryStructures[i].Execute();
         }
 
-        if (selected && !UiManager.instance.actions[0].activeInHierarchy && focused)
+
+        if (focused || MapManager.instance.activeSystem == parentSystem)
         {
-            UiManager.instance.ActivateActions(-1);
-            UiManager.instance.ActivateActions(0);
+            if (selected)
+            {
+                if (!selectedSprite.gameObject.activeInHierarchy)
+                {
+                    selectedSprite.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                if (selectedSprite.gameObject.activeInHierarchy)
+                {
+                    selectedSprite.gameObject.SetActive(false);
+                }
+            }
+
+            if (selected && !UiManager.instance.actionsActive && !UiManager.instance.actions[0].activeInHierarchy)
+            {
+                UiManager.instance.ActivateActions(-1);
+                UiManager.instance.ActivateActions(0);
+            }
+            else if (!selected && !UiManager.instance.actionsActive && !UiManager.instance.actions[1].activeInHierarchy)
+            {
+                UiManager.instance.ActivateActions(-1);
+                UiManager.instance.ActivateActions(1);
+            }
+
+            meshRenderer.GetPropertyBlock(mpb, 0);
+
+            mpb.SetVector(shaderPlanetPosId, transform.position);
+
+            meshRenderer.SetPropertyBlock(mpb, 0);
+
+
+            meshRenderer.GetPropertyBlock(mpb, 1);
+
+            mpb.SetVector(shaderPlanetPosId, transform.position);
+
+            meshRenderer.SetPropertyBlock(mpb, 1);
         }
-        else if (!selected && !UiManager.instance.actions[1].activeInHierarchy && focused)
-        {
-            UiManager.instance.ActivateActions(-1);
-            UiManager.instance.ActivateActions(1);
-        }
-        meshRenderer.GetPropertyBlock(mpb, 0);
-
-        mpb.SetVector(shaderPlanetPosId, transform.position);
-
-        meshRenderer.SetPropertyBlock(mpb, 0);
-
-
-        meshRenderer.GetPropertyBlock(mpb, 1);
-
-        mpb.SetVector(shaderPlanetPosId, transform.position);
-
-        meshRenderer.SetPropertyBlock(mpb, 1);
     }
 
     //Evaluate the planets orbital position 
@@ -184,9 +213,9 @@ public class Planet : MonoBehaviour, ISelectable
         transform.parent.GetComponent<LineRenderer>().enabled = !focused;
         if (focused)
         {
-            transform.localScale = planetSize * 7.5f;
+            transform.localScale = planetSize * 10f;
 
-            transform.position = EvaluateOrbitalPos(scaledOrbitalRadius);
+            transform.position = EvaluateOrbitalPos(orbitalRadius);
             CameraController.instance.FocusPosition(transform.position);
 
             MapManager.instance.activePlanet = this;
@@ -203,25 +232,12 @@ public class Planet : MonoBehaviour, ISelectable
 
         for (int i = 0; i < spaceStructures.Count; i++)
         {
-            MeshRenderer[] renderers = spaceStructures[i].GetComponentsInChildren<MeshRenderer>();
-            for (int j = 0; j < renderers.Length; j++)
-            {
-                renderers[j].enabled = focused;
-            }
-            spaceStructures[i].selectionCollider.enabled = focused;
-            spaceStructures[i].selectedSprite.enabled = focused;
+            spaceStructures[i].Hide(!focused);
         }
 
         foreach (Unit unit in targetables.FindAll((Targetable target) => target.GetType().IsSubclassOf(typeof(Unit))))
         {
-            MeshRenderer[] renderers = unit.GetComponentsInChildren<MeshRenderer>();
-            for (int j = 0; j < renderers.Length; j++)
-            {
-                renderers[j].enabled = focused;
-            }
-
-            unit.selectionCollider.enabled = focused;
-            unit.selectedSprite.enabled = focused;
+            unit.Hide(!focused);
         }
     }
 }

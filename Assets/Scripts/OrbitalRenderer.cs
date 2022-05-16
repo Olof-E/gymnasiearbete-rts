@@ -27,7 +27,7 @@ public class OrbitalRenderer : MonoBehaviour
         orbitRenderer.positionCount = segments;
         orbitRenderer.startColor = new Color(0.125f, 0.5f, 0.65f, 1);
         orbitRenderer.endColor = new Color(0.125f, 0.5f, 0.65f, 1);
-        orbitRenderer.startWidth = 0.05f;
+        orbitRenderer.startWidth = 0.085f;
         orbitRenderer.material = MapManager.instance.lineMaterial;
         orbitRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         orbitRenderer.receiveShadows = false;

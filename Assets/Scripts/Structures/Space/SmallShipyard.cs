@@ -5,6 +5,7 @@ using UnityEngine;
 public class SmallShipyard : SpaceStructure
 {
     public GameObject[] shipPrefabs;
+    private MaterialPropertyBlock mpb;
     private void Start()
     {
         orderQueue = new Queue<Order>();
@@ -25,12 +26,14 @@ public class SmallShipyard : SpaceStructure
             usedPower = 45,
         };
         selectionCollider = GetComponent<BoxCollider>();
+        mpb = new MaterialPropertyBlock();
+        Initialize();
         LevelUp();
     }
 
     public void Update()
     {
-        if (selected && !UiManager.instance.actions[2].activeInHierarchy)
+        if (selected && !UiManager.instance.actionsActive && !UiManager.instance.actions[2].activeInHierarchy)
         {
             UiManager.instance.ActivateActions(2);
         }
@@ -52,6 +55,14 @@ public class SmallShipyard : SpaceStructure
                 selectedSprite.gameObject.SetActive(false);
             }
         }
+        if (parentBody == MapManager.instance.activePlanet)
+        {
+            this.transform.Find("SmallShipyard").GetComponent<MeshRenderer>().GetPropertyBlock(mpb);
+
+            mpb.SetVector("_StructurePosWS", transform.position);
+
+            this.transform.Find("SmallShipyard").GetComponent<MeshRenderer>().SetPropertyBlock(mpb);
+        }
         ExecuteOrder();
     }
 
@@ -62,6 +73,7 @@ public class SmallShipyard : SpaceStructure
         newUnit.transform.SetParent(MapManager.instance.activePlanet.transform.parent);
         newUnit.parentBody = MapManager.instance.activePlanet;
         newUnit.parentBody.targetables.Add(newUnit);
+        newUnit.parentBody.selectables.Add(newUnit);
     }
 
     public override void LevelUp()

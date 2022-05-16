@@ -97,23 +97,13 @@ Shader "Unlit/StructureShader"
 
             float4 frag (Varyings i) : SV_Target
             {
-                //return tex2D(_RoughnessMap, i.uv);
-
                 float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
                 col = pow(col, 1.15)*_ColorIntensity;
                 float3 normal = UnpackNormal(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv)); 
                 
-                float3x3 tangent2Object =
-                {
-                    i.tangentWS.xyz*i.tangentWS.w,
-                    cross(i.tangentWS*i.tangentWS.w, i.normalWS),
-                    i.normalWS
-                };
-                tangent2Object = transpose(tangent2Object);
-                normal = mul(normal,tangent2Object);
-                float3 worldNormal = normalize(normal);
 
-                //float3 combinedNormals = float3(i.normalWS.x+normalMapWS.x, i.normalWS.y+normalMapWS.y, i.normalWS.z);
+                normal = TransformTangentToWorld(normal, CreateTangentToWorld(i.normalWS, i.tangentWS,1));
+                float3 worldNormal = normalize(normal);
                 
                 // float specular = pow(
                 //     max(0, saturate(dot(
@@ -121,12 +111,15 @@ Shader "Unlit/StructureShader"
                 //         -GetWorldSpaceNormalizeViewDir(i.positionWS)))), 
                 //     1);
 
-                float specular = saturate(pow(dot(i.normalWS,normalize(normalize(-_StructurePosWS)+GetWorldSpaceNormalizeViewDir(i.positionWS))), 1))*_Specular;
+                // float specular = saturate(pow(dot(i.normalWS,normalize(normalize(-_StructurePosWS)+GetWorldSpaceNormalizeViewDir(i.positionWS))), 1))*_Specular;
+                float3 r = normalize(2 * dot(normalize(_StructurePosWS), worldNormal) * worldNormal - normalize(_StructurePosWS));
+                
+                float specular = max(0, pow(dot(r, -GetWorldSpaceNormalizeViewDir(i.positionWS)), 6));
 
                 float lightDot = clamp(saturate(dot(worldNormal, normalize(-i.positionWS))), -1, 1);
+                col +=  saturate(specular * (1-tex2D(_RoughnessMap, i.uv)*0.65)) *  1.25;
 
-                col *= exp(-pow(1*(1 - lightDot), 0.9));
-                return col;
+                col *= exp(-pow(2*(1 - lightDot),0.8));
 
                     #ifdef _ADDITIONAL_LIGHTS
                         // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
@@ -137,7 +130,7 @@ Shader "Unlit/StructureShader"
                         }
                     #endif
 
-                col += pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 2);//lerp(0,pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5), pow(specular * (tex2D(_RoughnessMap, i.uv)) * _Roughness, 1.5)*2);
+ 
                 return lerp(col, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv)*_EmissionIntensity, SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, i.uv).r) * _BaseColor;
             }
             ENDHLSL

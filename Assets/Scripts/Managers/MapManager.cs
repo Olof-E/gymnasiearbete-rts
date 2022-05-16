@@ -24,7 +24,6 @@ public class MapManager : MonoBehaviour
     public PlanetProperties[] planetPropertiesList;
     public StarSystem activeSystem = null;
     public Planet activePlanet = null;
-    public LineRenderer line;
     public Graph mapGraph;
     public GameObject[] starMapObjs;
     private StarSystem[] starSystems;
@@ -50,7 +49,7 @@ public class MapManager : MonoBehaviour
     {
         mapGraph = new Graph();
         mapSeed = UnityEngine.Random.Range(-9999, 9999);
-        mapGraph.Initialize(45, mapSeed);
+        mapGraph.Initialize(100, mapSeed);
 
 
 
@@ -94,13 +93,10 @@ public class MapManager : MonoBehaviour
             lineRendererGo.transform.SetParent(mapLinesObj.transform);
             LineRenderer lr = lineRendererGo.AddComponent<LineRenderer>();
 
-            // Text text = lineRendererGo.AddComponent<Text>();
-            // text.text = $"{mapGraph.edges[i].cost}  {mapGraph.edges[i].vertexA.index}  {mapGraph.edges[i].vertexB.index}";
-
             lr.positionCount = 2;
             lr.startColor = lineColor;
             lr.endColor = lineColor;
-            lr.startWidth = 0.05f;
+            lr.startWidth = 0.055f;
             lr.material = lineMaterial;
             lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lr.receiveShadows = false;
@@ -109,55 +105,6 @@ public class MapManager : MonoBehaviour
             lr.SetPosition(1, mapGraph.edges[i].vertexB.position);
         }
 
-        //starMapObj.SetActive(false);
-        //mapLinesObj.SetActive(false);
-        //starSystems[0].HideSystem(false);
-
-    }
-
-    Vertex vertex1 = null;
-    Vertex vertex2 = null;
-
-    private void Update()
-    {
-        // RaycastHit hit;
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f))
-        //     {
-        //         for (int i = 0; i < mapGraph.vertices.Length; i++)
-        //         {
-        //             if (hit.transform.position == mapGraph.vertices[i].position)
-        //             {
-        //                 if (vertex1 == null)
-        //                 {
-        //                     Debug.Log("vertex 1 choosen");
-        //                     vertex1 = mapGraph.vertices[i];
-        //                 }
-        //                 else if (vertex2 == null)
-        //                 {
-        //                     Debug.Log("vertex 2 choosen");
-        //                     vertex2 = mapGraph.vertices[i];
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (vertex1 != null && vertex2 != null)
-        // {
-        //     List<Vertex> path = Pathfinding.CalculatePath(ref mapGraph, vertex1, vertex2);
-
-        //     line.positionCount = path.Count;
-
-        //     for (int i = 0; i < path.Count; i++)
-        //     {
-        //         line.SetPosition(i, path[i].position);
-        //     }
-        //     vertex1 = null;
-        //     vertex2 = null;
-        // }
     }
 
     //Get the system object from its world representation
@@ -186,23 +133,12 @@ public class MapManager : MonoBehaviour
     //Switch to the map view above the current one
     public void SwitchMapView()
     {
-        Debug.Log("switched");
         if (mapState == MapState.PLANETARY_VIEW)
         {
             mapState = MapState.SYSTEM_VIEW;
-            for (int i = 0; i < activeSystem.planets.Length; i++)
-            {
-                activeSystem.planets[i].Hide(false);
-                // activeSystem.planets[i].transform.parent.GetComponent<LineRenderer>().enabled = true;
-                // MeshRenderer[] renderers = activeSystem.planets[i].GetComponentsInChildren<MeshRenderer>();
-                // for (int j = 0; j < renderers.Length; j++)
-                // {
-                //     renderers[j].enabled = true;
-                // }
-            }
+            activeSystem.HideSystem(false);
             activePlanet.Focus(false);
             activePlanet = null;
-            activeSystem.star.SetActive(true);
 
         }
         else if (mapState == MapState.SYSTEM_VIEW)

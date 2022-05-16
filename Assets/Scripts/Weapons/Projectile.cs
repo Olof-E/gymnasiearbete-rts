@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     private float timeSinceFired = 0f;
     public Targetable target;
     public ShieldManager ignoreShield;
+    public BoxCollider ignoreSelectionColl;
     private void Start()
     {
 
@@ -25,14 +26,23 @@ public class Projectile : MonoBehaviour
             Destroy(this.gameObject);
         }
         RaycastHit hitInfo;
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 0.5f))
+        if (Physics.Raycast(transform.position, -transform.forward, out hitInfo, 2f))
         {
-            if (hitInfo.collider.gameObject == ignoreShield.gameObject)
+            if (hitInfo.collider.gameObject == ignoreShield.gameObject || hitInfo.collider.gameObject == ignoreSelectionColl.gameObject)
             {
                 return;
             }
-            Debug.Log("Hit target obj: " + hitInfo.collider.name);
-            target.TakeDamage(dmg, hitInfo.point);
+            Targetable hit;
+            ShieldManager shieldHit;
+            if (hitInfo.transform.TryGetComponent<Targetable>(out hit))
+            {
+                hit.TakeDamage(dmg, hitInfo.point);
+            }
+            else if (hitInfo.transform.gameObject.TryGetComponent<ShieldManager>(out shieldHit))
+            {
+                shieldHit.parent.TakeDamage(dmg, hitInfo.point);
+            }
+
             Destroy(this.gameObject);
         }
     }
@@ -45,6 +55,6 @@ public class Projectile : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.5f);
+        Gizmos.DrawLine(transform.position, transform.position - transform.forward * 2f);
     }
 }

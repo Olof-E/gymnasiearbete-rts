@@ -18,7 +18,7 @@ public class Targetable : MonoBehaviour
     {
         if (shields <= 0f)
         {
-            //armor -= dmg;
+            armor -= dmg;
             if (armor <= 0f)
             {
                 destroyed = true;
@@ -27,7 +27,7 @@ public class Targetable : MonoBehaviour
         else
         {
             shieldManager.AddNewHit(hitPos, 1);
-            //shields -= dmg;
+            shields -= dmg;
         }
     }
 }
