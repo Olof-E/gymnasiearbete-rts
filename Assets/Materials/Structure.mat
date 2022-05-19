@@ -121,7 +121,7 @@ Material:
     - _CameraNearFadeDistance: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _ColorIntensity: 1
+    - _ColorIntensity: 3.3
     - _ColorMode: 0
     - _Cull: 2
     - _Cutoff: 1

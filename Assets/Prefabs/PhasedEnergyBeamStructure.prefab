@@ -1253,7 +1253,7 @@ MonoBehaviour:
   roughnessMap: {fileID: 2800000, guid: 57b5d05cb53b54c449a70c244b127fcf, type: 3}
   specularMap: {fileID: 0}
   emissionMap: {fileID: 2800000, guid: ab021a80dcef7614aaf0802b19578748, type: 3}
-  colorIntensity: 2.75
+  colorIntensity: 3.25
   emissionIntenisty: 3
 --- !u!23 &1546336136508674072 stripped
 MeshRenderer:

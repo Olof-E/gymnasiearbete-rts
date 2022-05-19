@@ -135,6 +135,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: db68d15ba18a4344993305a9767d520c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
+    - target: {fileID: -4932982780345470907, guid: db68d15ba18a4344993305a9767d520c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
     - target: {fileID: 919132149155446097, guid: db68d15ba18a4344993305a9767d520c, type: 3}
       propertyPath: m_Name
       value: Railgun model
@@ -146,8 +154,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6390965886483609464, guid: db68d15ba18a4344993305a9767d520c, type: 3}
   m_PrefabInstance: {fileID: 4041877817291485383}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3807454440781090198 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: db68d15ba18a4344993305a9767d520c, type: 3}
+  m_PrefabInstance: {fileID: 4041877817291485383}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3103417888801228555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3807454440781090198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce707f3aefa3c049876637d26867310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRenderer: {fileID: 0}
+  diffuseMap: {fileID: 2800000, guid: bb54bc7d7e761024db54162d3097c9fb, type: 3}
+  normalMap: {fileID: 2800000, guid: 687ea65b59073a0409e812a092cf788c, type: 3}
+  roughnessMap: {fileID: 2800000, guid: e533ce92a1e46ef4aa8c84e0c3c1a6fb, type: 3}
+  specularMap: {fileID: 0}
+  emissionMap: {fileID: 2800000, guid: 0b8464128ea2d624f841cb85bfc61cc8, type: 3}
+  colorIntensity: 3.75
+  emissionIntenisty: 1
 --- !u!4 &4583849720053356332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: db68d15ba18a4344993305a9767d520c, type: 3}
   m_PrefabInstance: {fileID: 4041877817291485383}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8041826115864746458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2914413575082383075, guid: db68d15ba18a4344993305a9767d520c, type: 3}
+  m_PrefabInstance: {fileID: 4041877817291485383}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7328477150956497092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8041826115864746458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce707f3aefa3c049876637d26867310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRenderer: {fileID: 0}
+  diffuseMap: {fileID: 2800000, guid: bb54bc7d7e761024db54162d3097c9fb, type: 3}
+  normalMap: {fileID: 2800000, guid: 687ea65b59073a0409e812a092cf788c, type: 3}
+  roughnessMap: {fileID: 2800000, guid: e533ce92a1e46ef4aa8c84e0c3c1a6fb, type: 3}
+  specularMap: {fileID: 0}
+  emissionMap: {fileID: 2800000, guid: 0b8464128ea2d624f841cb85bfc61cc8, type: 3}
+  colorIntensity: 3.75
+  emissionIntenisty: 1

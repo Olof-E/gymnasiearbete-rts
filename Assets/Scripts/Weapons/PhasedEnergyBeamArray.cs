@@ -16,7 +16,7 @@ public class PhasedEnergyBeamArray : Weapon
         ignoreShield = parent.shieldManager;
         ignoreSelectionColl = ((ISelectable)parent).selectionCollider;
         targetingRadius = 400f;
-        reloadTime = 2.5f;
+        reloadTime = 2f;
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public class PhasedEnergyBeamArray : Weapon
                 beamGameObj.SetPosition(0, transform.position);
                 timeSinceFired += Time.deltaTime;
             }
-            if (timeSinceFired > 0.9f)
+            if (timeSinceFired > 0.8f)
             {
                 loaded = false;
                 timeSinceFired = 0f;
