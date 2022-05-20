@@ -91,25 +91,59 @@ public class Formation
 
         if (_type == FormationType.SQUARE)
         {
-            int rows = 4;
-            int cols = (int)Math.Ceiling((float)unitCount / (float)rows / 2f);
-            int index = 0;
-            for (int i = -rows / 2; i < rows / 2; i++)
-            {
-                for (int j = -cols; j < cols; j++)
-                {
-                    if (index >= unitCount)
-                    {
-                        continue;
-                    }
-                    Vector3 calculatedPos = centerPos + new Vector3(j * 7.5f, 0f, i * 7.5f);
-                    positions.Add(calculatedPos);
-                    //units[index++].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos, targetBody = currOrder.targetBody });
-                }
+            // int rows = 4;
+            // int cols = (int)Math.Ceiling((float)unitCount / (float)rows / 2f);
+            // int index = 0;
+            // for (int i = -rows / 2; i < rows / 2; i++)
+            // {
+            //     for (int j = -cols; j < cols; j++)
+            //     {
+            //         if (index >= unitCount)
+            //         {
+            //             continue;
+            //         }
+            //         Vector3 calculatedPos = centerPos + new Vector3(j * 6f, 0f, i * 6f);
+            //         positions.Add(calculatedPos);
+            //         //units[index++].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos, targetBody = currOrder.targetBody });
+            //     }
 
+            // }
+            for (int i = 0; i < unitCount; i++)
+            {
+                positions.Add(centerPos + Position(i) * 5f);
             }
         }
 
         return positions;
+    }
+
+    private static Vector3 Position(int n)
+    {
+        float k = Mathf.Ceil((Mathf.Sqrt(n) - 1f) / 2f);
+        float t = 2f * k + 1f;
+        float m = Mathf.Pow(t, 2f);
+
+        t -= 1f;
+
+        if (n >= m - t)
+        {
+            return new Vector3(k - (m - n), 0, -k);
+        }
+
+        m -= t;
+
+        if (n >= m - t)
+        {
+            return new Vector3(-k, 0, -k + (m - n));
+        }
+
+        m -= t;
+
+        if (n >= m - t)
+        {
+            return new Vector3(-k + (m - n), 0, k);
+        }
+
+        return new Vector3(k, 0, k - (m - n - t));
     }
 }

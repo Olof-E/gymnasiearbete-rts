@@ -5,7 +5,7 @@ public class BuildingManager : MonoBehaviour
     public static BuildingManager instance;
     public GameObject[] buildingPrefabs;
     public GameObject buildingBlueprint;
-    private bool buildingPlacement = false;
+    public bool buildingPlacement = false;
     private Camera mainCamera;
     private static Plane XZPlane = new Plane(Vector3.up, Vector3.zero);
 

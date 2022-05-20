@@ -140,6 +140,11 @@ public class MapManager : MonoBehaviour
             activePlanet.Focus(false);
             activePlanet = null;
             UiManager.instance.ActivateActions(-1);
+            if (BuildingManager.instance.buildingPlacement)
+            {
+                Destroy(BuildingManager.instance.buildingBlueprint);
+                BuildingManager.instance.buildingPlacement = false;
+            }
 
         }
         else if (mapState == MapState.SYSTEM_VIEW)
