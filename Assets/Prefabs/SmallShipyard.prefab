@@ -705,6 +705,7 @@ MonoBehaviour:
   gameObj: {fileID: 7856627992674246600}
   shieldManager: {fileID: 8413235715152971884}
   <boundsRenderer>k__BackingField: {fileID: 3564551127027718437}
+  statsCanvas: {fileID: 2318845835090647127}
   shipPrefabs:
   - {fileID: 4476911176958901980, guid: c2c607f82525e214bbdfc6baddf68ed3, type: 3}
 --- !u!65 &7856627992674246607
@@ -718,8 +719,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 12, y: 6, z: 10}
-  m_Center: {x: 0, y: -0.85, z: 0}
+  m_Size: {x: 8, y: 5.5, z: 6}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8716346328624774090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,7 +1266,7 @@ MonoBehaviour:
   roughnessMap: {fileID: 2800000, guid: e8615abe7ade4ad409a6889fe0299c45, type: 3}
   specularMap: {fileID: 0}
   emissionMap: {fileID: 2800000, guid: 6e7ac0adb2f45a24e9b73b64aa0fceed, type: 3}
-  colorIntensity: 5.5
+  colorIntensity: 5.25
   emissionIntenisty: 2.75
 --- !u!23 &3564551127027718437 stripped
 MeshRenderer:

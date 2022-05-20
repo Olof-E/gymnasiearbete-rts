@@ -61,14 +61,6 @@ public class RailgunStructure : SpaceStructure
                 selectedSprite.gameObject.SetActive(false);
             }
         }
-        if (parentBody == MapManager.instance.activePlanet)
-        {
-            this.transform.Find("DefenseEmplacement").GetComponent<MeshRenderer>().GetPropertyBlock(mpb);
-
-            mpb.SetVector("_StructurePosWS", transform.position);
-
-            this.transform.Find("DefenseEmplacement").GetComponent<MeshRenderer>().SetPropertyBlock(mpb);
-        }
         ExecuteOrder();
     }
 

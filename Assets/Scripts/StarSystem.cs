@@ -16,42 +16,46 @@ public enum StarType
 
 public class StarSystem
 {
+    //Properties
     public int id { get; private set; }
     public GameObject star { get; private set; }
-    private float starRadius;
     public StarType starType { get; private set; }
-    public float starTemperature { get; private set; }
     public Planet[] planets;
     public static float AU = 1.495f;
-    //public static int maxPlanetCount = 9;
+    private float starRadius;
+    private float starTemperature;
+
 
     public StarSystem(int systemId, float _starTemperature)
     {
-        MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
+        id = systemId;
+        MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+
+        //Create the star
+        GameObject starSystemObj = new GameObject($"Starsystem {systemId}");
         starType = (StarType)Mathf.FloorToInt(7 - (_starTemperature % 1450));
         starTemperature = _starTemperature;
         starRadius = UnityEngine.Random.Range(12f, 16f);
-
-        GameObject starSystemObj = new GameObject($"Starsystem {systemId}");
-        id = systemId;
         star = GameObject.Instantiate(MapManager.instance.starPrefab, Vector3.zero, Quaternion.identity);
         star.transform.localScale = Vector3.one * starRadius;
         star.transform.SetParent(starSystemObj.transform);
 
-        star.GetComponent<MeshRenderer>().GetPropertyBlock(propBlock);
-        propBlock.SetColor("_PrimaryColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 32.5f);
+        //Set star color depending on its temprature
+        star.GetComponent<MeshRenderer>().GetPropertyBlock(mpb);
+        mpb.SetColor("_PrimaryColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 32.5f);
         float hue;
         float saturation;
         float intensity;
         Color.RGBToHSV(Mathf.CorrelatedColorTemperatureToRGB(starTemperature), out hue, out saturation, out intensity);
-        propBlock.SetColor("_SecondaryColor", Color.HSVToRGB(hue + UnityEngine.Random.Range(-0.3f, 0.3f), saturation, intensity, true) / 5f);
-        star.GetComponent<MeshRenderer>().SetPropertyBlock(propBlock);
+        mpb.SetColor("_SecondaryColor", Color.HSVToRGB(hue + UnityEngine.Random.Range(-0.3f, 0.3f), saturation, intensity, true) / 5f);
+        star.GetComponent<MeshRenderer>().SetPropertyBlock(mpb);
         star.transform.GetChild(0).GetComponent<VisualEffect>().SetVector4("_MainColor", Mathf.CorrelatedColorTemperatureToRGB(starTemperature) * 6.5f);
 
 
-        propBlock.Clear();
-        propBlock = null;
+        mpb.Clear();
+        mpb = null;
 
+        //Initialize all planets with random values
         int planetCount = UnityEngine.Random.Range(1, 9);
         planets = new Planet[planetCount];
 
@@ -76,6 +80,7 @@ public class StarSystem
         }
     }
 
+    //Hide all renderers in the system and its children
     public void HideSystem(bool hide)
     {
         star.transform.position = Vector3.zero;
@@ -86,6 +91,7 @@ public class StarSystem
         }
     }
 
+    //Focus camera on specific planet
     public void FocusPlanet(GameObject planetObj)
     {
         Planet focusedPlanet = planets[Array.IndexOf(planets, planetObj.GetComponent<Planet>())];

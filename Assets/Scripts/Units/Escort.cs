@@ -15,11 +15,6 @@ public class Escort : Unit
 
     private void FixedUpdate()
     {
-        this.transform.Find("Escort").GetComponent<MeshRenderer>().GetPropertyBlock(mpb);
-
-        mpb.SetVector("_StructurePosWS", transform.position);
-
-        this.transform.Find("Escort").GetComponent<MeshRenderer>().SetPropertyBlock(mpb);
         ExecuteOrder();
     }
 }

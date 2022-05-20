@@ -140,8 +140,9 @@ public class Planet : MonoBehaviour, ISelectable
         }
 
 
-        if (focused || MapManager.instance.activeSystem == parentSystem)
+        if (focused)
         {
+
             if (selected)
             {
                 if (!selectedSprite.gameObject.activeInHierarchy)
@@ -157,7 +158,7 @@ public class Planet : MonoBehaviour, ISelectable
                 }
             }
 
-            if (selected && !UiManager.instance.actionsActive && !UiManager.instance.actions[0].activeInHierarchy)
+            if (selected && !UiManager.instance.actionsActive)// && !UiManager.instance.actions[0].activeInHierarchy)
             {
                 UiManager.instance.ActivateActions(-1);
                 UiManager.instance.ActivateActions(0);
@@ -167,17 +168,20 @@ public class Planet : MonoBehaviour, ISelectable
                 UiManager.instance.ActivateActions(-1);
                 UiManager.instance.ActivateActions(1);
             }
+        }
 
+        if (focused || MapManager.instance.activeSystem == parentSystem && MapManager.instance.activePlanet == null)
+        {
             meshRenderer.GetPropertyBlock(mpb, 0);
 
-            mpb.SetVector(shaderPlanetPosId, transform.position);
+            mpb.SetVector(shaderPlanetPosId, transform.position - parentSystem.star.transform.position);
 
             meshRenderer.SetPropertyBlock(mpb, 0);
 
 
             meshRenderer.GetPropertyBlock(mpb, 1);
 
-            mpb.SetVector(shaderPlanetPosId, transform.position);
+            mpb.SetVector(shaderPlanetPosId, transform.position - parentSystem.star.transform.position);
 
             meshRenderer.SetPropertyBlock(mpb, 1);
         }
@@ -204,6 +208,7 @@ public class Planet : MonoBehaviour, ISelectable
         }
 
         selectionCollider.enabled = !hide;
+        selectedSprite.enabled = !hide;
     }
 
     //Focus this planet and toggle all interactables
@@ -228,6 +233,7 @@ public class Planet : MonoBehaviour, ISelectable
 
             UiManager.instance.ActivateActions(-1);
         }
+        selectedSprite.enabled = focused;
 
 
         for (int i = 0; i < spaceStructures.Count; i++)
@@ -239,5 +245,10 @@ public class Planet : MonoBehaviour, ISelectable
         {
             unit.Hide(!focused);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(boundsRenderer.bounds.center, boundsRenderer.bounds.size);
     }
 }

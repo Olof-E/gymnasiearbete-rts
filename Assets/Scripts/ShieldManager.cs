@@ -39,24 +39,7 @@ public class ShieldManager : MonoBehaviour
             hitIntensityArr[i] = 1f;
             hitTimer[i] = 0f;
         }
-        else
-        {
-            // float minTimer = float.MaxValue;
-            // int minId = 0;
-            // for (int j = 0; j < maxHitCount; j++)
-            // {
-            //     if (minTimer > hitTimer[j])
-            //     {
-            //         minTimer = hitTimer[j];
-            //         minId = j;
-            //     }
-            // }
-            // i = minId;
-        }
-
-
     }
-
 
     private void Update()
     {
@@ -87,11 +70,5 @@ public class ShieldManager : MonoBehaviour
         mpb.SetFloatArray(hitIntensityId, hitIntensityArr.ToList());
 
         rend.SetPropertyBlock(mpb);
-    }
-
-    private void OnDrawGizmos()
-    {
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawWireSphere(hitPosArr[0], 0.3f);
     }
 }

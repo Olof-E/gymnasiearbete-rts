@@ -36,6 +36,18 @@ public class CustomLitShaderProperties : MonoBehaviour
         mainRenderer.SetPropertyBlock(mpb);
 
         mpb.Clear();
-        mpb = null;
+        //mpb = null;
+    }
+
+    private void FixedUpdate()
+    {
+        if (mainRenderer.enabled)
+        {
+            mainRenderer.GetPropertyBlock(mpb);
+
+            mpb.SetVector("_StructurePosWS", transform.position - MapManager.instance.activeSystem.star.transform.position);
+
+            mainRenderer.SetPropertyBlock(mpb);
+        }
     }
 }

@@ -6316,7 +6316,6 @@ MonoBehaviour:
   selectionLayer:
     serializedVersion: 2
     m_Bits: 64
-  selectionMesh: {fileID: 0}
 --- !u!114 &1792224772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7984,7 +7983,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 241022949}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.8583334
+  m_Size: 0.85833335
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

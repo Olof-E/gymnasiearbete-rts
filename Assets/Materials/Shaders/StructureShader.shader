@@ -116,10 +116,10 @@ Shader "Unlit/StructureShader"
                 
                 float specular = max(0, pow(dot(r, -GetWorldSpaceNormalizeViewDir(i.positionWS)), 6));
 
-                float lightDot = clamp(saturate(dot(worldNormal, normalize(-i.positionWS))), -1, 1);
+                float lightDot = clamp(saturate(dot(worldNormal, normalize(-_StructurePosWS))), -1, 1);
                 col +=  saturate(specular * (1-tex2D(_RoughnessMap, i.uv)*0.65)) *  1.25;
 
-                col *= exp(-pow(2*(1 - lightDot),0.8));
+                col *= exp(-pow(2*(1 - lightDot),1));
 
                     #ifdef _ADDITIONAL_LIGHTS
                         // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl

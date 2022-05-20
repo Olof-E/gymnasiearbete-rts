@@ -102,7 +102,7 @@ public class Formation
                     {
                         continue;
                     }
-                    Vector3 calculatedPos = centerPos + new Vector3(j * 1.5f, 0f, i * 1.5f);
+                    Vector3 calculatedPos = centerPos + new Vector3(j * 7.5f, 0f, i * 7.5f);
                     positions.Add(calculatedPos);
                     //units[index++].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos, targetBody = currOrder.targetBody });
                 }

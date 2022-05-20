@@ -71,8 +71,6 @@ public class PhasedEnergyBeamArray : Weapon
                 loaded = false;
                 timeSinceFired = 0f;
                 firing = false;
-
-
             }
             if (!loaded && !loading)
             {

@@ -139,6 +139,7 @@ public class MapManager : MonoBehaviour
             activeSystem.HideSystem(false);
             activePlanet.Focus(false);
             activePlanet = null;
+            UiManager.instance.ActivateActions(-1);
 
         }
         else if (mapState == MapState.SYSTEM_VIEW)

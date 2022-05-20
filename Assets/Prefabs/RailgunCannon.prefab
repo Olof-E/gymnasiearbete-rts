@@ -178,7 +178,7 @@ MonoBehaviour:
   specularMap: {fileID: 0}
   emissionMap: {fileID: 2800000, guid: 0b8464128ea2d624f841cb85bfc61cc8, type: 3}
   colorIntensity: 3.75
-  emissionIntenisty: 1
+  emissionIntenisty: 2
 --- !u!4 &4583849720053356332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: db68d15ba18a4344993305a9767d520c, type: 3}
@@ -208,4 +208,4 @@ MonoBehaviour:
   specularMap: {fileID: 0}
   emissionMap: {fileID: 2800000, guid: 0b8464128ea2d624f841cb85bfc61cc8, type: 3}
   colorIntensity: 3.75
-  emissionIntenisty: 1
+  emissionIntenisty: 2

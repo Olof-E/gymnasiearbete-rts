@@ -89,19 +89,25 @@ public class CommandManager : MonoBehaviour
                     RaycastHit hitInfo;
                     if (Physics.Raycast(CameraController.instance.mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
                     {
-                        hitInfo.transform.TryGetComponent<Planet>(out targetPlanet);
-                        Debug.Log("target planet hit " + targetPlanet);
+                        if (hitInfo.transform.TryGetComponent<Planet>(out targetPlanet))
+                        {
+                            Vector3 centerPos = targetPlanet.transform.position + Vector3.left * 75f;
+                            unitPos = Formation.CalculateFormationPos(FormationType.SQUARE, selectedUnits.Count, centerPos);
+                        }
                     }
                 }
-                for (int i = 0; i < selectedUnits.Count; i++)
+                if (targetPlanet != null)
                 {
-                    selectedUnits[i].RecieveOrder(
-                        new Order()
-                        {
-                            orderType = OrderType.MOVE_ORDER,
-                            movePos = unitPos[i],
-                            targetBody = targetPlanet
-                        });
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        selectedUnits[i].RecieveOrder(
+                            new Order()
+                            {
+                                orderType = OrderType.MOVE_ORDER,
+                                movePos = unitPos[i],
+                                targetBody = targetPlanet
+                            });
+                    }
                 }
 
                 moveOrder = false;

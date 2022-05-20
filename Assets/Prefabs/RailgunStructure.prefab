@@ -596,8 +596,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5074793637523153153}
-  - component: {fileID: 5074793637523153164}
   - component: {fileID: 5074793637523153152}
+  - component: {fileID: 5074793637523153164}
   m_Layer: 6
   m_Name: RailgunStructure
   m_TagString: Untagged
@@ -625,19 +625,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5074793637523153164
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5074793637523153165}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5.2, y: 5, z: 5.2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5074793637523153152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,7 +647,21 @@ MonoBehaviour:
   gameObj: {fileID: 5074793637523153165}
   shieldManager: {fileID: 8968980790431152486}
   <boundsRenderer>k__BackingField: {fileID: 8254735158772560427}
+  statsCanvas: {fileID: 7012573864252132351}
   railgunCannon: {fileID: 2402958849532814737}
+--- !u!65 &5074793637523153164
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5074793637523153165}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.5, y: 4.4, z: 4.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6777888119726506233
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,6 +1176,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ffb804c6a2367544d9a69edcbabe43a9, type: 2}
+    - target: {fileID: 3103417888801228555, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
+      propertyPath: mainRenderer
+      value: 
+      objectReference: {fileID: 4464456220911259829}
     - target: {fileID: 3447003948866743363, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1227,8 +1232,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7328477150956497092, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
+      propertyPath: mainRenderer
+      value: 
+      objectReference: {fileID: 1279018629332204660}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
+--- !u!23 &1279018629332204660 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 260404184368742530, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
+  m_PrefabInstance: {fileID: 1306844969593535734}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2402958849532814737 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3709803655514823015, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
@@ -1240,6 +1254,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aac1fb1d26fc4045811c81dfa27f9e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &4464456220911259829 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3447003948866743363, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
+  m_PrefabInstance: {fileID: 1306844969593535734}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5074793638007352868 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6075234393922196178, guid: 02f7663f139ec7944b22fc7c2d79bd38, type: 3}
@@ -1334,7 +1353,7 @@ MonoBehaviour:
   roughnessMap: {fileID: 2800000, guid: 57b5d05cb53b54c449a70c244b127fcf, type: 3}
   specularMap: {fileID: 0}
   emissionMap: {fileID: 2800000, guid: ab021a80dcef7614aaf0802b19578748, type: 3}
-  colorIntensity: 3.25
+  colorIntensity: 3.75
   emissionIntenisty: 3
 --- !u!23 &8254735158772560427 stripped
 MeshRenderer:

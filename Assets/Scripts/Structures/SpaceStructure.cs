@@ -42,6 +42,7 @@ public class SpaceStructure : Targetable, ISelectable
     public Renderer boundsRenderer { get; set; }
     public Vector3 selectablePosition { get; set; }
     public List<Weapon> weapons { get; private set; }
+    public Canvas statsCanvas;
     private Order currOrder { get; set; }
     private bool executingOrder { get; set; }
 
@@ -62,6 +63,9 @@ public class SpaceStructure : Targetable, ISelectable
     {
         if (destroyed)
         {
+            parentBody.spaceStructures.Remove(this);
+            parentBody.targetables.Remove(this);
+            parentBody.selectables.Remove(this);
             Destroy(this.gameObject);
         }
         shieldBar.value = shields / maxShields;
@@ -132,5 +136,6 @@ public class SpaceStructure : Targetable, ISelectable
 
         selectionCollider.enabled = !hide;
         selectedSprite.enabled = !hide;
+        statsCanvas.enabled = !hide;
     }
 }

@@ -14,17 +14,19 @@ public class Unit : Targetable, ISelectable
     public List<Weapon> weapons { get; private set; }
     public bool isOrderable { get; set; } = true;
     public GameObject enginesGameObj;
-    private Order currOrder;
-    private bool executingOrder = false;
     public SpriteRenderer selectedSprite { get; set; }
     public int fleetId { get; set; } = -1;
     public Vector3 selectablePosition { get; set; }
     [field: SerializeField]
     public Renderer boundsRenderer { get; set; }
+    public Canvas statsCanvas;
+    private Order currOrder;
+    private bool executingOrder = false;
     private bool pathFound = false;
     private List<Vertex> path;
     private List<Vector3> currPathLine = new List<Vector3>();
     private LineRenderer pathLineRend;
+    private float interplanetaryTravelT = 0f;
 
     public void Initialize(float _speed, float _maneuverability, int _armor, int _shields)
     {
@@ -51,6 +53,8 @@ public class Unit : Targetable, ISelectable
     {
         if (destroyed)
         {
+            parentBody.targetables.Remove(this);
+            parentBody.selectables.Remove(this);
             Destroy(this.gameObject);
         }
         shieldBar.value = shields / maxShields;
@@ -190,6 +194,7 @@ public class Unit : Targetable, ISelectable
         enginesGameObj.SetActive(!hide);
         selectionCollider.enabled = !hide;
         selectedSprite.enabled = !hide;
+        statsCanvas.enabled = !hide;
     }
 
     private void Move()
@@ -215,43 +220,61 @@ public class Unit : Targetable, ISelectable
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, speed * (1f / Mathf.Clamp(angle, 1f, 45f)) * Time.deltaTime);
                 selectablePosition = transform.position;
             }
-            Debug.Log(pathLineRend.positionCount);
-            pathLineRend.SetPosition(0, transform.position);
+
+            if (pathLineRend.positionCount > 0)
+            {
+                pathLineRend.SetPosition(0, transform.position);
+            }
 
             if (Vector3.Distance(transform.position, currOrder.movePos) < 1e-2)
             {
                 executingOrder = false;
                 currOrder = null;
-                currPathLine.RemoveAt(1);
+                if (currPathLine.Count > 0)
+                {
+                    currPathLine.RemoveAt(1);
 
-                pathLineRend.positionCount = currPathLine.Count;
-                pathLineRend.SetPositions(currPathLine.ToArray());
+                    pathLineRend.positionCount = currPathLine.Count;
+                    pathLineRend.SetPositions(currPathLine.ToArray());
+                }
             }
         }
         else if (parentBody.parentSystem == currOrder.targetBody.parentSystem)
         {
-            parentBody.targetables.Remove(this);
-            parentBody.selectables.Remove(this);
-            parentBody = currOrder.targetBody;
-            transform.SetParent(parentBody.transform.parent);
-            parentBody.targetables.Add(this);
-            parentBody.selectables.Add(this);
-            Debug.Log($"Moving to new target body: {parentBody}");
-            transform.position = parentBody.transform.position + (currOrder.movePos - parentBody.transform.position).normalized * 75f;
-
-            MeshRenderer[] renderers = this.GetComponentsInChildren<MeshRenderer>();
-            for (int j = 0; j < renderers.Length; j++)
+            if (currPathLine.Count <= 0)
             {
-                renderers[j].enabled = true;
+                Hide(MapManager.instance.activePlanet == null);
+                transform.position = parentBody.transform.position;
+                currPathLine.Add(transform.position);
+                currPathLine.Add(currOrder.targetBody.transform.position);
+
+                pathLineRend.positionCount = currPathLine.Count;
+                pathLineRend.SetPositions(currPathLine.ToArray());
             }
 
-            selectionCollider.enabled = true;
+            interplanetaryTravelT += speed / 2000f * Time.deltaTime;
+            interplanetaryTravelT = Mathf.Clamp01(interplanetaryTravelT);
+            transform.position = Vector3.Lerp(transform.position, currOrder.targetBody.transform.position, interplanetaryTravelT);
+            pathLineRend.SetPosition(0, transform.position);
+            pathLineRend.SetPosition(1, currOrder.targetBody.transform.position);
 
-            currPathLine.Add(transform.position);
-            currPathLine.Add(currOrder.movePos);
+            if (Vector3.Distance(transform.position, currOrder.targetBody.transform.position) <= 1e-2)
+            {
+                parentBody.targetables.Remove(this);
+                parentBody.selectables.Remove(this);
+                parentBody = currOrder.targetBody;
+                transform.SetParent(parentBody.transform.parent);
+                parentBody.targetables.Add(this);
+                parentBody.selectables.Add(this);
 
-            pathLineRend.positionCount = currPathLine.Count;
-            pathLineRend.SetPositions(currPathLine.ToArray());
+                currPathLine.Clear();
+                pathLineRend.positionCount = 0;
+
+                transform.position = currOrder.movePos;
+
+                Hide(MapManager.instance.activePlanet != parentBody);
+                interplanetaryTravelT = 0f;
+            }
         }
         else
         {
@@ -294,14 +317,7 @@ public class Unit : Targetable, ISelectable
                         Debug.Log($"Moving to new target body: {parentBody}");
                         transform.position = parentBody.transform.position + (currOrder.movePos - parentBody.transform.position).normalized * 45f;
 
-                        MeshRenderer[] renderers = this.GetComponentsInChildren<MeshRenderer>();
-                        for (int j = 0; j < renderers.Length; j++)
-                        {
-                            renderers[j].enabled = true;
-                        }
-
-                        selectionCollider.enabled = true;
-                        selectedSprite.enabled = true;
+                        Hide(MapManager.instance.activePlanet != parentBody);
 
                         path.Clear();
                         currPathLine.Clear();

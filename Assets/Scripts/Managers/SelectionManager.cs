@@ -37,7 +37,11 @@ public class SelectionManager : MonoBehaviour
     {
         if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW && !Input.GetKey(KeyCode.LeftControl))
         {
-            if (selected.Count > 0) { selected.ForEach((ISelectable item) => { item.selected = false; }); }
+            if (selected.Count > 0)
+            {
+                selected.ForEach((ISelectable item) => { item.selected = false; });
+                UiManager.instance.ActivateActions(-1);
+            }
             UnitManager.instance.selectedFleetKey = null;
             selected.Clear();
         }
@@ -150,7 +154,7 @@ public class SelectionManager : MonoBehaviour
     {
 
         Vector3 cen = selectableRenderer.bounds.center;
-        Vector3 ext = selectableRenderer.bounds.extents;
+        Vector3 ext = selectableRenderer.bounds.extents * 0.8f;
         Vector2[] extentPoints = new Vector2[8]
         {
             WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z-ext.z)),

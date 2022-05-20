@@ -52,7 +52,8 @@ Shader "Unlit/ShieldShader"
             {
                 float border = 0.08;
                 float currentRadius = lerp(0, radius, 1 - intensity);//expand radius over time 
-                return intensity * (1 - smoothstep(currentRadius, currentRadius + border, dist) - (1 - smoothstep(currentRadius - border, currentRadius, dist)));
+                float ring =  (1 - smoothstep(currentRadius, currentRadius + border, dist) - (1 - smoothstep(currentRadius - border, currentRadius, dist)));
+                return intensity * (pow(1-dist, 2.5) + ring);
             }
 
             void CalculateHitsFactor_float(float3 objectPosition, out float factor)
@@ -61,6 +62,7 @@ Shader "Unlit/ShieldShader"
                 for (int i = 0; i < _HitsCount; i++)
                 {
                     float distanceToHit = distance(objectPosition, _HitsPosition[i]);
+   
                     factor += DrawRing(_HitsIntensity[i], 0.6, distanceToHit);
                 }
                 factor = saturate(factor);

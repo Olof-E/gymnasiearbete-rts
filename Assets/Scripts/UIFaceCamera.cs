@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class UIFaceCamera : MonoBehaviour
 {
+    //Properties
     private Camera mainCamera;
+
     // Start is called before the first frame update
     void Start()
     {
