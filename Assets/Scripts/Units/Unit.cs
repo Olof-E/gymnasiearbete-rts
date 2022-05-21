@@ -27,10 +27,12 @@ public class Unit : Targetable, ISelectable
     private List<Vector3> currPathLine = new List<Vector3>();
     private LineRenderer pathLineRend;
     private float interplanetaryTravelT = 0f;
+    public string objectName { get; set; }
 
-    public void Initialize(float _speed, float _maneuverability, int _armor, int _shields)
+    public void Initialize(string name, float _speed, float _maneuverability, int _armor, int _shields)
     {
         orderQueue = new Queue<Order>();
+        objectName = name;
         speed = _speed;
         armor = _armor;
         shields = _shields;

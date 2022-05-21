@@ -19,18 +19,13 @@ public class UiManager : MonoBehaviour
     public TMP_Text gasText;
     public TMP_Text selectionInfoText;
     public Button switchMapView;
+    public Canvas fleetListCanvas;
+    public Canvas selectedListCanvas;
     public GameObject fleetList;
+    public GameObject selectedList;
     public bool actionsActive { get; private set; } = true;
-    // public Button buildFusionReactor;
-    // public Button buildTritaniumExtractor;
-    // public Button buildNanoCarbonExtruder;
-    // public Button buildCrystalSynthesizer;
-    // public Button buildResearchFacility;
-    // public Button buildGasSepartor;
-    // public Button buildSmallShipyard;
-    // public Button buildEnergyBeam;
-    // public Button buildTorpedLauncher;
-    // public Button buildRailgunCannon;
+    public Image toggleFleetBtn;
+    public Image toggleSelectedBtn;
 
     //Create singelton instance of ui manager
     private void Awake()
@@ -38,18 +33,6 @@ public class UiManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            switchMapView.onClick.AddListener(() => { MapManager.instance.SwitchMapView(); });
-            // buildFusionReactor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(0); });
-            // buildTritaniumExtractor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(1); });
-            // buildNanoCarbonExtruder.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(2); });
-            // buildCrystalSynthesizer.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(3); });
-            // buildResearchFacility.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(5); });
-            // buildGasSepartor.onClick.AddListener(() => { BuildingManager.instance.BuildPlanetaryStructure(6); });
-            // buildSmallShipyard.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(0); });
-            // buildEnergyBeam.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(2); });
-            // buildTorpedLauncher.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(3); });
-            // buildRailgunCannon.onClick.AddListener(() => { BuildingManager.instance.BuildSpaceStructure(4); });
-            //() => { ((SmallShipyard)SelectionManager.instance.selected[0]).BuildShip(0); };
         }
         else
         {
@@ -113,7 +96,7 @@ public class UiManager : MonoBehaviour
     */
     public void ActivateActions(int actionsId)
     {
-        Debug.Log("this was called");
+        //Debug.Log("this was called");
         if (actionsId == -1)
         {
             for (int i = 0; i < actions.Length; i++)
@@ -134,5 +117,27 @@ public class UiManager : MonoBehaviour
                 actionsActive = true;
             }
         }
+    }
+
+    /*
+    0 - Fleets info
+    1 - Selected objects info
+    */
+
+    public void SwitchSidePanel(int panelId)
+    {
+        if (panelId == 0 && !fleetListCanvas.enabled)
+        {
+            toggleFleetBtn.color *= 0.5f;
+            toggleSelectedBtn.color /= 0.5f;
+        }
+
+        if (panelId == 1 && !selectedListCanvas.enabled)
+        {
+            toggleFleetBtn.color /= 0.5f;
+            toggleSelectedBtn.color *= 0.5f;
+        }
+        fleetListCanvas.enabled = panelId == 0 ? true : false;
+        selectedListCanvas.enabled = panelId == 1 ? true : false;
     }
 }

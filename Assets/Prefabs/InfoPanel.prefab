@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1868277859086115361}
   - component: {fileID: 5255037031937250781}
   m_Layer: 5
-  m_Name: FleetInfoPanel
+  m_Name: InfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

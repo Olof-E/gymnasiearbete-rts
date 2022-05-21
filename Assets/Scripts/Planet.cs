@@ -46,6 +46,7 @@ public class Planet : MonoBehaviour, ISelectable
     [field: SerializeField]
     public Renderer boundsRenderer { get; set; }
     public Vector3 planetSize;
+    public string objectName { get; set; }
 
     //Initialize planet properties
     public void Initialize(int index, StarSystem _parentSystem)
@@ -54,6 +55,7 @@ public class Planet : MonoBehaviour, ISelectable
         orbitalSpeed = Random.Range(0.0005f, 0.001f) * 5;
         transform.localScale = planetSize;
         parentSystem = _parentSystem;
+        objectName = "Planet";
 
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
 

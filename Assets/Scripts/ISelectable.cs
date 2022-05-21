@@ -8,4 +8,5 @@ public interface ISelectable
     Renderer boundsRenderer { get; set; }
     BoxCollider selectionCollider { get; set; }
     SpriteRenderer selectedSprite { get; set; }
+    string objectName { get; set; }
 }

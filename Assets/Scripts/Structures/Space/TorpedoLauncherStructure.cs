@@ -11,6 +11,7 @@ public class TorpedoLauncherStructure : SpaceStructure
         orderQueue = new Queue<Order>();
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         gameObj = gameObject;
+        objectName = "Torpedo Launcher";
         maxLevel = 8;
         armor = 1000;
         shields = 1500;

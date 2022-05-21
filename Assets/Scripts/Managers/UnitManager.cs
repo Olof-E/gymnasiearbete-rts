@@ -88,24 +88,6 @@ public class UnitManager : MonoBehaviour
         for (int i = 0; i < fleets.Count; i++)
         {
             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -115 * i);
-            //             Debug.Log(UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.GetPersistentEventCount()
-            // );
-            //             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.RemoveAllListeners();
-            //             Debug.Log(UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.GetPersistentEventCount()
-            // );
-            //             Debug.Log("index:" + i);
-            //             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(() =>
-            //             {
-            //                 Debug.Log("this is from a listener(not first): " + i);
-            //                 if (CommandManager.instance.assignOrder)
-            //                 {
-            //                     CommandManager.instance.GiveOrders(UiManager.instance.fleetList.transform.GetChild(i).gameObject);
-            //                 }
-            //                 else
-            //                 {
-            //                     SelectFleet(UiManager.instance.fleetList.transform.GetChild(i).gameObject);
-            //                 }
-            //             });
         }
         Debug.Log("--------");
         Debug.Log($"{fleets.Count} {UiManager.instance.fleetList.transform.childCount}");

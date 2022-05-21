@@ -10,6 +10,7 @@ public class DeepSpaceAntennaArray : SpaceStructure
         orderQueue = new Queue<Order>();
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         gameObj = gameObject;
+        objectName = "Deep Space Antenna";
         maxLevel = 8;
         armor = 1000;
         shields = 1500;

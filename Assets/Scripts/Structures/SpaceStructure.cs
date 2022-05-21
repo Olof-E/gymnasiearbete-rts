@@ -30,6 +30,7 @@ public class SpaceStructure : Targetable, ISelectable
     public int playerId { get; set; }
     public int level { get; set; } = 0;
     public int maxLevel { get; set; } = 1;
+    public string objectName { get; set; }
     public Planet parentBody { get; set; }
     public ResourceConsumtion constructionCost { get; set; }
     public bool selected { get; set; }

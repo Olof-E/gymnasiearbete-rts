@@ -10,6 +10,7 @@ public class LargeShipyard : SpaceStructure
         orderQueue = new Queue<Order>();
         selectedSprite = transform.Find("SelectedSprite").GetComponent<SpriteRenderer>();
         gameObj = gameObject;
+        objectName = "Large Shipyard";
         maxLevel = 8;
         armor = 1000;
         shields = 1500;

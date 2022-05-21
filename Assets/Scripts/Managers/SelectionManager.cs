@@ -1,16 +1,20 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
     public static SelectionManager instance;
     public List<ISelectable> selected;
     public LayerMask selectionLayer;
+    public GameObject selectedListInfoPanel;
     private Camera mainCamera;
     private Bounds selectionBounds;
     private Texture2D selectRectTex;
     private Rect selectionRect;
-
+    private ObjectPool<GameObject> selectedListObjPool;
 
     //Create a singelton instance of the selection manager
     private void Awake()
@@ -22,7 +26,23 @@ public class SelectionManager : MonoBehaviour
             selectRectTex = new Texture2D(1, 1);
             selectRectTex.SetPixel(0, 0, new Color(0, 0.8f, 0f, 0.33f));
             selectRectTex.Apply();
-            //InputManager.instance.MouseEventOccured += HandleMouseInput;
+            selectedListObjPool = new ObjectPool<GameObject>(
+                createFunc: () =>
+                {
+                    GameObject newInfoPanel = GameObject.Instantiate(selectedListInfoPanel);
+                    newInfoPanel.transform.SetParent(UiManager.instance.selectedList.transform, false);
+                    return newInfoPanel;
+                },
+                actionOnGet: (obj) => { obj.SetActive(true); },
+                actionOnRelease: (obj) =>
+                {
+                    obj.GetComponent<Button>().onClick.RemoveAllListeners();
+                    obj.SetActive(false);
+                },
+                actionOnDestroy: (obj) => { Destroy(obj); },
+                defaultCapacity: 50,
+                maxSize: 150
+            );
             instance = this;
         }
         else
@@ -40,6 +60,15 @@ public class SelectionManager : MonoBehaviour
             if (selected.Count > 0)
             {
                 selected.ForEach((ISelectable item) => { item.selected = false; });
+                for (int i = 0; i < UiManager.instance.selectedList.transform.childCount; i++)
+                {
+                    GameObject infoPanel = UiManager.instance.selectedList.transform.GetChild(i).gameObject;
+                    if (!infoPanel.activeInHierarchy)
+                    {
+                        continue;
+                    }
+                    selectedListObjPool.Release(infoPanel);
+                }
                 UiManager.instance.ActivateActions(-1);
             }
             UnitManager.instance.selectedFleetKey = null;
@@ -61,7 +90,7 @@ public class SelectionManager : MonoBehaviour
                 else if (MapManager.instance.mapState == MapState.PLANETARY_VIEW)
                 {
                     ISelectable currSelection;
-                    if (hit.collider.gameObject.TryGetComponent<ISelectable>(out currSelection))
+                    if (hit.collider.TryGetComponent<ISelectable>(out currSelection))
                     {
                         if (currSelection.selected)
                         {
@@ -83,6 +112,7 @@ public class SelectionManager : MonoBehaviour
                     UiManager.instance.ActivateActions(-1);
                 }
             }
+            UpdateSelectedList();
         }
 
         //Check for double left click
@@ -147,6 +177,47 @@ public class SelectionManager : MonoBehaviour
                 }
             }
             selectionRect = Rect.zero;
+            UpdateSelectedList();
+        }
+    }
+
+    private void UpdateSelectedList()
+    {
+        if (UiManager.instance.selectedListCanvas.enabled)
+        {
+            for (int i = 0; i < UiManager.instance.selectedList.transform.childCount; i++)
+            {
+                GameObject infoPanel = UiManager.instance.selectedList.transform.GetChild(i).gameObject;
+                if (!infoPanel.activeInHierarchy)
+                {
+                    continue;
+                }
+                selectedListObjPool.Release(infoPanel);
+            }
+            for (int i = 0; i < selected.Count; i++)
+            {
+                GameObject infoPanel = selectedListObjPool.Get();
+
+                RectTransform panelTransform = infoPanel.GetComponent<RectTransform>();
+
+                ISelectable selectedObj = selected[i];
+                panelTransform.anchoredPosition = new Vector2(0, -115 * i);
+                infoPanel.GetComponentInChildren<TMP_Text>().SetText(selectedObj.objectName);
+
+                infoPanel.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    if (selectedObj.GetType() == typeof(Planet) || selectedObj.GetType().IsSubclassOf(typeof(SpaceStructure)))
+                    {
+                        UiManager.instance.ActivateActions(-1);
+                    }
+                    selectedObj.selected = false;
+                    selected.Remove(selectedObj);
+                    selectedListObjPool.Release(infoPanel);
+                    UpdateSelectedList();
+                });
+
+                UiManager.instance.selectedList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, selected.Count * 115);
+            }
         }
     }
 
