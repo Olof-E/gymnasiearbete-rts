@@ -361,16 +361,16 @@ public class Unit : Targetable, ISelectable
 
     private void Attack()
     {
-        if (target == null && target != this)
+        if (target == null && currOrder.target != this)
         {
             target = currOrder.target;
             weapons.ForEach((Weapon weapon) =>
             {
                 weapon.target = currOrder.target;
             });
-            executingOrder = false;
-            currOrder = null;
         }
+        executingOrder = false;
+        currOrder = null;
     }
 
     private void AssignFleet()

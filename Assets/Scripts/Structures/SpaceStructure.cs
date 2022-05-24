@@ -90,7 +90,7 @@ public class SpaceStructure : Targetable, ISelectable
         }
         if (currOrder != null)
         {
-            if (currOrder.orderType == OrderType.ATTACK_ORDER)
+            if (currOrder.orderType == OrderType.ATTACK_ORDER && currOrder.target != this)
             {
                 target = currOrder.target;
                 executingOrder = false;
