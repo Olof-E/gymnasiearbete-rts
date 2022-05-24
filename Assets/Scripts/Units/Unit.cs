@@ -361,9 +361,8 @@ public class Unit : Targetable, ISelectable
 
     private void Attack()
     {
-        if (target == null)
+        if (target == null && target != this)
         {
-            Debug.Log("Target is " + currOrder.target);
             target = currOrder.target;
             weapons.ForEach((Weapon weapon) =>
             {
