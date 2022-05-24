@@ -1,8 +1,7 @@
-Shader "Unlit/StructureShader"
+Shader "Unlit/CustomLitShader"
 {
     Properties
     {
-        //[PreRendererData] _PlanetPosWS ("planet pos", vector) = (0,0,0,0)
         [MainTexture] _BaseMap("Base Map (RGB) Smoothness / Alpha (A)", 2D) = "white" {}
         [MainColor]   _BaseColor("Base Color", Color) = (1, 1, 1, 1)
 
@@ -68,7 +67,7 @@ Shader "Unlit/StructureShader"
                 float4 tangentWS   : TEXCOORD3;
             };
 
-            float4 _StructurePosWS;
+            float4 _ObjectPosWS;
             sampler2D _RoughnessMap;
             float4 _RoughnessMap_ST;
 
@@ -105,24 +104,16 @@ Shader "Unlit/StructureShader"
                 normal = TransformTangentToWorld(normal, CreateTangentToWorld(i.normalWS, i.tangentWS,1));
                 float3 worldNormal = normalize(normal);
                 
-                // float specular = pow(
-                //     max(0, saturate(dot(
-                //         reflect(normalize(-_StructurePosWS), worldNormal), 
-                //         -GetWorldSpaceNormalizeViewDir(i.positionWS)))), 
-                //     1);
-
-                // float specular = saturate(pow(dot(i.normalWS,normalize(normalize(-_StructurePosWS)+GetWorldSpaceNormalizeViewDir(i.positionWS))), 1))*_Specular;
-                float3 r = normalize(2 * dot(normalize(_StructurePosWS), worldNormal) * worldNormal - normalize(_StructurePosWS));
+                float3 r = normalize(2 * dot(normalize(_ObjectPosWS), worldNormal) * worldNormal - normalize(_ObjectPosWS));
                 
                 float specular = max(0, pow(dot(r, -GetWorldSpaceNormalizeViewDir(i.positionWS)), 6));
 
-                float lightDot = clamp(saturate(dot(worldNormal, normalize(-_StructurePosWS))), -1, 1);
+                float lightDot = clamp(saturate(dot(worldNormal, normalize(-_ObjectPosWS))), -1, 1);
                 col +=  saturate(specular * (1-tex2D(_RoughnessMap, i.uv)*0.65)) *  1.25;
 
                 col *= exp(-pow(2*(1 - lightDot),1));
 
                     #ifdef _ADDITIONAL_LIGHTS
-                        // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
                         uint numAdditionalLights = GetAdditionalLightsCount();
                         for (uint lightI = 0; lightI < numAdditionalLights; lightI++) {
                             Light light = GetAdditionalLight(lightI, i.positionWS, 1);

@@ -123,7 +123,6 @@ public class UiManager : MonoBehaviour
     0 - Fleets info
     1 - Selected objects info
     */
-
     public void SwitchSidePanel(int panelId)
     {
         if (panelId == 0 && !fleetListCanvas.enabled)
@@ -136,8 +135,14 @@ public class UiManager : MonoBehaviour
         {
             toggleFleetBtn.color /= 0.5f;
             toggleSelectedBtn.color *= 0.5f;
+
         }
         fleetListCanvas.enabled = panelId == 0 ? true : false;
         selectedListCanvas.enabled = panelId == 1 ? true : false;
+
+        if (panelId == 1)
+        {
+            SelectionManager.instance.UpdateSelectedList();
+        }
     }
 }

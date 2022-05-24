@@ -303,6 +303,16 @@ public class Unit : Targetable, ISelectable
             }
             else
             {
+                if (MapManager.instance.mapState != MapState.GALAXY_VIEW && pathLineRend.enabled)
+                {
+                    pathLineRend.enabled = false;
+                    Debug.Log("asdfasdfas");
+                }
+                else if (MapManager.instance.mapState == MapState.GALAXY_VIEW && !pathLineRend.enabled)
+                {
+                    pathLineRend.enabled = true;
+                    Debug.Log("asdfasdfas");
+                }
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + (path[1].position - transform.position).normalized, speed * 0.05f * Time.deltaTime);
                 pathLineRend.SetPosition(0, transform.position);
 
@@ -320,6 +330,7 @@ public class Unit : Targetable, ISelectable
                         transform.position = parentBody.transform.position + (currOrder.movePos - parentBody.transform.position).normalized * 45f;
 
                         Hide(MapManager.instance.activePlanet != parentBody);
+                        pathLineRend.enabled = true;
 
                         path.Clear();
                         currPathLine.Clear();

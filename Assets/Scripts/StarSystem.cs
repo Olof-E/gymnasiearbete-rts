@@ -105,7 +105,6 @@ public class StarSystem
         focusedPlanet.Focus(true);
         MapManager.instance.mapState = MapState.PLANETARY_VIEW;
         star.transform.position = Vector3.Normalize(star.transform.position - focusedPlanet.transform.position) * 250f;
-        UiManager.instance.ActivateActions(0);
     }
 
     public override int GetHashCode()

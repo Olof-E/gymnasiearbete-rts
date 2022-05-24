@@ -41,7 +41,16 @@ public class UnitManager : MonoBehaviour
 
     public void CreateFleet()
     {
-        List<Unit> selectedUnits = SelectionManager.instance.selected.Cast<Unit>().ToList();
+        List<ISelectable> selection = SelectionManager.instance.selected;
+        if (!selection.TrueForAll((ISelectable a) => { return a.GetType().IsSubclassOf(typeof(Unit)); }))
+        {
+            return;
+        }
+        List<Unit> selectedUnits = selection.Cast<Unit>().ToList();
+        if (selectedUnits.Count <= 0)
+        {
+            return;
+        }
         Formation newFormation = new Formation(new List<Unit>(), FormationType.SQUARE);
         GameObject newFleetInfoPanel = GameObject.Instantiate(fleetLisInfoPrefab, Vector3.zero, Quaternion.identity);
 
@@ -97,15 +106,13 @@ public class UnitManager : MonoBehaviour
 
     public void SelectFleet(GameObject fleetKey)
     {
-        SelectionManager.instance.selected.Clear();
-        //Debug.Log($"we care about this: {fleetId}");
+        SelectionManager.instance.ClearSelection();
         for (int i = 0; i < fleets[fleetKey].units.Count; i++)
         {
             fleets[fleetKey].units[i].selected = true;
             SelectionManager.instance.selected.Add(fleets[fleetKey].units[i]);
         }
         selectedFleetKey = fleetKey;
-        Debug.Log($"Selected fleet: {fleets[fleetKey].id}");
     }
 
     public void AssignFleet(Unit assignedUnit, GameObject fleetKey)

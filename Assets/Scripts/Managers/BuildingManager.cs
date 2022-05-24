@@ -72,6 +72,11 @@ public class BuildingManager : MonoBehaviour
 
     public void BuildSpaceStructure(int buildingIndex)
     {
+        if (buildingBlueprint != null)
+        {
+            Destroy(buildingBlueprint);
+            buildingPlacement = false;
+        }
         if (buildingIndex == 0)
         {
             buildingPlacement = true;

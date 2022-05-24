@@ -28,96 +28,24 @@ public class Formation
         //UnitManager.instance.fleets.Add(this);
     }
 
-    public void Update()
-    {
-        //ExecuteOrder();
-    }
-
-
-    public void ExecuteOrder()
-    {
-        if (orderQueue.Count > 0)
-        {
-            if (!executingOrder)
-            {
-                executingOrder = true;
-                currOrder = orderQueue.Dequeue();
-            }
-        }
-        if (currOrder != null)
-        {
-            if (currOrder.orderType == OrderType.MOVE_ORDER)
-            {
-                List<Vector3> unitPositions = CalculateFormationPos(type, units.Count, currOrder.movePos);
-                for (int i = 0; i < units.Count; i++)
-                {
-                    units[i].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = unitPositions[i], targetBody = currOrder.targetBody });
-                }
-
-                executingOrder = false;
-                currOrder = null;
-            }
-            else if (currOrder.orderType == OrderType.ATTACK_ORDER)
-            {
-                for (int i = 0; i < units.Count; i++)
-                {
-                    units[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = currOrder.target });
-                }
-                executingOrder = false;
-                currOrder = null;
-            }
-        }
-    }
-
-    public void RecieveOrder(Order recievedOrder)
-    {
-        Debug.Log("Recieved order");
-
-        if (recievedOrder.orderType == OrderType.STOP_ORDER)
-        {
-            executingOrder = false;
-            currOrder = null;
-            orderQueue.Clear();
-        }
-        else
-        {
-            orderQueue.Enqueue(recievedOrder);
-        }
-    }
-
+    //Calculate positions for units in formation
     public static List<Vector3> CalculateFormationPos(FormationType _type, int unitCount, Vector3 centerPos)
     {
         List<Vector3> positions = new List<Vector3>();
 
         if (_type == FormationType.SQUARE)
         {
-            // int rows = 4;
-            // int cols = (int)Math.Ceiling((float)unitCount / (float)rows / 2f);
-            // int index = 0;
-            // for (int i = -rows / 2; i < rows / 2; i++)
-            // {
-            //     for (int j = -cols; j < cols; j++)
-            //     {
-            //         if (index >= unitCount)
-            //         {
-            //             continue;
-            //         }
-            //         Vector3 calculatedPos = centerPos + new Vector3(j * 6f, 0f, i * 6f);
-            //         positions.Add(calculatedPos);
-            //         //units[index++].RecieveOrder(new Order() { orderType = OrderType.MOVE_ORDER, movePos = calculatedPos, targetBody = currOrder.targetBody });
-            //     }
-
-            // }
             for (int i = 0; i < unitCount; i++)
             {
-                positions.Add(centerPos + Position(i) * 5f);
+                positions.Add(centerPos + SpiralPosition(i + 1) * 5f);
             }
         }
 
         return positions;
     }
 
-    private static Vector3 Position(int n)
+    //Calculate rectangular spiral
+    private static Vector3 SpiralPosition(int n)
     {
         float k = Mathf.Ceil((Mathf.Sqrt(n) - 1f) / 2f);
         float t = 2f * k + 1f;

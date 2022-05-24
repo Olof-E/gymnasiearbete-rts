@@ -13,11 +13,11 @@ public class CustomLitShaderProperties : MonoBehaviour
     public float colorIntensity;
     public float emissionIntenisty;
     private MaterialPropertyBlock mpb;
+    private int ShaderObjectPosId = Shader.PropertyToID("_ObjectPosWS");
 
     // Start is called before the first frame update
     void Awake()
     {
-        Debug.Log($"from: {this.gameObject.name}");
         mpb = new MaterialPropertyBlock();
         mainRenderer.GetPropertyBlock(mpb);
 
@@ -45,7 +45,7 @@ public class CustomLitShaderProperties : MonoBehaviour
         {
             mainRenderer.GetPropertyBlock(mpb);
 
-            mpb.SetVector("_StructurePosWS", transform.position - MapManager.instance.activeSystem.star.transform.position);
+            mpb.SetVector(ShaderObjectPosId, transform.position - MapManager.instance.activeSystem.star.transform.position);
 
             mainRenderer.SetPropertyBlock(mpb);
         }

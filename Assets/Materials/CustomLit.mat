@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Structure
+  m_Name: CustomLit
   m_Shader: {fileID: 4800000, guid: 4f52de5ebc2ef4343b74492bdde36c04, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []

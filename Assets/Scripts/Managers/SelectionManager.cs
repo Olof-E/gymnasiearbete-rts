@@ -57,22 +57,7 @@ public class SelectionManager : MonoBehaviour
     {
         if (e.mouseBtn == 0 && !CommandManager.instance.givingOrders && MapManager.instance.mapState == MapState.PLANETARY_VIEW && !Input.GetKey(KeyCode.LeftControl))
         {
-            if (selected.Count > 0)
-            {
-                selected.ForEach((ISelectable item) => { item.selected = false; });
-                for (int i = 0; i < UiManager.instance.selectedList.transform.childCount; i++)
-                {
-                    GameObject infoPanel = UiManager.instance.selectedList.transform.GetChild(i).gameObject;
-                    if (!infoPanel.activeInHierarchy)
-                    {
-                        continue;
-                    }
-                    selectedListObjPool.Release(infoPanel);
-                }
-                UiManager.instance.ActivateActions(-1);
-            }
-            UnitManager.instance.selectedFleetKey = null;
-            selected.Clear();
+            ClearSelection();
         }
         //Check for single left click
         if (e.mouseBtn == 0 && !e.doubleClick && !e.dragging && e.endDrag == Vector3.zero && !CommandManager.instance.givingOrders)
@@ -181,7 +166,27 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    private void UpdateSelectedList()
+    public void ClearSelection()
+    {
+        if (selected.Count > 0)
+        {
+            selected.ForEach((ISelectable item) => { item.selected = false; });
+            for (int i = 0; i < UiManager.instance.selectedList.transform.childCount; i++)
+            {
+                GameObject infoPanel = UiManager.instance.selectedList.transform.GetChild(i).gameObject;
+                if (!infoPanel.activeInHierarchy)
+                {
+                    continue;
+                }
+                selectedListObjPool.Release(infoPanel);
+            }
+            UiManager.instance.ActivateActions(-1);
+        }
+        UnitManager.instance.selectedFleetKey = null;
+        selected.Clear();
+    }
+
+    public void UpdateSelectedList()
     {
         if (UiManager.instance.selectedListCanvas.enabled)
         {
