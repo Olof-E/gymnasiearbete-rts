@@ -101,7 +101,6 @@ public class SpaceStructure : Targetable, ISelectable
 
     public void RecieveOrder(Order recievedOrder)
     {
-        Debug.Log(recievedOrder);
         if (recievedOrder.orderType == OrderType.STOP_ORDER)
         {
             target = null;

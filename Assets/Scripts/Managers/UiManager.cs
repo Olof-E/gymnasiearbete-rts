@@ -91,7 +91,6 @@ public class UiManager : MonoBehaviour
     */
     public void ActivateActions(int actionsId)
     {
-        //Debug.Log("this was called");
         if (actionsId == -1)
         {
             for (int i = 0; i < actions.Length; i++)

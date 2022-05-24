@@ -53,7 +53,6 @@ public class UnitManager : MonoBehaviour
 
         newFleetInfoPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
-            Debug.Log("this is from a listener(first): " + fleetId);
             if (CommandManager.instance.assignOrder)
             {
                 CommandManager.instance.GiveOrders(newFleetInfoPanel);
@@ -86,9 +85,6 @@ public class UnitManager : MonoBehaviour
         {
             UiManager.instance.fleetList.transform.GetChild(i).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -115 * i);
         }
-        Debug.Log("--------");
-        Debug.Log($"{fleets.Count} {UiManager.instance.fleetList.transform.childCount}");
-        Debug.Log("--------");
         UiManager.instance.fleetList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, fleets.Count * 115);
     }
 
@@ -110,12 +106,10 @@ public class UnitManager : MonoBehaviour
 
         if (assignedUnit.fleetId != -1)
         {
-            Debug.Log("Removing from previous fleet");
             fleets[fleetKey].units.Remove(assignedUnit);
         }
 
         fleets[fleetKey].units.Add(assignedUnit);
         assignedUnit.fleetId = fleets[fleetKey].id;
-        Debug.Log(assignedUnit.fleetId);
     }
 }

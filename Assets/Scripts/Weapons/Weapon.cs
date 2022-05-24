@@ -16,7 +16,6 @@ public class Weapon : MonoBehaviour
     {
         for (int i = 0; i < possibleTargets.Count; i++)
         {
-            //Debug.Log((possibleTargets[i].gameObj.transform.position - transform.position).magnitude);
             if (
             (possibleTargets[i].gameObj.transform.position - transform.position).magnitude < targetingRadius
             && possibleTargets[i] != parent)

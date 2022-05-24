@@ -110,8 +110,6 @@ public class MapManager : MonoBehaviour
     //Get the system object from its world representation
     public StarSystem GetSystem(GameObject systemObj)
     {
-        Debug.Log(Array.IndexOf(starMapObjs, systemObj));
-        Debug.Log(systemObj);
         return starSystems[Array.IndexOf(starMapObjs, systemObj)];
     }
 

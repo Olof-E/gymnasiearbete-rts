@@ -133,7 +133,6 @@ public class CommandManager : MonoBehaviour
                 RaycastHit hitInfo;
                 if (Physics.Raycast(mainCamera.transform.position, ((Vector3)orderData) - mainCamera.transform.position, out hitInfo, 100f))
                 {
-                    Debug.Log("The hit was: " + hitInfo.collider.name);
                     if (hitInfo.collider.gameObject.TryGetComponent<Targetable>(out target))
                     {
                         for (int i = 0; i < selectedUnits.Count; i++)
@@ -188,7 +187,6 @@ public class CommandManager : MonoBehaviour
 
                             for (int i = 0; i < selectedStrucs.Count; i++)
                             {
-                                Debug.Log(selectedStrucs[i]);
                                 selectedStrucs[i].RecieveOrder(new Order() { orderType = OrderType.ATTACK_ORDER, target = target });
                             }
                             attackOrder = false;

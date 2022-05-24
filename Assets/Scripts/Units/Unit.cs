@@ -117,8 +117,6 @@ public class Unit : Targetable, ISelectable
 
     public void RecieveOrder(Order recievedOrder)
     {
-        //Debug.Log("Recieved order");
-
         if (recievedOrder.orderType == OrderType.STOP_ORDER)
         {
             pathLineRend.positionCount = 0;
@@ -286,9 +284,6 @@ public class Unit : Targetable, ISelectable
                 Vertex currSystem = MapManager.instance.mapGraph.vertices[parentBody.parentSystem.id];
                 Vertex targetSystem = MapManager.instance.mapGraph.vertices[currOrder.targetBody.parentSystem.id];
 
-                Debug.Log(currOrder.targetBody.parentSystem.id);
-                Debug.Log(parentBody.parentSystem.id);
-
                 path = Pathfinding.CalculatePath(ref MapManager.instance.mapGraph, currSystem, targetSystem);
                 pathLineRend.positionCount = path.Count;
 
@@ -298,20 +293,16 @@ public class Unit : Targetable, ISelectable
                 }
 
                 transform.position = path[0].position;
-
-                Debug.Log(path.Count);
             }
             else
             {
                 if (MapManager.instance.mapState != MapState.GALAXY_VIEW && pathLineRend.enabled)
                 {
                     pathLineRend.enabled = false;
-                    Debug.Log("asdfasdfas");
                 }
                 else if (MapManager.instance.mapState == MapState.GALAXY_VIEW && !pathLineRend.enabled)
                 {
                     pathLineRend.enabled = true;
-                    Debug.Log("asdfasdfas");
                 }
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + (path[1].position - transform.position).normalized, speed * 0.05f * Time.deltaTime);
                 pathLineRend.SetPosition(0, transform.position);
@@ -326,7 +317,7 @@ public class Unit : Targetable, ISelectable
                         transform.SetParent(parentBody.transform.parent);
                         parentBody.targetables.Add(this);
                         parentBody.selectables.Add(this);
-                        Debug.Log($"Moving to new target body: {parentBody}");
+
                         transform.position = parentBody.transform.position + (currOrder.movePos - parentBody.transform.position).normalized * 45f;
 
                         Hide(MapManager.instance.activePlanet != parentBody);
