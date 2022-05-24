@@ -9,8 +9,8 @@ public class TorpedoLauncher : Weapon
     private bool hidden = false;
     private void Start()
     {
-        targetingRadius = 500f;
-        reloadTime = 7.5f;
+        targetingRadius = 90f;
+        reloadTime = 10f;
     }
 
     private void Update()

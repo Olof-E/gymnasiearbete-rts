@@ -15,7 +15,7 @@ public class PhasedEnergyBeamArray : Weapon
         beamGameObj = GetComponent<LineRenderer>();
         ignoreShield = parent.shieldManager;
         ignoreSelectionColl = ((ISelectable)parent).selectionCollider;
-        targetingRadius = 400f;
+        targetingRadius = 60f;
         reloadTime = 2f;
     }
 

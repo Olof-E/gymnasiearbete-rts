@@ -195,6 +195,7 @@ public class Unit : Targetable, ISelectable
         selectionCollider.enabled = !hide;
         selectedSprite.enabled = !hide;
         statsCanvas.enabled = !hide;
+        pathLineRend.enabled = !hide;
     }
 
     private void Move()
@@ -241,6 +242,15 @@ public class Unit : Targetable, ISelectable
         }
         else if (parentBody.parentSystem == currOrder.targetBody.parentSystem)
         {
+            if (MapManager.instance.mapState != MapState.SYSTEM_VIEW && pathLineRend.enabled)
+            {
+                pathLineRend.enabled = false;
+            }
+            else if (MapManager.instance.mapState == MapState.SYSTEM_VIEW && !pathLineRend.enabled)
+            {
+                pathLineRend.enabled = true;
+            }
+
             if (currPathLine.Count <= 0)
             {
                 Hide(MapManager.instance.activePlanet == null);

@@ -10,8 +10,8 @@ public class RailgunCannon : Weapon
 
     private void Start()
     {
-        targetingRadius = 50f;
-        reloadTime = 1f;
+        targetingRadius = 100f;
+        reloadTime = 6.5f;
     }
 
     private void Update()

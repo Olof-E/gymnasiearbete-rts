@@ -44,9 +44,6 @@ public class Torpedo : MonoBehaviour
             aC = newLOS * N * -LOSRate;
 
             //Move missile in accordance with the APN result
-            Debug.Log(Vector3.Cross(aC, transform.forward));
-
-            //transform.LookAt(target.transform.position + target.transform.forward * 4f * Time.fixedDeltaTime * Mathf.Clamp(100f / distance, 0, 1), transform.up);
             rb.angularVelocity = Vector3.Cross(aC, transform.forward) * angularSpeed * Time.fixedDeltaTime;
             rb.AddForce(transform.forward * speed * 3f * Time.fixedDeltaTime, ForceMode.Acceleration);
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, 30f);
