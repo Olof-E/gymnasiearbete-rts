@@ -11,4 +11,4 @@ För att åka mellan planeter krävs det att ett/flera skepp är markerade. Seda
 
 Samma princip gäller för att åka mellan olika stjärnsystem där man går in i det andra stjärnsystem och trycker på en av planeterna eller om planeten är fokuserad, trycker man någonstans runt omkring. 
 
-Attackera mål ordrar sätter det som spelare försöker trycka på som målet för de enheter eller strukturer som är markerade.
+Attackera mål ordrar sätter det som spelaren försöker trycka på som målet för de enheter eller strukturer som är markerade.
