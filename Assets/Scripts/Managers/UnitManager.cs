@@ -27,18 +27,6 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        foreach (KeyValuePair<GameObject, Formation> fleet in fleets)
-        {
-            fleet.Value.Update();
-        }
-        // for (int i = 0; i < tempFormations.Count; i++)
-        // {
-        //     tempFormations[i].Update();
-        // }
-    }
-
     public void CreateFleet()
     {
         List<ISelectable> selection = SelectionManager.instance.selected;
