@@ -7,7 +7,6 @@ public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
     public GameObject[] actions;
-    public TMP_Text fpsCounterTxt;
 
     public TMP_Text creditsText;
     public TMP_Text scienceText;
@@ -17,8 +16,6 @@ public class UiManager : MonoBehaviour
     public TMP_Text availablePowerText;
     public TMP_Text RareMetalText;
     public TMP_Text gasText;
-    public TMP_Text selectionInfoText;
-    public Button switchMapView;
     public Canvas fleetListCanvas;
     public Canvas selectedListCanvas;
     public GameObject fleetList;
@@ -73,7 +70,6 @@ public class UiManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //fpsCounterTxt.SetText($"Fps: {Mathf.Round(1f / Time.unscaledDeltaTime)}");
         creditsText.SetText($"¢: {Mathf.RoundToInt(Player.instance.totalCredits)}");
         scienceText.SetText($"S: {Mathf.RoundToInt(Player.instance.totalScience)}");
         tritaniumText.SetText($"T: {Mathf.RoundToInt(Player.instance.totalTritanium)}");
@@ -83,7 +79,6 @@ public class UiManager : MonoBehaviour
         RareMetalText.SetText($"R: {Mathf.RoundToInt(Player.instance.totalRareMetals)}");
         gasText.SetText($"G: {Mathf.RoundToInt(Player.instance.totalGas)}");
 
-        //selectionInfoText.SetText($"Selection: {SelectionManager.instance.selected.Count}");
     }
 
     /*
