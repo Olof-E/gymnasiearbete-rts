@@ -13,4 +13,4 @@ Samma princip gäller för att åka mellan olika stjärnsystem där man går in 
 
 Attackera mål ordrar sätter det som spelaren försöker trycka på som målet för de enheter eller strukturer som är markerade.
 
-Att ge en enhet eller struktur en order kommer även att stryka över den gamla ordern och börja göra den nya ordern. Dock genom att hålla ner Ctrl medans man ger flera ordrar på rad kan man köa upp dem en efter en.
+Att ge en enhet eller struktur en order kommer även att stryka över den gamla ordern och börja köra den nya ordern. Dock genom att hålla ner Ctrl medans man ger flera ordrar på rad kan man köa upp dem en efter en.
